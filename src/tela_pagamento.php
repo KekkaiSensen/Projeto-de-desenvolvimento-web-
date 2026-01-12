@@ -182,6 +182,11 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                 <span id="resumo-frete-valor">R$ 0,00</span>
             </div>
 
+            <div class="resumo-linha" id="resumo-desconto-container" style="display: none; color: #388e3c;">
+                <span>Desconto</span>
+                <span id="resumo-desconto-valor">- R$ 0,00</span>
+            </div>
+
             <a href="#" class="link-cupom">Inserir código do cupom</a>
 
             <div class="resumo-linha total">
@@ -404,6 +409,15 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
             doc.text(fSubtotal, 199, y + 7, {
                 align: 'right'
             }); // Total Produtos
+            const desconto = parseFloat(localStorage.getItem("valorDesconto")) || 0;
+            const fDesconto = desconto.toFixed(2).replace(".", ",");
+            // fTotal já foi declarado anteriormente, vamos apenas usar o valorFinal atualizado se necessário, 
+            // mas como é escopo de função, podemos reutilizar a lógica de parsear localStorage aqui para garantir
+            const totalFinalPDF = parseFloat(localStorage.getItem("valorFinal")) || 0;
+            const fTotalPDF = totalFinalPDF.toFixed(2).replace(".", ",");
+
+            // ... (dentro da função gerarNotaFiscalPDF)
+
             // Segunda linha de valores
             doc.text(fFrete, 47, y + 17, {
                 align: 'right'
@@ -411,15 +425,15 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
             doc.text("0,00", 72, y + 17, {
                 align: 'right'
             });
-            doc.text("0,00", 104, y + 17, {
+            doc.text(fDesconto, 104, y + 17, { // Valor do Desconto
                 align: 'right'
             });
             doc.text("0,00", 158, y + 17, {
                 align: 'right'
             });
-            doc.text(fTotal, 199, y + 17, {
+            doc.text(fTotalPDF, 199, y + 17, { // Valor Total Nota (Corrigido para usar fTotalPDF)
                 align: 'right'
-            }); // Valor Total Nota
+            });
             y += 25; // Avança Y para a próxima seção
 
             // --- Datas ---
@@ -508,19 +522,42 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
             }
 
             // --- Carregamento Inicial do Resumo ---
-            const subtotal = localStorage.getItem("totalCompra");
-            const frete = localStorage.getItem("valorFrete");
-            const totalFinal = localStorage.getItem("valorFinal");
+            // --- Carregamento Inicial do Resumo ---
+            const subtotal = parseFloat(localStorage.getItem("totalCompra")) || 0;
+            const frete = parseFloat(localStorage.getItem("valorFrete")) || 0;
+            let totalFinal = parseFloat(localStorage.getItem("valorFinal")) || 0;
+            let desconto = parseFloat(localStorage.getItem("valorDesconto")) || 0;
+
+            // Recalcula desconto se houver cupom mas não houver valor salvo (Fallback)
+            const cupomAplicado = JSON.parse(localStorage.getItem("cupomAplicado"));
+            if (cupomAplicado && cupomAplicado.valid && desconto === 0) {
+                if (cupomAplicado.tipo === 'porcentagem') {
+                    desconto = (subtotal * cupomAplicado.valor) / 100;
+                } else {
+                    desconto = Math.min(cupomAplicado.valor, subtotal);
+                }
+                // Atualiza localStorage e total
+                totalFinal = Math.max(0, subtotal + frete - desconto);
+                localStorage.setItem("valorDesconto", desconto.toFixed(2));
+                localStorage.setItem("valorFinal", totalFinal.toFixed(2));
+            }
+
             const elProduto = document.getElementById("resumo-produto-valor");
             const elFrete = document.getElementById("resumo-frete-valor");
             const elTotal = document.getElementById("resumo-total-valor");
+            const elDescontoContainer = document.getElementById("resumo-desconto-container");
+            const elDescontoValor = document.getElementById("resumo-desconto-valor");
 
-            if (elProduto && subtotal !== null) elProduto.innerText = formatarMoeda(subtotal);
-            if (elFrete && frete !== null) {
-                elFrete.innerText = formatarFrete(frete);
-                elFrete.classList.toggle("preco-gratis", parseFloat(frete) === 0);
+            if (elProduto) elProduto.innerText = formatarMoeda(subtotal.toFixed(2));
+            if (elFrete) {
+                elFrete.innerText = formatarFrete(frete.toFixed(2));
+                elFrete.classList.toggle("preco-gratis", frete === 0);
             }
-            if (elTotal && totalFinal !== null) elTotal.innerText = formatarMoeda(totalFinal);
+            if (desconto > 0) {
+                if (elDescontoContainer) elDescontoContainer.style.display = "flex";
+                if (elDescontoValor) elDescontoValor.innerText = "- " + formatarMoeda(desconto.toFixed(2));
+            }
+            if (elTotal) elTotal.innerText = formatarMoeda(totalFinal.toFixed(2));
 
             // --- Referências aos Elementos do Formulário ---
             const formNovoCartao = document.getElementById('formulario-novo-cartao');
@@ -748,6 +785,11 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                                     // SUCESSO!
                                     // 1. Limpa o carrinho local (só depois de salvar no BD)
                                     localStorage.setItem("carrinho", "[]");
+                                    localStorage.removeItem("cupomAplicado");
+                                    localStorage.removeItem("valorDesconto");
+                                    localStorage.removeItem("totalCompra");
+                                    localStorage.removeItem("valorFrete");
+                                    localStorage.removeItem("valorFinal");
 
                                     // 2. Mostra notificação e gera PDF
                                     const notificationDuration = 3000;

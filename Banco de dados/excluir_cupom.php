@@ -12,8 +12,8 @@ if (isset($_GET['id'])) {
     $usuario_id = $_SESSION['usuario_id'];
 
     try {
-        // Garante que só deleta se pertencer ao usuário logado
-        $stmt = $pdo->prepare("DELETE FROM cupons WHERE id = ? AND usuario_id = ?");
+        // Soft Delete: Marca como inativo para manter histórico e evitar erro de FK
+        $stmt = $pdo->prepare("UPDATE cupons SET ativo = 0 WHERE id = ? AND usuario_id = ?");
         $stmt->execute([$id, $usuario_id]);
 
         header("Location: ../src/tela_minha_conta.php?msg=cupom_excluido");

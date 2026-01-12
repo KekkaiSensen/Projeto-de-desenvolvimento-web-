@@ -76,9 +76,24 @@ if ($is_fornecedor) {
     // --- BUSCA CUPONS DO FORNECEDOR ---
     $meus_cupons = [];
     try {
-        $stmt_cupons = $pdo->prepare("SELECT * FROM cupons WHERE usuario_id = ? ORDER BY id DESC");
+        // Query modificada para contar os usos e trazer apenas os que ainda não atingiram o limite E estão ativos
+        $sql_cupons = "
+            SELECT c.*, (SELECT COUNT(id) FROM cupom_uso WHERE cupom_id = c.id) as qtd_usos 
+            FROM cupons c 
+            WHERE c.usuario_id = ? AND c.ativo = 1
+            ORDER BY c.id DESC
+        ";
+        $stmt_cupons = $pdo->prepare($sql_cupons);
         $stmt_cupons->execute([$usuario_id]);
-        $meus_cupons = $stmt_cupons->fetchAll(PDO::FETCH_ASSOC);
+        $todos_cupons = $stmt_cupons->fetchAll(PDO::FETCH_ASSOC);
+
+        // Filtra os cupons esgotados
+        foreach ($todos_cupons as $cupom) {
+            if ($cupom['limite_uso'] > 0 && $cupom['qtd_usos'] >= $cupom['limite_uso']) {
+                continue; // Pula este cupom pois atingiu o limite
+            }
+            $meus_cupons[] = $cupom;
+        }
     } catch (PDOException $e) {
         error_log("Erro ao buscar cupons: " . $e->getMessage());
     }
@@ -376,7 +391,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
                                             <td style="padding: 10px;"><strong><?php echo htmlspecialchars($cupom['codigo']); ?></strong></td>
                                             <td style="padding: 10px;"><?php echo $valor; ?></td>
                                             <td style="padding: 10px;"><?php echo $data_fim; ?></td>
-                                            <td style="padding: 10px;"><?php echo $cupom['limite_uso'] ? "Limite: {$cupom['limite_uso']}" : 'Ilimitado'; ?></td>
+                                            <td style="padding: 10px;"><?php echo $cupom['limite_uso'] ? "{$cupom['qtd_usos']} / {$cupom['limite_uso']}" : "{$cupom['qtd_usos']} (Ilimitado)"; ?></td>
                                             <td style="padding: 10px;">
                                                 <a href="../Banco de dados/excluir_cupom.php?id=<?php echo $cupom['id']; ?>" onclick="return confirm('Excluir cupom?');" style="color: red;">Excluir</a>
                                             </td>

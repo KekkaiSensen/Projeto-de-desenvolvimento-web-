@@ -1,4 +1,5 @@
 <?php
+session_start(); // Inicia a sessão para persistir o cupom
 header('Content-Type: application/json');
 
 // Include dependencies
@@ -22,6 +23,18 @@ $usuarioId = isset($data['usuario_id']) ? intval($data['usuario_id']) : null;
 try {
     $cupomService = new CupomService($pdo);
     $resultado = $cupomService->validarCupom($codigo, $cartTotal, $usuarioId);
+
+    if ($resultado['valid']) {
+        // Armazena na sessão para o processa_pedido.php usar
+        $_SESSION['checkout_cupom'] = [
+            'codigo' => $codigo,
+            'desconto' => $resultado['desconto_calculado'],
+            'cupom_id' => $resultado['cupom']->id
+        ];
+    } else {
+        // Se inválido, remove qualquer cupom prévio da sessão
+        unset($_SESSION['checkout_cupom']);
+    }
 
     echo json_encode($resultado);
 } catch (Exception $e) {

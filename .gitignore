@@ -44,9 +44,9 @@ Testes/cypress/screenshots/
 Testes/cypress/videos/
 
 # Ignorar documentação técnica, arquivos de conversão e gerados
-Artefatos/Documentacao_Tecnica.md\
-Artefatos/Documentacao_Tecnica.odt\
-Artefatos/Documentacao_Tecnica.pdf\
+Artefatos/Documentacao_Tecnica.md
+Artefatos/Documentacao_Tecnica.odt
+Artefatos/Documentacao_Tecnica.pdf
 Artefatos/converter.js
 Artefatos/gerar*
 **/gerar*

@@ -214,6 +214,10 @@ $dados_para_js = [
                 <span>Frete</span>
                 <span id="resumo-frete-preco" class="preco-gratis">GRÁTIS</span>
             </div>
+            <div class="resumo-linha" id="resumo-desconto-container" style="display: none; color: #388e3c;">
+                <span>Desconto</span>
+                <span id="resumo-desconto-valor">- R$ 0,00</span>
+            </div>
             <div class="resumo-divisor" style="display: block;"></div>
             <div class="resumo-linha total">
                 <span>Total</span>
@@ -421,19 +425,42 @@ $dados_para_js = [
                 if (freteSpan) freteSpan.classList.add("preco-gratis");
             }
 
-            const valorTotal = subtotalCompra + valorFrete;
+            // Tenta recuperar o cupom do localStorage
+            const cupomAplicado = JSON.parse(localStorage.getItem('cupomAplicado'));
+            let valorDesconto = 0.0;
+
+            if (cupomAplicado && cupomAplicado.valid) {
+                if (cupomAplicado.tipo === 'porcentagem') {
+                    valorDesconto = (subtotalCompra * cupomAplicado.valor) / 100;
+                } else {
+                    valorDesconto = Math.min(cupomAplicado.valor, subtotalCompra);
+                }
+            }
+
+            const valorTotal = Math.max(0, subtotalCompra + valorFrete - valorDesconto);
 
             const elProduto = document.getElementById("resumo-produto-preco");
             const elTotal = document.getElementById("resumo-total-preco");
+            const elDescontoContainer = document.getElementById("resumo-desconto-container");
+            const elDescontoValor = document.getElementById("resumo-desconto-valor");
 
             if (elProduto) elProduto.innerText = "R$ " + subtotalCompra.toFixed(2).replace(".", ",");
             if (freteSpan) freteSpan.innerText = textoFrete;
+
+            if (valorDesconto > 0) {
+                if (elDescontoContainer) elDescontoContainer.style.display = "flex";
+                if (elDescontoValor) elDescontoValor.innerText = "- R$ " + valorDesconto.toFixed(2).replace(".", ",");
+            } else {
+                if (elDescontoContainer) elDescontoContainer.style.display = "none";
+            }
+
             if (elTotal) elTotal.innerText = "R$ " + valorTotal.toFixed(2).replace(".", ",");
 
             // Salva no localStorage para a próxima página
             localStorage.setItem("totalCompra", subtotalCompra.toFixed(2));
             localStorage.setItem("valorFrete", valorFrete.toFixed(2));
             localStorage.setItem("valorFinal", valorTotal.toFixed(2));
+            localStorage.setItem("valorDesconto", valorDesconto.toFixed(2)); // Salva desconto também
         }
 
         // --- Funções Relacionadas à Geolocalização e Preenchimento ---
