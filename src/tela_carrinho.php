@@ -173,6 +173,25 @@ if ($usuario_logado) {
     <div class="resumo-container">
       <h3>Resumo da compra</h3>
       <div id="resumo-separador" class="resumo-divisor" style="display: none;"></div>
+
+      <!-- Cupom Section -->
+      <div id="cupom-container" style="display: none; margin-bottom: 10px; flex-direction: column; gap: 5px;">
+        <div id="cupom-input-group" style="display: flex; gap: 5px;">
+          <input type="text" id="cupom-codigo" placeholder="Cupom de desconto" style="flex: 1; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+          <button type="button" id="btn-aplicar-cupom" style="padding: 5px 10px; background: #2968C8; color: white; border: none; border-radius: 4px; cursor: pointer;">Aplicar</button>
+        </div>
+        <div id="cupom-ativo-group" style="display: none; align-items: center; justify-content: space-between; background: #e8f5e9; padding: 8px; border-radius: 4px; border: 1px solid #c8e6c9;">
+          <span id="cupom-ativo-texto" style="color: #2e7d32; font-weight: 500;"></span>
+          <button type="button" id="btn-remover-cupom" style="background: none; border: none; color: #d32f2f; cursor: pointer; font-size: 12px; text-decoration: underline;">Remover</button>
+        </div>
+        <div id="msg-cupom" style="font-size: 12px;"></div>
+      </div>
+
+      <div id="desconto-container" class="resumo-linha" style="display: none; color: #388e3c;">
+        <span>Desconto</span>
+        <span id="valor-desconto">- R$ 0,00</span>
+      </div>
+
       <div id="total-container" class="resumo-linha total" style="display: none;">
         <span>Total</span>
         <span id="valor-total">R$ 0,00</span>
@@ -204,18 +223,60 @@ if ($usuario_logado) {
 
       if (carrinho_ls.length > 0) {
         const mapaCarrinhoBD = new Map();
-        carrinho.forEach(item => mapaCarrinhoBD.set(item.id, item));
+        carrinho.forEach(item => mapaCarrinhoBD.set(parseInt(item.id), item));
 
         carrinho_ls.forEach(item_ls => {
-          if (mapaCarrinhoBD.has(item_ls.id)) {
-            mapaCarrinhoBD.get(item_ls.id).quantidade = item_ls.quantidade;
+          const lsId = parseInt(item_ls.id);
+          if (mapaCarrinhoBD.has(lsId)) {
+            // Se já existe, atualiza quantidade (prioriza o maior ou o do LS? vamos manter LS atualizado)
+            mapaCarrinhoBD.get(lsId).quantidade = item_ls.quantidade;
           } else {
+            // Se não existe no BD, adiciona
             carrinho.push(item_ls);
           }
         });
       }
 
       localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+      // Recupera cupom salvo se houver (para persistência visual ao voltar)
+      let cupomSalvo = localStorage.getItem("cupomAplicado");
+      if (cupomSalvo) {
+        window.cupomAplicado = JSON.parse(cupomSalvo);
+
+        // Re-valida o cupom ao carregar a página (Evita persistência indevida)
+        if (window.cupomAplicado && carrinho.length > 0) {
+          const totalLoad = carrinho.reduce((acc, p) => acc + (p.price * p.quantidade), 0);
+          const usuarioIdLoad = <?php echo $usuario_logado ? $usuario_id : 'null'; ?>;
+
+          fetch('api/validar_cupom.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                codigo: window.cupomAplicado.codigo,
+                total: totalLoad,
+                usuario_id: usuarioIdLoad
+              })
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (!data.valid) {
+                console.warn("Cupom salvo não é mais válido:", data.message);
+                window.cupomAplicado = null;
+                localStorage.removeItem('cupomAplicado');
+                atualizarTotal(); // Atualiza UI para remover o desconto
+              }
+              // Se for válido, mantém. A UI será atualizada no mostrarCarrinho -> atualizarTotal
+            })
+            .catch(err => {
+              console.error("Erro ao revalidar cupom:", err);
+              // Opcional: remover cupom em caso de erro de rede? Por enquanto, mantém.
+            });
+        }
+      }
+
       let salvos = JSON.parse(localStorage.getItem("salvos")) || [];
       // === FIM DA NOVA LÓGICA DE MERGE ===
 
@@ -337,13 +398,137 @@ if ($usuario_logado) {
           separador.style.display = "none";
           totalContainer.style.display = "none";
           btnContinuar.style.display = "none";
+
+          // Limpa cupom se carrinho estiver vazio
+          window.cupomAplicado = null;
+          localStorage.removeItem('cupomAplicado');
+          const descontoContainer = document.getElementById("desconto-container");
+          if (descontoContainer) descontoContainer.style.display = "none";
         } else {
           const total = carrinho.reduce((acc, p) => acc + (p.price * p.quantidade), 0);
           separador.style.display = "block";
+
+          // Show Coupon Field
+          const cupomContainer = document.getElementById("cupom-container");
+          const cupomInputGroup = document.getElementById("cupom-input-group");
+          const cupomAtivoGroup = document.getElementById("cupom-ativo-group");
+          const cupomAtivoTexto = document.getElementById("cupom-ativo-texto");
+          const msgCupom = document.getElementById("msg-cupom");
+
+          if (cupomContainer) cupomContainer.style.display = "flex";
+
           totalContainer.style.display = "flex";
           btnContinuar.style.display = "block";
-          totalSpan.innerText = "R$ " + total.toFixed(2).replace(".", ",");
+
+          // Calculate with Discount
+          let finalTotal = total;
+          if (window.cupomAplicado && window.cupomAplicado.valid) {
+            const descontoContainer = document.getElementById("desconto-container");
+            const valorDescontoSpan = document.getElementById("valor-desconto");
+
+            // UI Changes for Active Coupon
+            if (cupomInputGroup) cupomInputGroup.style.display = "none";
+            if (cupomAtivoGroup) {
+              cupomAtivoGroup.style.display = "flex";
+              cupomAtivoTexto.innerText = "Cupom: " + window.cupomAplicado.codigo;
+            }
+            if (msgCupom) msgCupom.innerText = ""; // Clear active messages
+
+            // Recalculate discount based on current total (important if quantity changed)
+            let valorDesconto = 0;
+            if (window.cupomAplicado.tipo === 'porcentagem') {
+              valorDesconto = (total * window.cupomAplicado.valor) / 100;
+            } else {
+              valorDesconto = Math.min(window.cupomAplicado.valor, total);
+            }
+
+            finalTotal = total - valorDesconto;
+
+            descontoContainer.style.display = "flex";
+            valorDescontoSpan.innerText = "- R$ " + valorDesconto.toFixed(2).replace(".", ",");
+          } else {
+            // No Coupon Active
+            const descontoContainer = document.getElementById("desconto-container");
+            if (descontoContainer) descontoContainer.style.display = "none";
+
+            // Reset UI to Input Mode
+            if (cupomInputGroup) cupomInputGroup.style.display = "flex";
+            if (cupomAtivoGroup) cupomAtivoGroup.style.display = "none";
+          }
+
+          totalSpan.innerText = "R$ " + finalTotal.toFixed(2).replace(".", ",");
         }
+      }
+
+      // --- CUPOM LOGIC ---
+      const btnAplicarCupom = document.getElementById("btn-aplicar-cupom");
+      const btnRemoverCupom = document.getElementById("btn-remover-cupom");
+      const inputCupom = document.getElementById("cupom-codigo");
+      const msgCupom = document.getElementById("msg-cupom");
+
+      // Função para remover cupom
+      window.removerCupom = function() {
+        window.cupomAplicado = null;
+        localStorage.removeItem('cupomAplicado');
+        if (msgCupom) msgCupom.innerText = "";
+        atualizarTotal();
+      }
+
+      if (btnRemoverCupom) {
+        btnRemoverCupom.addEventListener('click', window.removerCupom);
+      }
+
+      if (btnAplicarCupom) {
+        btnAplicarCupom.addEventListener("click", function() {
+          const codigo = inputCupom.value.trim();
+          if (!codigo) return;
+
+          const total = carrinho.reduce((acc, p) => acc + (p.price * p.quantidade), 0);
+          const usuarioId = <?php echo $usuario_logado ? $usuario_id : 'null'; ?>;
+
+          fetch('api/validar_cupom.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                codigo: codigo,
+                total: total,
+                usuario_id: usuarioId
+              })
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.valid) {
+                msgCupom.innerText = "Cupom aplicado!";
+                msgCupom.style.color = "green";
+
+                const valor = parseFloat(data.cupom.valor_desconto);
+                const tipo = data.cupom.tipo_desconto;
+
+                window.cupomAplicado = {
+                  valid: true,
+                  codigo: data.cupom.codigo,
+                  tipo: tipo,
+                  valor: valor,
+                  id: data.cupom.id
+                };
+                localStorage.setItem('cupomAplicado', JSON.stringify(window.cupomAplicado)); // Persiste o cupom
+                atualizarTotal();
+              } else {
+                msgCupom.innerText = data.message;
+                msgCupom.style.color = "red";
+                window.cupomAplicado = null;
+                localStorage.removeItem('cupomAplicado'); // Remove se inválido
+                atualizarTotal();
+              }
+            })
+            .catch(err => {
+              console.error(err);
+              msgCupom.innerText = "Erro ao validar cupom.";
+              msgCupom.style.color = "red";
+            });
+        });
       }
 
       // Atualiza os contadores nas ABAS
@@ -526,7 +711,8 @@ if ($usuario_logado) {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              carrinho: carrinho
+              carrinho: carrinho,
+              cupom: window.cupomAplicado // Envia o cupom aplicado, se houver
             })
           })
           .then(response => response.json())

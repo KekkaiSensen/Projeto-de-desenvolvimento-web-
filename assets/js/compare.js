@@ -160,8 +160,11 @@ function toggleProductSelection(id, element) {
         removeFromComparison(id);
     } else {
         // Precisa pegar dados básicos do DOM para salvar (Título, Imagem, Preço)
+<<<<<<< HEAD
         // Isso é útil se quisermos mostrar preview na barra, mas o ID é o principal.
         // Vamos pegar o básico.
+=======
+>>>>>>> feature/sistema-cupons
         const card = element.querySelector('.card');
         const title = card.querySelector('.title').textContent;
         // Imagem url está no style background-image
