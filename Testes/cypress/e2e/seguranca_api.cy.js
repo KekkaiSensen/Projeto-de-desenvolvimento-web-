@@ -43,7 +43,7 @@ describe('Segurança - Testes de API (SQLi e XSS)', () => {
     // Agora que estamos logados, este request vai funcionar
     cy.request({
       method: 'POST',
-      url: '../Banco de dados/processa_avaliacao.php', // Corrected path to be consistent with login test
+      url: '../Banco%20de%20dados/processa_avaliacao.php', // URL Encoded for CI/Linux paths
       // O seu script tela_produto.php envia JSON
       body: {
         produto_id: produtoIdParaTestar,
