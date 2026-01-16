@@ -631,7 +631,7 @@ $meu_comentario_js = json_encode($minha_avaliacao ? $minha_avaliacao['comentario
       if (btnEnviarOpiniao) btnEnviarOpiniao.disabled = true;
 
       try {
-        const response = await fetch('../Banco de dados/processa_avaliacao.php', {
+        const response = await fetch('../Banco%20de%20dados/processa_avaliacao.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -667,7 +667,7 @@ $meu_comentario_js = json_encode($minha_avaliacao ? $minha_avaliacao['comentario
       }
 
       try {
-        const response = await fetch('../Banco de dados/excluir_avaliacao.php', {
+        const response = await fetch('../Banco%20de%20dados/excluir_avaliacao.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'

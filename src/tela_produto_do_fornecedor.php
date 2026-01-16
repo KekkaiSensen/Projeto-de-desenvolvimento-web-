@@ -354,7 +354,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
       const selectCategoria = document.getElementById('produto-categoria');
       async function carregarCategorias() {
         try {
-          const response = await fetch('../Banco de dados/buscar_categorias.php');
+          const response = await fetch('../Banco%20de%20dados/buscar_categorias.php');
           const data = await response.json();
           if (data.sucesso && data.categorias.length > 0) {
             selectCategoria.innerHTML = '<option value="">Selecione uma categoria</option>';
@@ -386,7 +386,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
 
       async function carregarDadosProduto(id) {
         try {
-          const response = await fetch(`../Banco de dados/buscar_produto.php?id=${id}`);
+          const response = await fetch(`../Banco%20de%20dados/buscar_produto.php?id=${id}`);
           const data = await response.json();
 
           if (data.sucesso) {
@@ -539,12 +539,12 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
           return;
         }
 
-        enviarDados('../Banco de dados/processa_novo_produto.php', 'Enviando...', 'index.php');
+        enviarDados('../Banco%20de%20dados/processa_novo_produto.php', 'Enviando...', 'index.php');
       });
 
       // --- Salvar Rascunho ---
       document.getElementById('btn-salvar-rascunho').addEventListener('click', () => {
-        enviarDados('../Banco de dados/salvar_rascunho.php', 'Salvando...', 'tela_minha_conta.php');
+        enviarDados('../Banco%20de%20dados/salvar_rascunho.php', 'Salvando...', 'tela_minha_conta.php');
       });
 
       async function enviarDados(url, textoBotao, redirectUrl) {
