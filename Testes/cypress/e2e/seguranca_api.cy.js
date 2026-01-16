@@ -35,14 +35,14 @@ describe('Segurança - Testes de API (SQLi e XSS)', () => {
 
     // 1. FAZEMOS O LOGIN
     // Usa o usuário do seu bancodadosteste.sql
-    // A senha 'senha123' corresponde ao hash $2y$10$BzliJoZpt...
-    cy.login('joao.teste+qa@example.com', 'senha123');
+    // A senha correta é 'Teste@1234'
+    cy.login('joao.teste+qa@example.com', 'Teste@1234');
 
     // 2. INJETAMOS O PAYLOAD (bloco descomentado)
     // Agora que estamos logados, este request vai funcionar
     cy.request({
       method: 'POST',
-      url: '/Banco de dados/processa_avaliacao.php',
+      url: '../Banco de dados/processa_avaliacao.php', // Corrected path to be consistent with login test
       // O seu script tela_produto.php envia JSON
       body: {
         produto_id: produtoIdParaTestar,

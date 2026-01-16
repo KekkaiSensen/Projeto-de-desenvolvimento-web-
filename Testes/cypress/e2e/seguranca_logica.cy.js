@@ -3,7 +3,7 @@
 describe('Segurança - Lógica de Negócios', () => {
 
   it('PROVA DE CONCEITO: permite a manipulação de preço via LocalStorage', () => {
-    
+
     cy.intercept('POST', '**/Banco de dados/processa_pedido.php').as('processaPedido');
 
     // --- CORREÇÃO APLICADA ---
@@ -15,19 +15,24 @@ describe('Segurança - Lógica de Negócios', () => {
       img: 'imagens/Produtos/69011c3c45949-0.webp',
       quantidade: 1
     };
-    
+
     // Preço real (string)
     const precoRealString = '189.00';
 
-    cy.visit('/'); 
-    
+    cy.visit('/');
+
     cy.window().then((win) => {
       win.localStorage.setItem('carrinho', JSON.stringify([produtoCaro]));
       win.localStorage.setItem('totalCompra', precoRealString);
       win.localStorage.setItem('valorFrete', '0.00');
       win.localStorage.setItem('valorFinal', precoRealString);
+      win.localStorage.setItem('dadosEntrega', JSON.stringify({
+        endereco_id: 1, // Exemplo de ID
+        nome: 'Teste Cypress',
+        endereco: 'Rua Teste, 123'
+      }));
     });
-    
+
     cy.visit('/tela_pagamento.php');
 
     // Verifica o preço real na tela
@@ -39,7 +44,7 @@ describe('Segurança - Lógica de Negócios', () => {
     });
 
     cy.reload();
-    
+
     // A INTERFACE AGORA MOSTRA O PREÇO FALSO
     cy.get('#resumo-total-valor').should('contain', 'R$ 1,00');
 
@@ -49,7 +54,7 @@ describe('Segurança - Lógica de Negócios', () => {
     cy.wait('@processaPedido').then((interception) => {
       // O backend DEVE receber o preço falso
       expect(interception.request.body.valor_total).to.equal('1.00');
-      
+
       // O preço falso é diferente do preço real do carrinho
       const precoRealCarrinho = interception.request.body.cart[0].price;
       expect(interception.request.body.valor_total).to.not.equal(precoRealCarrinho);

@@ -1,7 +1,7 @@
 describe('Gerenciamento de Produtos', () => {
 
-    const usuarioFornecedor = 'joao.teste+qa@example.com';
-    const senhaFornecedor = 'Teste@1234';
+    const usuarioFornecedor = 'AAAA@LojaLTDA.com';
+    const senhaFornecedor = '123456';
 
     beforeEach(() => {
         // Limpa sessão e visita a home
@@ -15,15 +15,20 @@ describe('Gerenciamento de Produtos', () => {
         cy.visit('/tela_login.html');
         cy.get('input[name="email"]').type(usuarioFornecedor);
         cy.get('input[name="senha"]').type(senhaFornecedor);
-        cy.get('button[type="submit"]').click();
+        cy.get('form[action*="processa_login.php"] button[type="submit"]').click();
 
         // Verifica se logou (redirecionamento ou cookie)
         // Assumindo que redireciona para home ou minha conta
         cy.url().should('not.include', 'tela_login.html');
 
-        // 2. Acessar tela de novo produto
-        // Se não houver link direto fácil, vamos direto pela URL
-        cy.visit('/src/tela_produto_do_fornecedor.php');
+        // 2. Acessar tela de novo produto via Minha Conta (mais robusto)
+        cy.visit('/tela_minha_conta.php');
+
+        // Clica na aba "Meus produtos" para tornar o botão visível
+        cy.get('button[data-tab="painel-produtos"]').click();
+
+        // Clica no botão de adicionar novo produto
+        cy.contains('Adicionar novo produto').click();
 
         // Verifica se carregou a página
         cy.get('h2').contains('Características principais').should('be.visible');
@@ -58,11 +63,11 @@ describe('Gerenciamento de Produtos', () => {
         // 4. Upload de Imagem
         // O ID é estranho: produto-../assets/imagens
         // Vamos usar um seletor de atributo para garantir
-        cy.get('[id="produto-../assets/imagens"]').selectFile('Testes/cypress/fixtures/produto_teste.png', { force: true });
+        cy.get('[id="produto-../assets/imagens"]').selectFile('cypress/fixtures/produto_teste.png', { force: true });
 
         // 5. Submeter
         cy.intercept('POST', '**/processa_novo_produto.php').as('postProduto');
-        cy.get('button[type="submit"]').click();
+        cy.get('#form-produto button[type="submit"]').click();
 
         // 6. Verificar sucesso
         cy.wait('@postProduto').its('response.statusCode').should('eq', 200);
