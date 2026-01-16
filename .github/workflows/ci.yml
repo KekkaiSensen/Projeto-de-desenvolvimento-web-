@@ -19,6 +19,10 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, intl, pdo_sqlite, pdo_mysql
 
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+
       - name: Start PHP Server
         run: |
           php -S 127.0.0.1:3000 -t . > /dev/null 2>&1 &
@@ -32,6 +36,10 @@ jobs:
       - name: Install Dependencies
         working-directory: ./Testes
         run: npm ci
+
+      - name: Run PHPUnit Tests
+        run: vendor/bin/phpunit
+
 
       - name: Cypress Run
         working-directory: ./Testes

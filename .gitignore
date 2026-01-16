@@ -59,3 +59,6 @@ src/magalu_config.php
  
 # Documentação de arquitetura (desativada)
 docs
+
+# PHPUnit
+.phpunit.result.cache
