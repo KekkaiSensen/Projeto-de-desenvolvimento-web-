@@ -71,7 +71,7 @@ describe('Jornada E2E do Cliente (Happy Path)', () => {
 
     // --- 6. Página de Pagamento (tela_pagamento.php) ---
     cy.url().should('include', 'tela_pagamento.php');
-    cy.intercept('POST', '**/Banco de dados/processa_pedido.php').as('processaPedido');
+    cy.intercept('POST', '**/processa_pedido.php').as('processaPedido');
     cy.get('#pix').check();
     // Usa seletor específico para garantir
     cy.get('#form-pagamento .btn-continuar-entrega').click();

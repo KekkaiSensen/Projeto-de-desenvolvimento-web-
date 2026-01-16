@@ -4,15 +4,16 @@ describe('Segurança - Lógica de Negócios', () => {
 
   it('PROVA DE CONCEITO: permite a manipulação de preço via LocalStorage', () => {
 
-    cy.intercept('POST', '**/Banco de dados/processa_pedido.php').as('processaPedido');
+    cy.intercept('POST', '**/processa_pedido.php').as('processaPedido');
 
     // --- CORREÇÃO APLICADA ---
     // Usamos um ID e preço que existem no seu banco (Produto 22)
+    // Usamos um ID e preço que existem no seu banco (Produto 58 - LEGO)
     const produtoCaro = {
-      id: 22, // ID do produto "Parafusadeira"
-      title: 'Parafusadeira E Furadeira Impacto',
-      price: 189.00, // Preço com 10% de desconto (210.00 - 10%)
-      img: 'imagens/Produtos/69011c3c45949-0.webp',
+      id: 58, // ID válido (LEGO)
+      title: 'LEGO Star Wars TIE Bomber 75347, Conjunto de Construção de Brinquedo Colecionável para Fãs da saga do clássico Star Wars, com Minifigura do Darth Vader, Presente para Meninos e Meninas',
+      price: 189.00, // Preço aproximado ou fictício para o teste
+      img: 'https://http2.mlstatic.com/D_NQ_NP_690111-MLU72685794301_112023-O.webp',
       quantidade: 1
     };
 

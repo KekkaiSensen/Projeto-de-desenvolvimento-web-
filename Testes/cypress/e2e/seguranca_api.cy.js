@@ -29,7 +29,8 @@ describe('Segurança - Testes de API (SQLi e XSS)', () => {
 
     const xssPayload = '<img src=x onerror=alert("XSS-AVALIACAO")>';
     // Usando o ID 22 (Parafusadeira) do seu bancodadosteste.sql
-    const produtoIdParaTestar = 22;
+    // Usando o ID 58 conforme solicitado pelo usuário
+    const produtoIdParaTestar = 58;
 
     // --- INÍCIO DAS CORREÇÕES ---
 
