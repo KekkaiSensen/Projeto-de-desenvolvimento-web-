@@ -54,7 +54,7 @@ describe('Captura de Screenshots para README', () => {
         cy.visit('/tela_login.html')
         cy.get('input[name="email"]').type('teste@email.com')
         cy.get('input[name="senha"]').type('senha123')
-        cy.get('button[type="submit"]').click()
+        cy.get('main button[type="submit"]').click()
 
         // Depois navega para entrega
         cy.visit('/tela_entrega.php', { failOnStatusCode: false })
@@ -70,7 +70,7 @@ describe('Captura de Screenshots para README', () => {
         cy.visit('/tela_login.html')
         cy.get('input[name="email"]').type('teste@email.com')
         cy.get('input[name="senha"]').type('senha123')
-        cy.get('button[type="submit"]').click()
+        cy.get('main button[type="submit"]').click()
 
         // Navega para pagamento
         cy.visit('/tela_pagamento.php', { failOnStatusCode: false })
@@ -86,7 +86,7 @@ describe('Captura de Screenshots para README', () => {
         cy.visit('/tela_login.html')
         cy.get('input[name="email"]').type('teste@email.com')
         cy.get('input[name="senha"]').type('senha123')
-        cy.get('button[type="submit"]').click()
+        cy.get('main button[type="submit"]').click()
 
         // Navega para minha conta
         cy.visit('/tela_minha_conta.php')
@@ -102,7 +102,7 @@ describe('Captura de Screenshots para README', () => {
         cy.visit('/tela_login.html')
         cy.get('input[name="email"]').type('fornecedor@email.com')
         cy.get('input[name="senha"]').type('senha123')
-        cy.get('button[type="submit"]').click()
+        cy.get('main button[type="submit"]').click()
 
         // Navega para tela de produto do fornecedor
         cy.visit('/tela_produto_do_fornecedor.php')

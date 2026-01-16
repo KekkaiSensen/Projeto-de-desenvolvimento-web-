@@ -10,11 +10,11 @@ describe('Jornada E2E do Cliente (Happy Path)', () => {
   });
 
   it('deve permitir que um usuário adicione um item, faça login e finalize a compra', () => {
-    
+
     // --- 1. Home (index.php) ---
     // Clica no primeiro produto (que será o ID 22, "Parafusadeira")
     cy.get('.card-link').first().click();
-    
+
     // --- 2. Página de Produto (tela_produto.php) ---
     cy.url().should('include', 'tela_produto.php');
     cy.get('#btn-adicionar-carrinho').click();
@@ -31,9 +31,9 @@ describe('Jornada E2E do Cliente (Happy Path)', () => {
     // --- CORREÇÃO APLICADA ---
     // Usamos o usuário e senha que existem no seu bancodadosteste.sql
     // A senha para 'joao.teste+qa@example.com' é 'senha123' (hash $2y$10$BzliJoZptHJnsCFGKk4ADO8MOXxT89I3LfYgG/QSqC7CXCjLgEfzO)
-    cy.get('#usuario').type('joao.teste+qa@example.com');
-    cy.get('#senha').type('senha123'); // Você precisará saber a senha real
-    cy.get('button[type="submit"]').click();
+    cy.get('input[name="email"]').type('joao.teste+qa@example.com');
+    cy.get('input[name="senha"]').type('senha123'); // Você precisará saber a senha real
+    cy.get('main button[type="submit"]').click();
 
     cy.wait('@postLogin');
 
@@ -53,7 +53,7 @@ describe('Jornada E2E do Cliente (Happy Path)', () => {
     cy.get('#success-notification')
       .should('be.visible')
       .and('contain', 'Pagamento bem-sucedido');
-    
+
     // --- 8. Verificação Pós-Compra ---
     cy.visit('/tela_carrinho.php');
     cy.get('#painel-carrinho').should('contain', 'Nenhum produto no carrinho');

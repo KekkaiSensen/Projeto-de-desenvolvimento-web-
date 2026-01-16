@@ -898,14 +898,7 @@ if ($usuario_logado) {
                                           <div class="thumb" style="background-image: url('${imgUrl}');"></div>
                                           <div class="details">
                                               <span class="title">${produto.nome}</span>
-                                                <div class="card-avaliacao">
-                                                    <?php
-                                                    for ($i = 1; $i <= 5; $i++) {
-                                                      $classe = ($i <= $nota_para_estrelas) ? 'filled' : '';
-                                                      echo '<span class="star ' . $classe . '">&#9733;</span>';
-                                                    }
-                                                    ?>
-                                                </div>
+                                                <div class="card-avaliacao"></div>
                                               
                                               <div class="price-container">
                                                   ${precoAntigoHTML}

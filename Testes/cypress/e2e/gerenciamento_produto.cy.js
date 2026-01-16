@@ -13,8 +13,8 @@ describe('Gerenciamento de Produtos', () => {
     it('Deve permitir cadastrar um novo produto com sucesso', () => {
         // 1. Login
         cy.visit('/tela_login.html');
-        cy.get('#usuario').type(usuarioFornecedor);
-        cy.get('#senha').type(senhaFornecedor);
+        cy.get('input[name="email"]').type(usuarioFornecedor);
+        cy.get('input[name="senha"]').type(senhaFornecedor);
         cy.get('button[type="submit"]').click();
 
         // Verifica se logou (redirecionamento ou cookie)
