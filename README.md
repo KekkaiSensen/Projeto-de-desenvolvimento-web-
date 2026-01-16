@@ -330,7 +330,7 @@ Para mais informações sobre o projeto, consulte:
 
 ## Roadmap e Melhorias
 
-Confira nosso **[Roadmap](ROADMAP.md)** para ver as próximas funcionalidades planejadas e melhorias técnicas.
+Confira nosso **[roadmap](ROADMAP.md)** para ver as próximas funcionalidades planejadas e melhorias técnicas.
 
 ---
 
