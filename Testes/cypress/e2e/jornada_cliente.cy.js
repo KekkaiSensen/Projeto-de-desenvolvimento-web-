@@ -12,6 +12,11 @@ describe('Jornada E2E do Cliente (Happy Path)', () => {
   it('deve permitir que um usuário adicione um item, faça login e finalize a compra', () => {
 
     // --- 1. Home (index.php) ---
+    // Debug: Verifica quantos produtos existem na tela
+    cy.get('.card-link').should('have.length.greaterThan', 0).then($cards => {
+      cy.log(`Encontrados ${$cards.length} produtos.`);
+    });
+
     // Clica no primeiro produto (que será o ID 22, "Parafusadeira")
     cy.get('.card-link').first().click();
 
