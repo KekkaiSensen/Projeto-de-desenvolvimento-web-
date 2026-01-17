@@ -11,7 +11,7 @@ $produto_id = $_GET['id'];
 
 // 2. Buscar o produto principal
 try {
-  $stmt = $pdo->prepare("SELECT p.*, u.nome as fornecedor_nome FROM PRODUTOS p LEFT JOIN usuarios u ON p.usuario_id = u.id WHERE p.id = ? AND p.status = 'ativo'");
+  $stmt = $pdo->prepare("SELECT p.*, u.nome as fornecedor_nome FROM produtos p LEFT JOIN usuarios u ON p.usuario_id = u.id WHERE p.id = ? AND p.status = 'ativo'");
   $stmt->execute([$produto_id]);
   $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -21,7 +21,7 @@ try {
   }
 
   // 3. Buscar as imagens secundárias
-  $stmt_imgs = $pdo->prepare("SELECT url_imagem FROM PRODUTO_IMAGENS WHERE produto_id = ?");
+  $stmt_imgs = $pdo->prepare("SELECT url_imagem FROM produto_imagens WHERE produto_id = ?");
   $stmt_imgs->execute([$produto_id]);
   $imagens_secundarias = $stmt_imgs->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
