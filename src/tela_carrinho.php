@@ -16,7 +16,7 @@ if ($usuario_logado) {
   // 2. AGORA BUSQUE O ENDEREÇO (BLOCO MOVIDO PARA CÁ)
   try {
     // Busca o último endereço cadastrado pelo usuário
-    $stmt_addr = $pdo->prepare("SELECT * FROM ENDERECOS WHERE usuario_id = ? ORDER BY id DESC LIMIT 1");
+    $stmt_addr = $pdo->prepare("SELECT * FROM enderecos WHERE usuario_id = ? ORDER BY id DESC LIMIT 1");
     $stmt_addr->execute([$usuario_id]); // <-- Agora $usuario_id existe
     $endereco_padrao = $stmt_addr->fetch(PDO::FETCH_ASSOC);
 
@@ -31,7 +31,7 @@ if ($usuario_logado) {
   // 3. A BUSCA DE CARRINHO (QUE JÁ ESTAVA AQUI) CONTINUA ABAIXO
   try {
     // 1. Busca o ID do carrinho principal do usuário
-    $stmt_cart = $pdo->prepare("SELECT id FROM CARRINHO WHERE usuario_id = ?");
+    $stmt_cart = $pdo->prepare("SELECT id FROM carrinho WHERE usuario_id = ?");
     $stmt_cart->execute([$usuario_id]);
     $carrinho = $stmt_cart->fetch();
 
@@ -40,8 +40,8 @@ if ($usuario_logado) {
 
       // 2. Busca os itens desse carrinho E os dados dos produtos
       $sql_itens = "SELECT p.id, p.nome as title, p.preco as price, p.imagem_url as img, ci.quantidade
-                          FROM CARRINHO_ITENS ci
-                          JOIN PRODUTOS p ON ci.produto_id = p.id
+                          FROM carrinho_itens ci
+                          JOIN produtos p ON ci.produto_id = p.id
                           WHERE ci.carrinho_id = ?";
       $stmt_itens = $pdo->prepare($sql_itens);
       $stmt_itens->execute([$carrinho_id]);

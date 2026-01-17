@@ -46,9 +46,9 @@ try {
             pi.quantidade,
             prod.nome as produto_nome,
             prod.imagem_url as produto_imagem
-        FROM PEDIDOS p
-        JOIN PEDIDO_ITENS pi ON p.id = pi.pedido_id
-        JOIN PRODUTOS prod ON pi.produto_id = prod.id
+        FROM pedidos p
+        JOIN pedido_itens pi ON p.id = pi.pedido_id
+        JOIN produtos prod ON pi.produto_id = prod.id
         WHERE p.usuario_id = ?
         ORDER BY p.data_pedido DESC, p.id DESC, prod.nome ASC
     ";
@@ -66,7 +66,7 @@ try {
 $rascunhos = [];
 if ($is_fornecedor) {
     try {
-        $stmt_rascunhos = $pdo->prepare("SELECT * FROM PRODUTOS WHERE usuario_id = ? AND status != 'inativo' ORDER BY id DESC");
+        $stmt_rascunhos = $pdo->prepare("SELECT * FROM produtos WHERE usuario_id = ? AND status != 'inativo' ORDER BY id DESC");
         $stmt_rascunhos->execute([$usuario_id]);
         $rascunhos = $stmt_rascunhos->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {

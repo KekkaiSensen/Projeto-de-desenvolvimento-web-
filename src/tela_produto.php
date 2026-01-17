@@ -4,10 +4,12 @@ require '../Banco de dados/conexao.php';
 
 // 1. Validar e pegar o ID da URL
 if (!isset($_GET['id']) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
+  error_log("tela_produto.php: ID invalido ou ausente. GET: " . print_r($_GET, true));
   header('Location: index.php');
   exit();
 }
 $produto_id = $_GET['id'];
+error_log("tela_produto.php: Buscando produto ID: " . $produto_id);
 
 // 2. Buscar o produto principal
 try {
@@ -16,9 +18,11 @@ try {
   $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
   if (!$produto) {
+    error_log("tela_produto.php: Produto nao encontrado ou inativo. ID: " . $produto_id);
     header('Location: index.php');
     exit();
   }
+  error_log("tela_produto.php: Produto encontrado: " . $produto['nome']);
 
   // 3. Buscar as imagens secundárias
   $stmt_imgs = $pdo->prepare("SELECT url_imagem FROM produto_imagens WHERE produto_id = ?");

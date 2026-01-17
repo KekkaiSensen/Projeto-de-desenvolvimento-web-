@@ -24,7 +24,7 @@ $total_carrinho = 0.00; // Fallback do PHP
 
 // 5. BUSCA DADOS ADICIONAIS DO USUÁRIO (CPF/TELEFONE)
 try {
-    $stmt_usuario = $pdo->prepare("SELECT cpf, telefone FROM USUARIOS WHERE id = ?");
+    $stmt_usuario = $pdo->prepare("SELECT cpf, telefone FROM usuarios WHERE id = ?");
     $stmt_usuario->execute([$usuario_id]);
     $dados_usuario = $stmt_usuario->fetch(PDO::FETCH_ASSOC);
 
@@ -42,7 +42,7 @@ try {
 
 // 6. BUSCA ENDEREÇO PADRÃO
 try {
-    $stmt_addr = $pdo->prepare("SELECT * FROM ENDERECOS WHERE usuario_id = ? ORDER BY id DESC LIMIT 1");
+    $stmt_addr = $pdo->prepare("SELECT * FROM enderecos WHERE usuario_id = ? ORDER BY id DESC LIMIT 1");
     $stmt_addr->execute([$usuario_id]);
     $endereco_padrao = $stmt_addr->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -52,9 +52,9 @@ try {
 // 7. BUSCA TOTAL DO CARRINHO (DO BANCO DE DADOS, COMO FALLBACK)
 try {
     $sql_cart = "SELECT SUM(p.preco * ci.quantidade) as subtotal
-                 FROM CARRINHO c
-                 JOIN CARRINHO_ITENS ci ON c.id = ci.carrinho_id
-                 JOIN PRODUTOS p ON ci.produto_id = p.id
+                 FROM carrinho c
+                 JOIN carrinho_itens ci ON c.id = ci.carrinho_id
+                 JOIN produtos p ON ci.produto_id = p.id
                  WHERE c.usuario_id = ?";
 
     $stmt_cart = $pdo->prepare($sql_cart);
