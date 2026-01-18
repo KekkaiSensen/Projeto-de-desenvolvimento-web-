@@ -81,14 +81,14 @@ try {
     // Se produto_id existe, é UPDATE
     if ($produto_id) {
         // Verifica se pertence ao usuário
-        $stmtCheck = $pdo->prepare("SELECT id FROM PRODUTOS WHERE id = ? AND usuario_id = ?");
+        $stmtCheck = $pdo->prepare("SELECT id FROM produtos WHERE id = ? AND usuario_id = ?");
         $stmtCheck->execute([$produto_id, $usuario_id]);
         if (!$stmtCheck->fetch()) {
             echo json_encode(['sucesso' => false, 'mensagem' => 'Produto não encontrado ou permissão negada.']);
             exit();
         }
 
-        $sql = "UPDATE PRODUTOS SET 
+        $sql = "UPDATE produtos SET 
                 nome = ?, preco = ?, desconto = ?, descricao = ?, estoque = ?, categoria_id = ?, status = 'rascunho'";
 
         $params = [$titulo, $preco, $desconto, $descricao_final, $quantidade, $categoria_id];
@@ -108,7 +108,7 @@ try {
         $id_retorno = $produto_id;
     } else {
         // INSERT
-        $sql = "INSERT INTO PRODUTOS (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) 
+        $sql = "INSERT INTO produtos (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, 'rascunho', ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$titulo, $preco, $desconto, $descricao_final, $quantidade, $categoria_id, $imagem_db_path, $usuario_id]);

@@ -30,7 +30,7 @@ try {
     $pdo->beginTransaction();
 
     // 2. Encontrar ou criar o carrinho principal do usuário (Tabela CARRINHO)
-    $stmt = $pdo->prepare("SELECT id FROM CARRINHO WHERE usuario_id = ?");
+    $stmt = $pdo->prepare("SELECT id FROM carrinho WHERE usuario_id = ?");
     $stmt->execute([$usuario_id]);
     $carrinhoBD = $stmt->fetch();
 
@@ -38,17 +38,17 @@ try {
     if ($carrinhoBD) {
         $carrinho_id = $carrinhoBD['id'];
     } else {
-        $stmt_cria = $pdo->prepare("INSERT INTO CARRINHO (usuario_id) VALUES (?)");
+        $stmt_cria = $pdo->prepare("INSERT INTO carrinho (usuario_id) VALUES (?)");
         $stmt_cria->execute([$usuario_id]);
         $carrinho_id = $pdo->lastInsertId();
     }
 
     // 3. Limpar itens antigos (Tabela CARRINHO_ITENS)
-    $stmt_limpa = $pdo->prepare("DELETE FROM CARRINHO_ITENS WHERE carrinho_id = ?");
+    $stmt_limpa = $pdo->prepare("DELETE FROM carrinho_itens WHERE carrinho_id = ?");
     $stmt_limpa->execute([$carrinho_id]);
 
     // 4. Inserir os novos itens
-    $stmt_insere = $pdo->prepare("INSERT INTO CARRINHO_ITENS (carrinho_id, produto_id, quantidade) VALUES (?, ?, ?)");
+    $stmt_insere = $pdo->prepare("INSERT INTO carrinho_itens (carrinho_id, produto_id, quantidade) VALUES (?, ?, ?)");
 
     foreach ($carrinhoJS as $item) {
         // ATENÇÃO: Você precisa ter o ID do produto no seu JS.

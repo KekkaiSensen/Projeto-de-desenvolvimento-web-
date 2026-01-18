@@ -15,7 +15,7 @@ $sql_fallback = "SELECT
                     p.id, p.nome, p.preco, p.desconto, p.imagem_url,
                     AVG(a.nota) as media_avaliacoes,
                     COUNT(a.nota) as total_avaliacoes
-                 FROM PRODUTOS p
+                 FROM produtos p
                  LEFT JOIN avaliacoes a ON p.id = a.produto_id
                  WHERE p.status = 'ativo' 
                  GROUP BY p.id
@@ -25,10 +25,10 @@ $sql_fallback = "SELECT
 try {
     // Só tenta buscar por categoria se o usuário estiver logado
     if ($usuario_id) {
-        
+
         // 1. Encontrar o ID do último pedido do usuário
         $stmt_last_order = $pdo->prepare(
-            "SELECT id FROM PEDIDOS WHERE usuario_id = ? ORDER BY data_pedido DESC LIMIT 1"
+            "SELECT id FROM pedidos WHERE usuario_id = ? ORDER BY data_pedido DESC LIMIT 1"
         );
         $stmt_last_order->execute([$usuario_id]);
         $ultimo_pedido = $stmt_last_order->fetch();
@@ -39,22 +39,22 @@ try {
 
             // 2. Encontrar as categorias (distintas) dos produtos desse pedido
             $sql_categorias = "SELECT DISTINCT p.categoria_id 
-                               FROM PRODUTOS p
-                               JOIN PEDIDO_ITENS pi ON p.id = pi.produto_id
+                               FROM produtos p
+                               JOIN pedido_itens pi ON p.id = pi.produto_id
                                WHERE pi.pedido_id = ?";
-            
+
             $stmt_categorias = $pdo->prepare($sql_categorias);
             $stmt_categorias->execute([$pedido_id]);
             $categorias_ids = $stmt_categorias->fetchAll(PDO::FETCH_COLUMN); // Pega só os IDs
 
             // Se encontrou categorias...
             if (!empty($categorias_ids)) {
-                
+
                 // 3. Buscar produtos dessas categorias (incluindo os já comprados)
-                
+
                 // Cria os placeholders (?) dinamicamente (ex: ?,?,?)
                 $placeholders = implode(',', array_fill(0, count($categorias_ids), '?'));
-                
+
                 // ===================================================================
                 // === 2. SQL DE RECOMENDAÇÕES (MODIFICADA) ===
                 // Busca produtos das categorias, agora incluindo as avaliações.
@@ -63,14 +63,14 @@ try {
                                         p.id, p.nome, p.preco, p.desconto, p.imagem_url,
                                         AVG(a.nota) as media_avaliacoes,
                                         COUNT(a.nota) as total_avaliacoes
-                                    FROM PRODUTOS p
+                                    FROM produtos p
                                     LEFT JOIN avaliacoes a ON p.id = a.produto_id
                                     WHERE p.categoria_id IN ($placeholders) 
                                     AND p.status = 'ativo'
                                     GROUP BY p.id
                                     ORDER BY RAND() 
                                     LIMIT 10";
-                                    
+
                 $stmt_recomendacoes = $pdo->prepare($sql_recomendacoes);
                 $stmt_recomendacoes->execute($categorias_ids);
                 $recomendacoes = $stmt_recomendacoes->fetchAll(PDO::FETCH_ASSOC);
@@ -86,7 +86,6 @@ try {
     }
 
     echo json_encode(['sucesso' => true, 'produtos' => $recomendacoes]);
-
 } catch (PDOException $e) {
     // Em caso de erro, tenta o fallback
     try {
@@ -103,4 +102,3 @@ try {
         echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de Banco de Dados: ' . $e2->getMessage()]);
     }
 }
-?>

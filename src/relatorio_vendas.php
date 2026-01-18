@@ -21,9 +21,9 @@ try {
         SELECT 
             DATE(p.data_pedido) as date, 
             SUM(pi.quantidade * pi.preco_unitario) as total 
-        FROM PEDIDOS p
-        JOIN PEDIDO_ITENS pi ON p.id = pi.pedido_id
-        JOIN PRODUTOS prod ON pi.produto_id = prod.id
+        FROM pedidos p
+        JOIN pedido_itens pi ON p.id = pi.pedido_id
+        JOIN produtos prod ON pi.produto_id = prod.id
         WHERE prod.usuario_id = ?
     ";
 

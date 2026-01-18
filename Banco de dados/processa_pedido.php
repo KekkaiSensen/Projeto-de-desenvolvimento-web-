@@ -83,7 +83,7 @@ try {
 
     // 5. Criar o registro na tabela PEDIDOS (MODIFICADO para usar bind)
     $stmt_pedido = $pdo->prepare(
-        "INSERT INTO PEDIDOS (usuario_id, endereco_id, valor_total, status, cupom_id, valor_desconto) 
+        "INSERT INTO pedidos (usuario_id, endereco_id, valor_total, status, cupom_id, valor_desconto) 
          VALUES (?, ?, ?, 'processando', ?, ?)"
     );
 
@@ -124,12 +124,12 @@ try {
 
     // 6. Preparar queries para itens e estoque (sem alteração)
     $stmt_item = $pdo->prepare(
-        "INSERT INTO PEDIDO_ITENS (pedido_id, produto_id, quantidade, preco_unitario) 
+        "INSERT INTO pedido_itens (pedido_id, produto_id, quantidade, preco_unitario) 
          VALUES (?, ?, ?, ?)"
     );
 
     $stmt_stock = $pdo->prepare(
-        "UPDATE PRODUTOS SET estoque = estoque - ? WHERE id = ? AND estoque >= ?"
+        "UPDATE produtos SET estoque = estoque - ? WHERE id = ? AND estoque >= ?"
     );
 
     // 7. Loop pelos itens do carrinho (sem alteração)
@@ -150,13 +150,13 @@ try {
     }
 
     // 8. Limpar o CARRINHO_ITENS do usuário no banco (sem alteração)
-    $stmt_get_cart = $pdo->prepare("SELECT id FROM CARRINHO WHERE usuario_id = ?");
+    $stmt_get_cart = $pdo->prepare("SELECT id FROM carrinho WHERE usuario_id = ?");
     $stmt_get_cart->execute([$usuario_id]);
     $carrinho_row = $stmt_get_cart->fetch();
 
     if ($carrinho_row) {
         $carrinho_id = $carrinho_row['id'];
-        $stmt_clear_cart = $pdo->prepare("DELETE FROM CARRINHO_ITENS WHERE carrinho_id = ?");
+        $stmt_clear_cart = $pdo->prepare("DELETE FROM carrinho_itens WHERE carrinho_id = ?");
         $stmt_clear_cart->execute([$carrinho_id]);
     }
 

@@ -11,7 +11,7 @@ $usuario_id = $_SESSION['usuario_id'];
 $id = $_GET['id'] ?? 0;
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM PRODUTOS WHERE id = ? AND usuario_id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM produtos WHERE id = ? AND usuario_id = ?");
     $stmt->execute([$id, $usuario_id]);
     $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -47,7 +47,7 @@ try {
         }
 
         // Buscar Thumbnails
-        $stmtThumb = $pdo->prepare("SELECT url_imagem FROM PRODUTO_IMAGENS WHERE produto_id = ?");
+        $stmtThumb = $pdo->prepare("SELECT url_imagem FROM produto_imagens WHERE produto_id = ?");
         $stmtThumb->execute([$id]);
         $thumbs = $stmtThumb->fetchAll(PDO::FETCH_COLUMN);
 

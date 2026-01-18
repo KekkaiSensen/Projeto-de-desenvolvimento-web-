@@ -28,7 +28,7 @@ try {
     $urlsToDelete = [];
 
     // Verificar produto e imagem principal
-    $stmtSelect = $pdo->prepare("SELECT imagem_url FROM PRODUTOS WHERE id = ? AND usuario_id = ?");
+    $stmtSelect = $pdo->prepare("SELECT imagem_url FROM produtos WHERE id = ? AND usuario_id = ?");
     $stmtSelect->execute([$id, $usuario_id]);
     $produto = $stmtSelect->fetch(PDO::FETCH_ASSOC);
 
@@ -40,7 +40,7 @@ try {
 
         // Buscar imagens da galeria
         try {
-            $stmtGallery = $pdo->prepare("SELECT url_imagem FROM PRODUTO_IMAGENS WHERE produto_id = ?");
+            $stmtGallery = $pdo->prepare("SELECT url_imagem FROM produto_imagens WHERE produto_id = ?");
             $stmtGallery->execute([$id]);
             $galleryImages = $stmtGallery->fetchAll(PDO::FETCH_COLUMN);
 
@@ -71,7 +71,7 @@ try {
     }
 
     // Modificado para Soft Delete
-    $stmt = $pdo->prepare("UPDATE PRODUTOS SET status = 'inativo' WHERE id = ? AND usuario_id = ?");
+    $stmt = $pdo->prepare("UPDATE produtos SET status = 'inativo' WHERE id = ? AND usuario_id = ?");
     $stmt->execute([$id, $usuario_id]);
 
     if ($stmt->rowCount() > 0) {

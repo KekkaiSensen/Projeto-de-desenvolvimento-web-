@@ -42,8 +42,8 @@ try {
         $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
         $pdo->exec("TRUNCATE TABLE produto_imagens");
         $pdo->exec("TRUNCATE TABLE avaliacoes");
-        $pdo->exec("DELETE FROM PRODUTOS");
-        $pdo->exec("ALTER TABLE PRODUTOS AUTO_INCREMENT = 1");
+        $pdo->exec("DELETE FROM produtos");
+        $pdo->exec("ALTER TABLE produtos AUTO_INCREMENT = 1");
         $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
         echo "Limpeza concluída.\n";
     }
@@ -111,7 +111,7 @@ try {
             $img = getRealImage($item['term']);
             $descFinal = "--- CARACTERÍSTICAS ---\nMarca: Genérica\n--- ESPECIFICAÇÕES ---\nProduto original\n--- DESCRIÇÃO ---\n" . $item['desc'];
 
-            $pdo->prepare("INSERT INTO PRODUTOS (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) VALUES (?, ?, 0, ?, 50, ?, ?, 'ativo', ?)")
+            $pdo->prepare("INSERT INTO produtos (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) VALUES (?, ?, 0, ?, 50, ?, ?, 'ativo', ?)")
                 ->execute([$item['nome'], $item['preco'], $descFinal, $catId, $img, $usuario_id]);
         }
         echo "Cat $catName OK.\n";
@@ -125,7 +125,7 @@ try {
         $nome = ucfirst($term) . " Premium";
         $descFinal = "--- CARACTERÍSTICAS ---\nMarca: Importada\n--- ESPECIFICAÇÕES ---\nAlta qualidade\n--- DESCRIÇÃO ---\nProduto excelente.";
 
-        $pdo->prepare("INSERT INTO PRODUTOS (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) VALUES (?, 99.90, 0, ?, 20, ?, ?, 'ativo', ?)")
+        $pdo->prepare("INSERT INTO produtos (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) VALUES (?, 99.90, 0, ?, 20, ?, ?, 'ativo', ?)")
             ->execute([$nome, $descFinal, $catIdMisc, $img, $usuario_id]);
     }
 

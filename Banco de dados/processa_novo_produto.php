@@ -92,14 +92,14 @@ try {
     if ($produto_id) {
         // UPDATE
         // Verifica permissão
-        $stmtCheck = $pdo->prepare("SELECT id FROM PRODUTOS WHERE id = ? AND usuario_id = ?");
+        $stmtCheck = $pdo->prepare("SELECT id FROM produtos WHERE id = ? AND usuario_id = ?");
         $stmtCheck->execute([$produto_id, $usuario_id]);
         if (!$stmtCheck->fetch()) {
             echo json_encode(['sucesso' => false, 'mensagem' => 'Produto não encontrado ou permissão negada.']);
             exit();
         }
 
-        $sql = "UPDATE PRODUTOS SET 
+        $sql = "UPDATE produtos SET 
                 nome = ?, preco = ?, desconto = ?, descricao = ?, estoque = ?, categoria_id = ?, status = 'ativo'";
         $params = [$titulo, $preco, $desconto, $descricao_final, $quantidade, $categoria_id];
 
@@ -118,7 +118,7 @@ try {
     } else {
         // INSERT
         $stmt = $pdo->prepare(
-            "INSERT INTO PRODUTOS (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) 
+            "INSERT INTO produtos (nome, preco, desconto, descricao, estoque, categoria_id, imagem_url, status, usuario_id) 
              VALUES (?, ?, ?, ?, ?, ?, ?, 'ativo', ?)"
         );
         $stmt->execute([
@@ -136,7 +136,7 @@ try {
 
     // Processa Thumbnails
     if (isset($_FILES['thumbnails'])) {
-        $stmt_thumb = $pdo->prepare("INSERT INTO PRODUTO_IMAGENS (produto_id, url_imagem) VALUES (?, ?)");
+        $stmt_thumb = $pdo->prepare("INSERT INTO produto_imagens (produto_id, url_imagem) VALUES (?, ?)");
 
         // Re-organiza array de files se necessario, mas CloudinaryService::upload espera um item de $_FILES (com tmp_name etc)
         // O array $_FILES['thumbnails'] vem invertido (name => [0=>..., 1=>...]).
