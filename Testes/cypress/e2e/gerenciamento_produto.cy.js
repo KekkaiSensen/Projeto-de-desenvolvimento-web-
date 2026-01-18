@@ -1,4 +1,4 @@
-describe.skip('Gerenciamento de Produtos', () => {
+describe('Gerenciamento de Produtos', () => {
 
     const usuarioFornecedor = 'AAAA@LojaLTDA.com';
     const senhaFornecedor = '123456';
