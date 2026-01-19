@@ -14,6 +14,8 @@
 ![PHP](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?logo=cloudinary&logoColor=white)
 
 </div>
 
@@ -21,14 +23,16 @@
 
 ## Sobre o Projeto
 
-**Loja Ponto Com** é uma plataforma de e-commerce desenvolvida como projeto prático da disciplina de Desenvolvimento Web 1 do IFSP. O sistema permite que usuários comprem produtos de diversos fornecedores, além de possibilitar que os próprios usuários se cadastrem como vendedores para oferecer seus produtos na plataforma.
+**Loja Ponto Com** é uma plataforma de e-commerce moderna desenvolvida como projeto prático da disciplina de Desenvolvimento Web 1 do IFSP. O sistema evoluiu para incluir recursos avançados como cache distribuído com **Redis**, upload de imagens otimizado via **Cloudinary** e um pipeline de **CI/CD** automatizado.
+
+A plataforma opera como um marketplace, permitindo que usuários comprem produtos de diversos fornecedores e também se tornem vendedores.
 
 ### Objetivo
 
-Criar uma solução de marketplace que:
-- Facilite a compra e venda de produtos online
-- Ofereça uma experiência de compra completa, desde a navegação até o pagamento
-- Gerencie todo o ciclo de vida de um pedido
+Criar uma solução de marketplace robusta e escalável que:
+- Facilite a compra e venda de produtos online com alta performance.
+- Ofereça uma experiência de uso fluida e responsiva.
+- Implemente práticas modernas de desenvolvimento web (Cache, CDN, Automação de Testes).
 
 ---
 
@@ -36,70 +40,60 @@ Criar uma solução de marketplace que:
 
 ### Para Clientes
 
--  **Cadastro e Login**: Sistema completo de autenticação de usuários
--  **Catálogo de Produtos**: Navegação por categorias e visualização detalhada
--  **Busca e Filtros**: Sistema de busca inteligente por nome de produtos
--  **Carrinho de Compras**: Adicionar, remover e alterar quantidades de produtos
--  **Gestão de Endereços**: Cadastrar, editar e excluir endereços de entrega
--  **Finalização de Pedido**: Processo completo de checkout
--  **Múltiplas Formas de Pagamento**: Cartão de Crédito, PIX e Boleto
--  **Histórico de Compras**: Visualização de todos os pedidos realizados
--  **Avaliações e Comentários**: Avaliar produtos comprados
--  **Perfil do Usuário**: Atualização de dados pessoais
+-  **Cadastro e Login**: Sistema completo de autenticação.
+-  **Catálogo de Produtos**: Navegação por categorias e visualização detalhada.
+-  **Busca e Filtros**: Busca inteligente por nome de produtos.
+-  **Comparação de Produtos**: Ferramenta para comparar até 3 produtos lado a lado.
+-  **Sistema de Cupons**: Aplicação de códigos promocionais no carrinho.
+-  **Notificações em Tempo Real**: Alertas sobre status de pedidos e novidades.
+-  **Carrinho de Compras**: Gestão completa de itens e quantidades.
+-  **Checkout Seguro**: Processo de múltiplas etapas (Endereço, Pagamento, Confirmação).
+-  **Múltiplas Formas de Pagamento**: Simulação de Cartão de Crédito, PIX e Boleto.
+-  **Histórico e Avaliações**: Acompanhamento de pedidos e review de produtos com upload de fotos.
 
 ### Para Fornecedores
 
--  **Gestão de Produtos**: Cadastrar, editar e excluir produtos
--  **Upload de Múltiplas Imagens**: Até 5 imagens por produto
--  **Sistema de Rascunhos**: Salvar produtos incompletos para finalizar depois
--  **Categorização**: Organizar produtos por categorias
--  **Especificações Técnicas**: Adicionar características e detalhes dos produtos
--  **Controle de Estoque**: Gerenciar quantidade disponível
--  **Visualização de Vendas**: Acompanhar produtos vendidos
+-  **Dashboard Aprimorado**: Visão geral de vendas e produtos.
+-  **Gestão de Produtos**: CRUD completo de produtos.
+-  **Upload Otimizado**: Integração com Cloudinary para armazenamento de imagens.
+-  **Modo Editor**: Interface *drag-and-drop* para organizar vitrines na Home.
+-  **Sistema de Rascunhos**: Salvar produtos para edição posterior.
+-  **Controle de Estoque**: Gerenciamento em tempo real.
 
 ### Funcionalidades Técnicas
 
--  **Sessões Persistentes**: Manutenção de estado do usuário
--  **Segurança**: Proteção contra SQL Injection e XSS
--  **Validação de Dados**: Frontend e Backend
--  **Responsividade**: Design adaptável para mobile, tablet e desktop
--  **Performance**: Otimização de consultas ao banco de dados
+-  **Performance com Redis**: Cache de produtos e sessões para carregamento instantâneo.
+-  **CDN de Imagens**: Entrega otimizada de assets via Cloudinary.
+-  **Segurança**: Prepared Statements, CSRF protection e tratamento de XSS.
+-  **CI/CD**: Pipeline automatizado no GitHub Actions rodando testes E2E.
+-  **Responsividade**: Layout adaptável para todos os dispositivos.
 
 ---
 
 ## Tecnologias Utilizadas
 
 ### Frontend
-- **HTML5**: Estruturação semântica das páginas
-- **CSS3**: Estilização vanilla (sem frameworks)
-- **JavaScript (ES6+)**: Interatividade e validações do lado do cliente
-- **Ajax/Fetch API**: Requisições assíncronas
+- **HTML5**: Estruturação semântica.
+- **CSS3**: Estilização vanilla moderna.
+- **JavaScript (ES6+)**: Interatividade e chamadas assíncronas.
+- **Ajax/Fetch API**: Comunicação dinâmica com o backend.
 
 ### Backend
-- **PHP (Vanilla)**: Lógica de negócio e processamento de dados
-- **PDO (PHP Data Objects)**: Abstração de banco de dados com Prepared Statements
+- **PHP 8.2+**: Linguagem core do sistema.
+- **PDO**: Abstração segura de banco de dados.
+- **Redis**: Sistema de cache (via `predis/predis`).
+- **Cloudinary SDK**: Gerenciamento de mídia na nuvem.
 
 ### Banco de Dados
-- **MySQL**: Sistema de gerenciamento de banco de dados relacional
-- **Modelo Normalizado**: Estrutura otimizada com relacionamentos adequados
+- **MySQL 8.0**: Armazenamento relacional principal.
+- **Redis**: Armazenamento em memória (Key-Value) para cache.
 
-### Segurança
-- **Prepared Statements**: Prevenção de SQL Injection
-- **htmlspecialchars()**: Prevenção de XSS (Cross-Site Scripting)
-- **Password Hashing**: Senhas criptografadas
-- **Validação de Sessão**: Controle de acesso às páginas
-
-### Ferramentas de Desenvolvimento
-- **XAMPP/WAMP**: Ambiente de desenvolvimento local
-- **Git**: Controle de versão
-- **VSCode**: Editor de código
-- **Cypress**: Testes E2E automatizados
-
----
-
-## Estrutura do Projeto
-
-Para ver a organização detalhada dos arquivos e diretórios, consulte a **[estrutura do projeto](docs/STRUCTURE.md)**.
+### DevOps & QA
+- **GitHub Actions**: Automação de CI/CD.
+- **Cypress**: Testes End-to-End (E2E).
+- **PHPUnit**: Testes unitários de backend.
+- **Composer**: Gerenciador de dependências PHP.
+- **NPM**: Gerenciador de dependências Frontend/Testes.
 
 ---
 
@@ -107,11 +101,11 @@ Para ver a organização detalhada dos arquivos e diretórios, consulte a **[est
 
 ### Pré-requisitos
 
-- **PHP 8.0+** ou superior
-- **MySQL 5.7+** ou superior
-- **Servidor Web** (Apache ou Nginx)
-- **Redis** (Opcional, mas recomendado para cache)
-- **XAMPP** ou **WAMP** (recomendado para ambiente local)
+- **PHP 8.2+**
+- **MySQL 8.0+**
+- **Redis Server** (Obrigatório para funcionalidades de cache)
+- **Composer**
+- **Node.js 18+** (Para rodar os testes Cypress)
 
 ### Passo a Passo
 
@@ -120,120 +114,74 @@ Para ver a organização detalhada dos arquivos e diretórios, consulte a **[est
 ```bash
 git clone https://github.com/mar-moraes/Loja-Ponto-Com.git
 cd Loja-Ponto-Com
-composer install
 ```
 
-#### 2. Configure o Banco de Dados
-
-##### 2.1. Crie o Banco de Dados
-
-Abra o **phpMyAdmin** (geralmente em `http://localhost/phpmyadmin`) ou seu cliente MySQL preferido.
-
-##### 2.2. Importe o SQL
-
-Importe o arquivo de dump do banco de dados:
+#### 2. Instale as Dependências
 
 ```bash
-mysql -u seu_usuario -p < "Banco de dados/bancodadosteste.sql"
+# Backend (PHP)
+composer install
+
+# Frontend/Testes (Node.js) -> Entre na pasta de testes se necessário
+cd Testes
+npm install
+cd ..
 ```
 
-Ou pelo phpMyAdmin:
-1. Clique em "Importar"
-2. Selecione o arquivo `Banco de dados/bancodadosteste.sql`
-3. Clique em "Executar"
+#### 3. Configuração de Variáveis de Ambiente
 
-#### 3. Configure as Credenciais do Banco
+Crie um arquivo `.env` na raiz do projeto (use `.env.example` como base):
 
-Edite o arquivo `Banco de dados/conexao.php` e ajuste as credenciais:
-
-```php
-<?php
-$dsn = 'mysql:host=127.0.0.1;dbname=bancodadosteste';
-$dbusername = '';
-$dbpassword = '';
-?>
-```
-
-#### 4. Configure o Cloudinary (CDN de Imagens)
-
-Para que o upload de imagens funcione, crie um arquivo `.env` na raiz do projeto com sua URL de API do Cloudinary:
-
-```env
+```ini
+# Cloudinary (Imagens)
+# Pegue sua URL no Dashboard do Cloudinary: https://console.cloudinary.com/
 CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+
+# Redis (Cache)
 REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
+# REDIS_PASSWORD=null 
 ```
 
-> **Nota**: O sistema utiliza o Cloudinary para armazenar imagens de produtos. Sem isso, o upload falhará.
+#### 4. Configure o Banco de Dados
 
-#### 5. Configure o Servidor Web
+1.  Crie um banco de dados chamado `bancodadosteste`.
+2.  Importe o arquivo `Banco de dados/bancodadosteste.sql`.
+3.  Configure as credenciais em `Banco de dados/conexao.php`:
 
-##### Usando XAMPP/WAMP:
+```php
+$host = 'localhost';
+$dbname = 'bancodadosteste';
+$username = 'seu_usuario';
+$password = 'sua_senha';
+```
 
-1. Copie a pasta do projeto para `htdocs/` (XAMPP) ou `www/` (WAMP)
-2. Inicie o Apache e MySQL pelo painel de controle
-3. Acesse: `http://localhost:3000/src/index.php`
+#### 5. Inicie os Serviços
 
-##### Usando o Servidor Embutido do PHP:
+Certifique-se de que o **MySQL** e o **Redis** estejam rodando.
 
+Inicie o servidor PHP embutido:
 ```bash
 php -S localhost:3000
 ```
 
-Acesse: http://localhost:3000/src/index.php
-
-#### 5. Acesse o Sistema
-
-- **Página Inicial**: `http://localhost:3000/src/index.php`
-- **Login**: `http://localhost:3000/src/tela_login.html`
-- **Cadastro**: `http://localhost:3000/src/tela_cadastro.html`
+Acesse o sistema em: `http://localhost:3000/src/index.php`
 
 ---
 
-## Configuração de Variáveis de Ambiente
+## Estrutura de CI/CD
 
-O projeto utiliza arquivo de configuração direto em PHP. Edite o arquivo `Banco de dados/conexao.php`:
+O projeto utiliza **GitHub Actions** para Integração Contínua. A cada push na branch `main`:
+1.  Sobe containers MySQL e Redis.
+2.  Instala dependências PHP e Node.js.
+3.  Roda testes unitários (PHPUnit).
+4.  Roda testes E2E (Cypress) para validar fluxos críticos (Login, Compra, Cadastro de Produto).
 
-```php
-<?php
-// Configurações do Banco de Dados
-$host = 'localhost';              // Host do MySQL
-$dbname = 'bancodadosteste';       // Nome do banco de dados
-$username = 'root';               // Usuário do MySQL
-$password = '';                   // Senha do MySQL
-$charset = 'utf8mb4';             // Charset
-
-// DSN para conexão PDO
-$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
-
-// Opções do PDO
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-try {
-    $pdo = new PDO($dsn, $username, $password, $options);
-} catch (\PDOException $e) {
-    throw new \PDOException($e->getMessage(), (int)$e->getCode());
-}
-?>
-```
-
-### Configurações Importantes:
-
-| Variável | Descrição | Valor Padrão |
-|----------|-----------|--------------|
-| `$host` | Endereço do servidor MySQL | `localhost` |
-| `$dbname` | Nome do banco de dados | `bancodadosteste` |
-| `$username` | Usuário do banco de dados | `root` |
-| `$password` | Senha do banco de dados | _(vazio)_ |
+Arquivo de configuração: `.github/workflows/ci.yml`
 
 ---
 
 ## Como Contribuir
-
 
 Para detalhes sobre como colaborar com este projeto, leia o **[Guia de Contribuição](CONTRIBUTING.md)**.
 
@@ -241,32 +189,19 @@ Para detalhes sobre como colaborar com este projeto, leia o **[Guia de Contribui
 
 ## Capturas de Tela
 
-### Página Inicial
-
+### Página Inicial (Catálogo)
 ![Página Inicial](Artefatos/Readme/Fotos%20do%20readme/homepage.jpg)
 
----
+### Comparação de Produtos
+*(Adicione uma captura aqui)*
 
 ### Detalhes do Produto
-
 ![Produto](Artefatos/Readme/Fotos%20do%20readme/produto_1.jpg)
 
----
-
-### Carrinho de Compras
-
+### Carrinho e Cupons
 ![Carrinho](Artefatos/Readme/Fotos%20do%20readme/carrinho.jpg)
 
----
-
-### Checkout - Entrega
-
-![Entrega](Artefatos/Readme/Fotos%20do%20readme/entrega.jpg)
-
----
-
-### Checkout - Pagamento
-
+### Checkout
 ![Pagamento](Artefatos/Readme/Fotos%20do%20readme/pagamento.jpg)
 
 ---
@@ -280,57 +215,6 @@ Para detalhes sobre como colaborar com este projeto, leia o **[Guia de Contribui
 ### Painel do Fornecedor
 
 ![Painel Fornecedor](Artefatos/Readme/Fotos%20do%20readme/fornecedor.jpg)
-
----
-
-## Testes
-
-O projeto conta com testes E2E automatizados usando Cypress e testes unitários com PHPUnit.
-
-### Testes Unitários (Backend)
-
-Para rodar os testes unitários do PHP:
-
-```bash
-.\vendor\bin\phpunit tests
-```
-
-### Testes E2E (Frontend/Integração)
-
-```bash
-# Instalar dependências
-npm install
-
-# Abrir Cypress (modo interativo)
-npx cypress open
-
-# Executar testes (modo headless)
-npx cypress run
-```
-
-### Cobertura de Testes
-
-- [x] Fluxo de cadastro de usuário
-- [x] Fluxo de login
-- [x] Navegação no catálogo
-- [x] Adicionar produtos ao carrinho
-- [x] Processo de checkout completo
-- [x] Cadastro de produtos (fornecedor)
-- [x] Sistema de rascunhos
-
----
-
-## Documentação Adicional
-
-Para mais informações sobre o projeto, consulte:
-
-- **[Diretrizes do Trabalho Prático](Artefatos/Diretrizes_TrabalhoPrático.pdf)**: Escopo e regras do projeto
-- **[Telas e Requisitos](Artefatos/Telas%20e%20requisitos.pdf)**: Detalhamento funcional
----
-
-## Roadmap e Melhorias
-
-Confira nosso **[roadmap](ROADMAP.md)** para ver as próximas funcionalidades planejadas e melhorias técnicas.
 
 ---
 
@@ -356,10 +240,7 @@ Confira nosso **[roadmap](ROADMAP.md)** para ver as próximas funcionalidades pl
   </tr>
 </table>
 
-
-
 ---
-
 
 ## Suporte
 
