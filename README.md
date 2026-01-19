@@ -192,9 +192,6 @@ Para detalhes sobre como colaborar com este projeto, leia o **[Guia de Contribui
 ### Página Inicial (Catálogo)
 ![Página Inicial](Artefatos/Readme/Fotos%20do%20readme/homepage.jpg)
 
-### Comparação de Produtos
-*(Adicione uma captura aqui)*
-
 ### Detalhes do Produto
 ![Produto](Artefatos/Readme/Fotos%20do%20readme/produto_1.jpg)
 
