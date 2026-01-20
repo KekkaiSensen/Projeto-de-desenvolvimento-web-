@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 16, 2026 at 11:36 PM
+-- Generation Time: Jan 20, 2026 at 05:23 PM
 -- Server version: 8.0.34
 -- PHP Version: 8.2.12
 
@@ -41,8 +41,10 @@ CREATE TABLE `avaliacoes` (
 --
 
 INSERT INTO `avaliacoes` (`id`, `usuario_id`, `produto_id`, `nota`, `comentario`, `data_avaliacao`) VALUES
-(1, 3, 22, 1, '<img src=x onerror=alert(\"XSS-AVALIACAO\")>', '2026-01-16 18:46:57'),
-(14, 3, 58, 1, '<img src=x onerror=alert(\"XSS-AVALIACAO\")>', '2026-01-16 19:32:15');
+(31, 9, 58, 4, '', '2026-01-18 21:35:07'),
+(32, 9, 59, 4, '', '2026-01-18 21:35:09'),
+(33, 9, 55, 5, '', '2026-01-18 21:35:12'),
+(34, 9, 56, 5, '', '2026-01-18 21:35:16');
 
 -- --------------------------------------------------------
 
@@ -168,7 +170,8 @@ INSERT INTO `conversas` (`id`, `comprador_id`, `fornecedor_id`, `pedido_id`, `pr
 (26, 9, 6, NULL, NULL, '2026-01-07 17:06:20', '2026-01-07 17:28:41'),
 (27, 9, 6, NULL, NULL, '2026-01-07 17:26:32', '2026-01-07 17:26:35'),
 (28, 16, 6, NULL, NULL, '2026-01-07 17:39:20', '2026-01-07 17:39:22'),
-(29, 9, 6, NULL, 70, '2026-01-09 12:49:09', '2026-01-09 13:11:21');
+(29, 9, 6, NULL, 70, '2026-01-09 12:49:09', '2026-01-09 13:11:21'),
+(30, 9, 6, NULL, 64, '2026-01-19 12:33:35', '2026-01-19 12:33:35');
 
 -- --------------------------------------------------------
 
@@ -260,9 +263,8 @@ INSERT INTO `enderecos` (`id`, `usuario_id`, `cep`, `rua`, `numero`, `complement
 (6, 4, '09687-100', 'Rua General Izidoro Dias Lopes', '314', 'Casa', 'Paulicéia', 'São Bernardo do Campo', 'SP', 'Brasil'),
 (7, 8, '13058-011', 'Rua Padre Josimo Moraes Tavares', 'S/N', 'casa', 'Conjunto Habitacional Parque Itajaí', 'Campinas', 'SP', 'Brasil'),
 (11, 6, '13184000', 'Rua Sete de Setembro', '123', 'casa', 'Parque Ortolândia', 'Hortolândia', 'SP', 'Brasil'),
-(12, 9, '01455-070', 'Rua Angelina Maffei Vita', '314', 'Apartamento', 'Jardim Europa', 'São Paulo', 'SP', 'Brasil'),
 (13, 9, '90880-310', 'Avenida Moab Caldas', '159', 'Casa', 'Santa Tereza', 'Porto Alegre', 'RS', 'Brasil'),
-(14, 3, '13184-230', 'Buscando...', '123', '', '', '', '', 'Brasil');
+(14, 3, '85806-470', 'Avenida Presidente Tancredo Neves', '123', NULL, 'Santa Cruz', 'Cascavel', 'PR', 'Brasil');
 
 -- --------------------------------------------------------
 
@@ -353,7 +355,7 @@ CREATE TABLE `notificacoes` (
 --
 
 INSERT INTO `notificacoes` (`id`, `usuario_id`, `mensagem`, `lida`, `tipo`, `link`, `data_criacao`) VALUES
-(1, 3, 'Teste de notificação executado em 29/12/2025 21:04:12', 0, 'success', 'tela_minha_conta.php', '2025-12-29 17:04:12'),
+(1, 3, 'Teste de notificação executado em 29/12/2025 21:04:12', 1, 'success', 'tela_minha_conta.php', '2025-12-29 17:04:12'),
 (2, 6, 'Nova mensagem: Olá, este produto ainda está disponível? 22:21:...', 1, 'primary', 'tela_chat.php?chat_id=1', '2025-12-29 18:21:31'),
 (3, 3, 'Nova mensagem: Sim, temos em estoque! 22:21:31', 1, 'primary', 'tela_chat.php?chat_id=1', '2025-12-29 18:21:31'),
 (4, 6, 'Nova mensagem: Olá, Sandra. Gostaria que fosse informado qual é...', 1, 'primary', 'tela_chat.php?chat_id=5', '2025-12-29 18:27:44'),
@@ -390,7 +392,69 @@ INSERT INTO `notificacoes` (`id`, `usuario_id`, `mensagem`, `lida`, `tipo`, `lin
 (36, 6, 'AAAA enviou uma mensagem referente ao produto AAAA', 1, 'primary', 'tela_chat.php?chat_id=28', '2026-01-07 17:39:22'),
 (37, 9, 'AAAA enviou uma mensagem referente ao produto um produto', 1, 'primary', 'tela_chat.php?chat_id=25', '2026-01-07 17:41:23'),
 (38, 6, 'Marcelo enviou uma mensagem referente ao produto Chaleira Elétrica EEK10', 1, 'primary', 'tela_chat.php?chat_id=29', '2026-01-09 12:54:48'),
-(39, 9, 'Sandra Gomes Fictícia enviou uma mensagem referente ao produto Chaleira Elétrica EEK10', 1, 'primary', 'tela_chat.php?chat_id=29', '2026-01-09 13:11:21');
+(39, 9, 'Sandra Gomes Fictícia enviou uma mensagem referente ao produto Chaleira Elétrica EEK10', 1, 'primary', 'tela_chat.php?chat_id=29', '2026-01-09 13:11:21'),
+(40, 6, 'Novo pedido #68 recebido! Valor: R$ 189,00', 1, 'success', 'tela_minha_conta.php?tab=painel-pedidos-recebidos', '2026-01-20 12:57:32'),
+(41, 3, 'Seu pedido #68 mudou de status para: PROCESSING', 0, 'info', 'tela_minha_conta.php?tab=painel-compras', '2026-01-20 13:00:03'),
+(42, 3, 'Seu pedido #68 mudou de status para: SHIPPED', 1, 'info', 'tela_minha_conta.php?tab=painel-compras', '2026-01-20 13:00:07'),
+(43, 6, 'Novo pedido #69 recebido! Valor: R$ 15.699,00', 1, 'success', 'tela_minha_conta.php?tab=painel-pedidos-recebidos', '2026-01-20 13:00:50'),
+(44, 16, 'Seu pedido #69 mudou de status para: PROCESSING', 1, 'info', 'tela_minha_conta.php?tab=painel-compras', '2026-01-20 13:01:11'),
+(45, 16, 'Seu pedido #69 mudou de status para: SHIPPED', 1, 'info', 'tela_minha_conta.php?tab=painel-compras', '2026-01-20 13:01:19');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_events`
+--
+
+CREATE TABLE `order_events` (
+  `id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `old_status` varchar(50) DEFAULT NULL,
+  `new_status` varchar(50) NOT NULL,
+  `description` text,
+  `actor_type` varchar(20) NOT NULL,
+  `actor_id` int DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `order_events`
+--
+
+INSERT INTO `order_events` (`id`, `order_id`, `old_status`, `new_status`, `description`, `actor_type`, `actor_id`, `created_at`) VALUES
+(1, 63, NULL, 'CREATED', 'Pedido criado', 'client', 9, '2026-01-19 14:05:54'),
+(2, 63, 'CREATED', 'CANCELED', 'Cancelado pelo usuário', 'supplier', 9, '2026-01-19 14:08:02'),
+(3, 64, NULL, 'CREATED', 'Pedido criado', 'client', 9, '2026-01-19 20:23:38'),
+(4, 64, 'CREATED', 'PROCESSING', '', 'supplier', 6, '2026-01-20 12:29:26'),
+(5, 64, 'PROCESSING', 'SHIPPED', '', 'supplier', 6, '2026-01-20 12:30:37'),
+(6, 66, NULL, 'CREATED', 'Pedido criado', 'client', 3, '2026-01-20 12:36:45'),
+(7, 66, 'CREATED', 'PROCESSING', '', 'supplier', 6, '2026-01-20 12:37:08'),
+(8, 66, 'PROCESSING', 'SHIPPED', '', 'supplier', 6, '2026-01-20 12:37:14'),
+(9, 66, 'SHIPPED', 'DELIVERED', '', 'client', 3, '2026-01-20 12:37:29'),
+(10, 68, NULL, 'CREATED', 'Pedido criado', 'client', 3, '2026-01-20 12:57:32'),
+(11, 68, 'CREATED', 'PROCESSING', '', 'supplier', 6, '2026-01-20 13:00:03'),
+(12, 68, 'PROCESSING', 'SHIPPED', '', 'supplier', 6, '2026-01-20 13:00:07'),
+(13, 68, 'SHIPPED', 'DELIVERED', '', 'client', 3, '2026-01-20 13:00:32'),
+(14, 69, NULL, 'CREATED', 'Pedido criado', 'client', 16, '2026-01-20 13:00:50'),
+(15, 69, 'CREATED', 'PROCESSING', '', 'supplier', 6, '2026-01-20 13:01:11'),
+(16, 69, 'PROCESSING', 'SHIPPED', '', 'supplier', 6, '2026-01-20 13:01:19'),
+(17, 69, 'SHIPPED', 'DELIVERED', '', 'client', 16, '2026-01-20 13:01:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_issues`
+--
+
+CREATE TABLE `order_issues` (
+  `id` int NOT NULL,
+  `order_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `description` text,
+  `status` varchar(20) DEFAULT 'open',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -416,61 +480,81 @@ CREATE TABLE `pagamentos` (
 CREATE TABLE `pedidos` (
   `id` int NOT NULL,
   `usuario_id` int NOT NULL,
+  `supplier_id` int DEFAULT NULL,
   `endereco_id` int DEFAULT NULL,
   `data_pedido` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(50) NOT NULL DEFAULT 'pendente',
   `valor_total` decimal(10,2) NOT NULL,
   `cupom_id` int DEFAULT NULL,
-  `valor_desconto` decimal(10,2) DEFAULT '0.00'
+  `valor_desconto` decimal(10,2) DEFAULT '0.00',
+  `shipped_at` datetime DEFAULT NULL,
+  `delivered_at` datetime DEFAULT NULL,
+  `canceled_at` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `pedidos`
 --
 
-INSERT INTO `pedidos` (`id`, `usuario_id`, `endereco_id`, `data_pedido`, `status`, `valor_total`, `cupom_id`, `valor_desconto`) VALUES
-(1, 4, 6, '2025-10-27 10:00:00', 'processando', 839.00, NULL, 0.00),
-(2, 4, 6, '2025-10-28 20:34:28', 'processando', 24999.99, NULL, 0.00),
-(3, 3, NULL, '2025-10-28 20:50:28', 'processando', 135.98, NULL, 0.00),
-(4, 3, NULL, '2025-10-28 20:54:21', 'processando', 75005.96, NULL, 0.00),
-(5, 3, NULL, '2025-10-28 22:08:20', 'processando', 194.99, NULL, 0.00),
-(6, 3, NULL, '2025-10-28 22:24:31', 'processando', 634.99, NULL, 0.00),
-(7, 6, NULL, '2025-11-21 15:03:10', 'processando', 25005.98, NULL, 0.00),
-(8, 8, NULL, '2025-11-21 19:30:35', 'processando', 1509.99, NULL, 0.00),
-(9, 8, 7, '2025-11-21 19:43:02', 'processando', 629.00, NULL, 0.00),
-(10, 9, NULL, '2025-11-22 15:04:55', 'processando', 194.99, NULL, 0.00),
-(11, 9, NULL, '2025-12-01 16:34:57', 'processando', 634.99, NULL, 0.00),
-(12, 9, NULL, '2025-12-02 14:14:57', 'processando', 701.99, NULL, 0.00),
-(13, 9, NULL, '2025-12-02 14:32:26', 'processando', 575.04, NULL, 0.00),
-(14, 9, NULL, '2025-12-02 15:31:51', 'processando', 215.99, NULL, 0.00),
-(15, 9, NULL, '2025-12-02 15:36:06', 'processando', 194.99, NULL, 0.00),
-(16, 9, NULL, '2025-12-02 15:37:27', 'processando', 194.99, NULL, 0.00),
-(17, 9, NULL, '2025-12-02 15:38:48', 'processando', 194.99, NULL, 0.00),
-(18, 9, NULL, '2025-12-02 15:41:11', 'processando', 194.99, NULL, 0.00),
-(19, 9, NULL, '2025-12-02 15:43:57', 'processando', 194.99, NULL, 0.00),
-(20, 9, NULL, '2025-12-02 15:45:23', 'processando', 194.99, NULL, 0.00),
-(21, 9, NULL, '2025-12-02 15:47:32', 'processando', 194.99, NULL, 0.00),
-(23, 9, NULL, '2025-12-25 19:19:40', 'processando', 1517.99, NULL, 0.00),
-(24, 9, NULL, '2025-12-29 17:48:38', 'processando', 3652.99, NULL, 0.00),
-(25, 9, NULL, '2025-12-29 18:45:39', 'processando', 1509.99, NULL, 0.00),
-(26, 6, NULL, '2025-12-29 19:37:48', 'processando', 25005.98, NULL, 0.00),
-(27, 6, 11, '2026-01-07 19:26:41', 'processando', 90000.00, NULL, 0.00),
-(29, 9, 13, '2026-01-12 12:34:05', 'processando', 766.84, 6, 85.20),
-(30, 3, NULL, '2026-01-12 12:35:52', 'processando', 7525.46, 6, 836.16),
-(31, 9, NULL, '2026-01-12 13:05:03', 'processando', 565.47, 7, 62.83),
-(32, 3, NULL, '2026-01-12 13:06:30', 'processando', 2222.88, 7, 246.99),
-(33, 6, NULL, '2026-01-12 13:35:38', 'processando', 401.48, 7, 44.61),
-(34, 9, NULL, '2026-01-12 13:40:51', 'processando', 287.90, 8, 31.99),
-(35, 16, NULL, '2026-01-12 13:49:43', 'processando', 1490.45, 8, 165.61),
-(36, 16, NULL, '2026-01-12 13:53:56', 'processando', 135.89, NULL, 0.00),
-(37, 9, NULL, '2026-01-12 13:58:20', 'processando', 667.81, 9, 74.20),
-(38, 3, 14, '2026-01-16 15:53:06', 'processando', 129.90, NULL, 0.00),
-(39, 3, 14, '2026-01-16 18:27:22', 'processando', 129.90, NULL, 0.00),
-(40, 3, 14, '2026-01-16 18:44:57', 'processando', 129.90, NULL, 0.00),
-(41, 3, 14, '2026-01-16 18:46:09', 'processando', 129.90, NULL, 0.00),
-(42, 3, 14, '2026-01-16 19:08:33', 'processando', 129.90, NULL, 0.00),
-(43, 3, 14, '2026-01-16 19:14:24', 'processando', 129.90, NULL, 0.00),
-(44, 3, 14, '2026-01-16 19:31:42', 'processando', 129.90, NULL, 0.00);
+INSERT INTO `pedidos` (`id`, `usuario_id`, `supplier_id`, `endereco_id`, `data_pedido`, `status`, `valor_total`, `cupom_id`, `valor_desconto`, `shipped_at`, `delivered_at`, `canceled_at`, `created_at`) VALUES
+(1, 4, NULL, 6, '2025-10-27 10:00:00', 'processando', 839.00, NULL, 0.00, NULL, NULL, NULL, NULL),
+(2, 4, NULL, 6, '2025-10-28 20:34:28', 'processando', 24999.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(3, 3, NULL, NULL, '2025-10-28 20:50:28', 'processando', 135.98, NULL, 0.00, NULL, NULL, NULL, NULL),
+(4, 3, NULL, NULL, '2025-10-28 20:54:21', 'processando', 75005.96, NULL, 0.00, NULL, NULL, NULL, NULL),
+(5, 3, NULL, NULL, '2025-10-28 22:08:20', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(6, 3, NULL, NULL, '2025-10-28 22:24:31', 'processando', 634.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(7, 6, NULL, NULL, '2025-11-21 15:03:10', 'processando', 25005.98, NULL, 0.00, NULL, NULL, NULL, NULL),
+(8, 8, NULL, NULL, '2025-11-21 19:30:35', 'processando', 1509.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(9, 8, NULL, 7, '2025-11-21 19:43:02', 'processando', 629.00, NULL, 0.00, NULL, NULL, NULL, NULL),
+(10, 9, NULL, NULL, '2025-11-22 15:04:55', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(11, 9, NULL, NULL, '2025-12-01 16:34:57', 'processando', 634.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(12, 9, NULL, NULL, '2025-12-02 14:14:57', 'processando', 701.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(13, 9, NULL, NULL, '2025-12-02 14:32:26', 'processando', 575.04, NULL, 0.00, NULL, NULL, NULL, NULL),
+(14, 9, NULL, NULL, '2025-12-02 15:31:51', 'processando', 215.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(15, 9, NULL, NULL, '2025-12-02 15:36:06', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(16, 9, NULL, NULL, '2025-12-02 15:37:27', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(17, 9, NULL, NULL, '2025-12-02 15:38:48', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(18, 9, NULL, NULL, '2025-12-02 15:41:11', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(19, 9, NULL, NULL, '2025-12-02 15:43:57', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(20, 9, NULL, NULL, '2025-12-02 15:45:23', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(21, 9, NULL, NULL, '2025-12-02 15:47:32', 'processando', 194.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(23, 9, NULL, NULL, '2025-12-25 19:19:40', 'processando', 1517.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(24, 9, NULL, NULL, '2025-12-29 17:48:38', 'processando', 3652.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(25, 9, NULL, NULL, '2025-12-29 18:45:39', 'processando', 1509.99, NULL, 0.00, NULL, NULL, NULL, NULL),
+(26, 6, NULL, NULL, '2025-12-29 19:37:48', 'processando', 25005.98, NULL, 0.00, NULL, NULL, NULL, NULL),
+(27, 6, NULL, 11, '2026-01-07 19:26:41', 'processando', 90000.00, NULL, 0.00, NULL, NULL, NULL, NULL),
+(29, 9, NULL, 13, '2026-01-12 12:34:05', 'processando', 766.84, 6, 85.20, NULL, NULL, NULL, NULL),
+(30, 3, NULL, NULL, '2026-01-12 12:35:52', 'processando', 7525.46, 6, 836.16, NULL, NULL, NULL, NULL),
+(31, 9, NULL, NULL, '2026-01-12 13:05:03', 'processando', 565.47, 7, 62.83, NULL, NULL, NULL, NULL),
+(32, 3, NULL, NULL, '2026-01-12 13:06:30', 'processando', 2222.88, 7, 246.99, NULL, NULL, NULL, NULL),
+(33, 6, NULL, NULL, '2026-01-12 13:35:38', 'processando', 401.48, 7, 44.61, NULL, NULL, NULL, NULL),
+(34, 9, NULL, NULL, '2026-01-12 13:40:51', 'processando', 287.90, 8, 31.99, NULL, NULL, NULL, NULL),
+(35, 16, NULL, NULL, '2026-01-12 13:49:43', 'processando', 1490.45, 8, 165.61, NULL, NULL, NULL, NULL),
+(36, 16, NULL, NULL, '2026-01-12 13:53:56', 'processando', 135.89, NULL, 0.00, NULL, NULL, NULL, NULL),
+(37, 9, NULL, NULL, '2026-01-12 13:58:20', 'processando', 667.81, 9, 74.20, NULL, NULL, NULL, NULL),
+(38, 3, NULL, 14, '2026-01-16 15:53:06', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(39, 3, NULL, 14, '2026-01-16 18:27:22', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(40, 3, NULL, 14, '2026-01-16 18:44:57', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(41, 3, NULL, 14, '2026-01-16 18:46:09', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(42, 3, NULL, 14, '2026-01-16 19:08:33', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(43, 3, NULL, 14, '2026-01-16 19:14:24', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(44, 3, NULL, 14, '2026-01-16 19:31:42', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(45, 3, NULL, 14, '2026-01-16 19:44:58', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(46, 3, NULL, 14, '2026-01-16 19:53:03', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(47, 3, NULL, 14, '2026-01-16 20:01:14', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(48, 3, NULL, 14, '2026-01-16 20:15:28', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(49, 3, NULL, 14, '2026-01-16 20:31:51', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(50, 3, NULL, 14, '2026-01-16 20:56:14', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(51, 3, NULL, 14, '2026-01-16 21:24:20', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(52, 3, NULL, 14, '2026-01-17 15:14:16', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(53, 3, NULL, 14, '2026-01-17 19:28:23', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(54, 3, NULL, 14, '2026-01-18 20:16:21', 'processando', 129.90, NULL, 0.00, NULL, NULL, NULL, NULL),
+(63, 9, 6, NULL, '2026-01-19 14:05:54', 'CANCELED', 30792.00, NULL, 0.00, NULL, NULL, '2026-01-19 14:08:02', '2026-01-19 14:05:54'),
+(64, 9, 6, 13, '2026-01-19 20:23:38', 'SHIPPED', 1551.00, NULL, 0.00, '2026-01-20 12:30:37', NULL, NULL, '2026-01-19 20:23:38'),
+(66, 3, 6, 13, '2026-01-20 12:36:45', 'DELIVERED', 629.00, NULL, 0.00, '2026-01-20 12:37:14', '2026-01-20 12:37:29', NULL, '2026-01-20 12:36:45'),
+(68, 3, 6, NULL, '2026-01-20 12:57:32', 'DELIVERED', 189.00, NULL, 0.00, '2026-01-20 13:00:07', '2026-01-20 13:00:32', NULL, '2026-01-20 12:57:32'),
+(69, 16, 6, NULL, '2026-01-20 13:00:50', 'DELIVERED', 15699.00, NULL, 0.00, '2026-01-20 13:01:19', '2026-01-20 13:01:36', NULL, '2026-01-20 13:00:50');
 
 -- --------------------------------------------------------
 
@@ -540,7 +624,22 @@ INSERT INTO `pedido_itens` (`id`, `pedido_id`, `produto_id`, `quantidade`, `prec
 (48, 41, 70, 1, 129.90),
 (49, 42, 70, 1, 129.90),
 (50, 43, 70, 1, 129.90),
-(51, 44, 70, 1, 129.90);
+(51, 44, 70, 1, 129.90),
+(52, 45, 70, 1, 129.90),
+(53, 46, 70, 1, 129.90),
+(54, 47, 70, 1, 129.90),
+(55, 48, 70, 1, 129.90),
+(56, 49, 70, 1, 129.90),
+(57, 50, 70, 1, 129.90),
+(58, 51, 70, 1, 129.90),
+(59, 52, 70, 1, 129.90),
+(60, 53, 70, 1, 129.90),
+(61, 54, 70, 1, 129.90),
+(62, 63, 64, 1, 30792.00),
+(63, 64, 55, 1, 1551.00),
+(64, 66, 59, 1, 629.00),
+(65, 68, 58, 1, 189.00),
+(66, 69, 65, 1, 15699.00);
 
 -- --------------------------------------------------------
 
@@ -574,22 +673,22 @@ INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `desconto`, `categor
 (26, 'Sapato Oxford', '--- CARACTERÍSTICAS ---\nMarca: Genérica\n--- ESPECIFICAÇÕES ---\nProduto original\n--- DESCRIÇÃO ---\nPara ocasiões formais.', 280.00, 0, 12, 50, 'https://cdn.dummyjson.com/product-images/womens-shoes/calvin-klein-heel-shoes/thumbnail.webp', 'inativo', 6, -26),
 (30, 'Bicicleta Mountain Bike', '--- CARACTERÍSTICAS ---\nMarca: Genérica\n\n--- ESPECIFICAÇÕES ---\nProduto original\n\n--- DESCRIÇÃO ---\nAventura em qualquer terreno.', 1800.00, 0, 14, 100, 'https://cdn.dummyjson.com/product-images/motorcycle/generic-motorcycle/thumbnail.webp', 'inativo', 6, -30),
 (32, 'Perfume Premium', '--- CARACTERÍSTICAS ---\nMarca: Importada\n\n--- ESPECIFICAÇÕES ---\nAlta qualidade\n\n--- DESCRIÇÃO ---\nProduto excelente.', 99.90, 0, 1, 20, 'https://placehold.co/600x400?text=perfume', 'inativo', 6, -32),
-(55, 'Bicicleta Ergométrica Para Spinning', '--- CARACTERÍSTICAS ---\nPeso máximo suportado: 120 kg\nÉ dobrável: Não\nCor: Preto/Vermelho\nAltura: 1.2 m\n\n--- ESPECIFICAÇÕES ---\nSistema de resistência mecânica que é operado a partir do botão de ajuste.\n\n--- DESCRIÇÃO ---\nA Bicicleta Ergométrica Spinning PACE3000 Odin Fit é ideal para uso residencial, proporcionando exercícios aeróbicos que fortalecem a musculatura e melhoram o condicionamento cardiorrespiratório. Oferece benefícios como queima calórica, aumento da disposição e baixo impacto nas articulações, sendo indicada também para reabilitação. Possui ajustes no selim, guidão e pedais, além de roda de inércia de 8kg com resistência mecânica ajustável. Inclui monitor multifunções com sensor de pulso e suporte para tablet ou smartphone.', 1551.00, 5, 6, 100, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767826978/loja_ponto_com/produtos/taxpkh7a5xaym7kfzqmf.webp', 'ativo', 6, 14),
-(56, 'Cadeira De Escritório Ergonômica Giratória', '--- CARACTERÍSTICAS ---\nÉ gamer: Sim\nCom apoio de braços ajustável: Sim\nÉ giratória: Sim\nMaterial Do Estofamento: Mesh Espuma Látex\n\n--- ESPECIFICAÇÕES ---\n\n--- DESCRIÇÃO ---\nCadeira De Escritório Ergonômica Com Apoio De Braços 3D Plus\r\n\r\nApresentamos a nossa excepcional Cadeira de Escritório Ergonômica 3D Plus, uma fusão perfeita de design elegante e funcionalidade excepcional. O revestimento em tecido Mesh oferece conforto respirável, enquanto o encosto de cabeça ajustável em dois sentidos proporciona suporte personalizado. Com encosto reclinável, altura ajustável e apoio de braço reversível, esta cadeira se adapta perfeitamente às suas preferências.\r\n', 599.32, 6, 23, 25, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767827660/loja_ponto_com/produtos/hzoadq8dwjng4y6urnbw.webp', 'ativo', 6, 13),
-(57, 'Cafeteira Elétrica Electrolux', '--- CARACTERÍSTICAS ---\n Nome da marca: Electrolux\nFabricante: ‎Electrolux\nModelo: ‎ECM25\nCor: ‎Granite Grey\n\n--- ESPECIFICAÇÕES ---\nNúmero da peça: ‎ECM25\nCaracterísticas especiais: filtro permanente\nPeças para montagem: ‎filtro permanente, jarra\n\n--- DESCRIÇÃO ---\nA Cafeteira Elétrica Programável Experience Electrolux possui capacidade de 1,2L, permitindo preparar até 30 cafezinhos. Com timer de 24 horas, painel programável e função manter aquecido, garante praticidade e café quente a qualquer momento. Conta com sistema corta pingos, desligamento automático e placa de aquecimento antiaderente. Seu filtro permanente removível dispensa o uso de filtros de papel, sendo mais econômico e sustentável. Possui acabamento em aço inox escovado e indicador de nível de água para maior modernidade e facilidade no uso.', 259.90, 1, 7, 20, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767828021/loja_ponto_com/produtos/ttqlyl7k1bhyvvvzvaaj.jpg', 'ativo', 6, 2),
-(58, 'Parafusadeira E Furadeira Impacto', '--- CARACTERÍSTICAS ---\nÉ sem fio: Sim\nCom função percutor: Sim\nTamanho do mandril: 10 mm\n\n--- ESPECIFICAÇÕES ---\nCom função reversa.\nVem com maleta de transporte.\nSua frequência é de 60Hz.\nPossui função parafusadeira.\nInclui função martelete.\n\n--- DESCRIÇÃO ---\nA Parafusadeira/Furadeira de Impacto Profissional The Black Tools TB-21PW 21V é ideal para uso profissional e doméstico, oferecendo potência, durabilidade e praticidade. Com velocidade variável, função reversível e impacto, garante excelente desempenho em metal, madeira e plástico. Possui empunhadura Soft Grip e indicador de carga da bateria para maior conforto e controle. Acompanha maleta completa com brocas, soquetes, adaptadores e bits. Compacta e leve, é a escolha certa para quem busca eficiência e qualidade nas tarefas do dia a dia.', 189.00, 9, 22, 25, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767828265/loja_ponto_com/produtos/n4fanmphoqecxzyvx9kq.webp', 'ativo', 6, 15),
-(59, 'Motor Estacionário Gasolina 7hp Kawashima ', '--- CARACTERÍSTICAS ---\nTipo De Motor: Monocilíndrico 4T OHV\nRefrigeração: Ar\nCombustível: Gasolina\nDiâmetro x Curso: 68 x 45 mm\nCilindrada: 208 cc\n\n--- ESPECIFICAÇÕES ---\nTipo de ignição: manual.\nDimensões: 39cm de largura x 39cm de comprimento x 39cm de altura.\nPeso: 16g.\nTipo de combustível: Gasolina.\n\n--- DESCRIÇÃO ---\nOs motores estacionários Kawashima Serie E são equipamentos robustos que proporcionam economia e alto desempenho. Podem ser acoplados em diversos equipamentos como microtratores, motobombas, geradores, rabetas para barcos, moenda de cana e outros.\r\n', 629.00, 2, 17, 24, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767828488/loja_ponto_com/produtos/inrgglai9zdqu5xam2n1.webp', 'ativo', 6, 10),
-(60, 'Placa Solar 550w Peimar Monocristalino', '--- CARACTERÍSTICAS ---\nMarca: Peimar\nModelo: 550w\nCor: Prateado\nVoltagem de circuito aberto: 49.6V\nQuantidade de células: 144\n\n--- ESPECIFICAÇÕES ---\n\n--- DESCRIÇÃO ---\nPainel Solar Monocristalino Peimar OR10H550M de 550W, com tecnologia italiana Half Cell M10 | PERC, garantindo alta eficiência de 21,28% e excelente desempenho em projetos residenciais, comerciais e industriais. O kit inclui 3 unidades, cada uma com estrutura resistente em alumínio anodizado e vidro temperado antirreflexo. Suporta condições extremas, possui classe de proteção IP67 e certificações internacionais (IEC 61215 / 61730). Oferece 30 anos de garantia de performance e 25 anos de fabricação. Produto original com NF-e e seguro de responsabilidade civil incluso.\r\n', 2499.00, 2, 8, 499, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767833502/loja_ponto_com/produtos/ovpsfpduhycxtrk9cj9k.webp', 'ativo', 6, 9),
-(61, 'Tomada Inteligente Wifi', '--- CARACTERÍSTICAS ---\nMarca: ‎Coibeu\nFabricante: C &amp; B Global Importação e Exportação LTDA\nCertificação: ‎INMETRO:0124\nAparelhos compatíveis: ‎smartphones, tablets, computadores\n\n--- ESPECIFICAÇÕES ---\n\n--- DESCRIÇÃO ---\nFiltro de linha multifuncional com 3 tomadas, 2 portas USB e 1 Type-C, permitindo alimentar até 6 dispositivos simultaneamente. Possui carcaça resistente, materiais de alta condutividade e proteção contra sobrecarga e raios. Conta com interruptor centralizado e indicadores luminosos para uso prático e seguro. Permite controle remoto via aplicativo, temporização e integração com Alexa e Google Assistant. Oferece estatísticas de consumo de energia no app (função paga).\r\n', 129.99, 0, 4, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767833718/loja_ponto_com/produtos/btvi5yvbzq8rijs6mtar.jpg', 'ativo', 6, 8),
-(62, 'Samsung S85F 4K OLED Smart TV ', '--- CARACTERÍSTICAS ---\nTipo de tela: OLED\nÉ smart: Sim\nResolução: 4k\n Quantidade de portas HDM: 4\n\n--- ESPECIFICAÇÕES ---\nAlexa Embutido.\nPossui 4 portas HDMI.\nEquipado com conexão USB.\nConta com wi-fi e porto de rede\n\n--- DESCRIÇÃO ---\n65\" OLED S85F 4K Samsung Vision AI Smart TV / Smart TV Samsung Vision AI OLED 4K 2025 é uma Smart TV 4K OLED com painel de pixels autoiluminados que entrega pretos profundos, cores vivas e contraste realista. Seu processador Vision AI aprimora automaticamente brilho, cor e detalhes, além de upscaling inteligente para conteúdos mais antigos. Conta com taxa de atualização de 120 Hz, áudio imersivo e sistema Smart TV Tizen com comandos de voz e conectividade ampla. O design é fino e elegante, com controle SolarCell sustentável incluso', 5019.99, 0, 2, 125, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767834110/loja_ponto_com/produtos/t79m3ex6rtsnkxjicd5l.webp', 'ativo', 6, 1),
-(63, 'Kit De Internet Via Satelite Starlink Mini', '--- CARACTERÍSTICAS ---\nMarca: Starlink\nModelo: Mini\nTipo de antena: Omnidirecional\nCor: Branco\n\n--- ESPECIFICAÇÕES ---\nUnidades por kit: 1.\nFormato de venda: Unidade.\nÉ uma antena de internet via satélite.\n\n--- DESCRIÇÃO ---\nKit de Internet via Satélite Starlink Mini, ideal para quem precisa de conexão rápida e estável em qualquer lugar.\r\nCompacto, portátil e fácil de instalar, funciona mesmo em áreas remotas.\r\n\r\nOferece alta velocidade e baixa latência para trabalho, estudos e lazer.\r\n\r\nPerfeito para viagens, zonas rurais e situações sem infraestrutura tradicional.', 799.99, 6, 11, 200, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767834929/loja_ponto_com/produtos/kov7jsbnjzo6hojfnxji.jpg', 'ativo', 6, 3),
-(64, 'Unitree Go2 ', '--- CARACTERÍSTICAS ---\nMarca: Unitree Go2\nModelo: Unitree Go2 Pro\nCor: Cinza\n\n--- ESPECIFICAÇÕES ---\nPersonagem: CAO.\nTem forma de cão.\nFaz parte do mundo Robô.\n\n--- DESCRIÇÃO ---\nUnitree Go2 — robô-cão quadrúpede inteligente com sensor 4D LIDAR ultra-wide para reconhecimento ambiente e navegação autônoma. \r\n\r\nEquipado com bateria de longa duração, controle via app e conectividade Wi-Fi/Bluetooth/4G para monitoramento em tempo real. \r\n\r\nMovimenta-se com agilidade por terrenos variados e realiza ações programadas como seguir, mapear e evitar obstáculos. \r\n\r\nProjetado para pesquisa, educação e entretenimento com IA integrada para tomadas de decisão. \r\n\r\nCompacto, robusto e versátil, ideal para robótica avançada e aplicações exploratórias.', 30792.00, 13, 5, 500, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767835170/loja_ponto_com/produtos/fhx9zivznaydpsald9ga.webp', 'ativo', 6, 6),
-(65, 'MSI Raider 18 HX AI ', '--- CARACTERÍSTICAS ---\nTipo de resolução: QHD\nCom tela tátil: Não\nTamanho da tela: 18 &quot;\nCom leitor de impressão digital: Sim\n\n--- ESPECIFICAÇÕES ---\nMarca de placa gráfica dedicada: NVIDIA\nLinha de placa gráfica dedicada: GeForce RTX\nModelo de placa gráfica dedicada: 5080\n\n--- DESCRIÇÃO ---\nMSI 18\'\' Raider 18 HX AI Gaming Laptop 5090 64GB RAM 2TB SSD é um laptop gamer top-de-linha com hardware de última geração, combinando processador Intel Core Ultra 9 285HX e GPU NVIDIA GeForce RTX 5090/5080 para desempenho bruto em jogos e tarefas pesadas. Sua tela Mini-LED de 18″ UHD+ com 120 Hz e amplo gamut de cores entrega imagens detalhadas e fluidez visual impressionante. Com Wi-Fi 7, áudio Dynaudio de 6 alto-falantes e sistema térmico avançado, oferece experiência imersiva e conectividade de ponta. Além disso, conta com SSD ultrarrápido, Thunderbolt 5 e recursos de IA integrados para produtividade, streaming e criação de conteúdo. Ideal para quem busca potência, qualidade de visual e versatilidade em um único portátil.', 15699.00, 5, 11, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767835566/loja_ponto_com/produtos/tncqps5nm5dcnupr6en9.jpg', 'ativo', 6, 4),
-(66, 'Lego Ninjago Zane ZX Mini-figurinha', '--- CARACTERÍSTICAS ---\nNúmero do modelo: ‎Ninjago\nNúmero de peças: ‎6\nFunciona a bateria ou pilha?: Não\nTipo(s) de material: ‎Acrilonitrila butadieno estireno\n\n--- ESPECIFICAÇÕES ---\nDimensões do produto: ‎9,14 x 5,84 x 1,52 cm; 9,07 g\nMarca: ‎LEGO\n\n--- DESCRIÇÃO ---\nEGO Ninjago Zane ZX Minifigure é uma mini-figura colecionável LEGO® Ninjago do personagem Zane ZX, representando o ninja branco do gelo em um visual clássico da série. Ela vem com detalhes autênticos e acessórios (dependendo da versão), perfeita para fãs e colecionadores exibirem ou usarem em construções e aventuras LEGO. Zane é conhecido por seu papel como mestre elemental do gelo, sendo um dos protagonistas da história Ninjago, valorizado por sua inteligência, coragem e lealdade. Esta mini-figura remete ao estilo das primeiras temporadas, tornando-a um item nostálgico e divertido tanto para brincar quanto para completar coleções.', 189.99, 0, 1, 110, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767835867/loja_ponto_com/produtos/j19z9mi9apr1bjhyst02.jpg', 'ativo', 6, 5),
-(67, 'Termômetro Infravermelho Digital Industrial', '--- CARACTERÍSTICAS ---\nFabricante: ALTOMEX\nNúmero do modelo: A641\nCor: Amarelo E Preto\nComponentes incluídos: 1 Termômetro Infravermelho, Manual De Instruções\n\n--- ESPECIFICAÇÕES ---\nPilha(s) ou bateria(s): ‏ 2AAA baterias necessárias. (inclusas)\nDimensões do produto: 8 x 3,8 x 1,5 cm; 150 g\nDISPLAY LCD: Tela digital de fácil leitura com iluminação de fundo e indicação em tempo real da temperatura medida\nFAIXA DE MEDIÇÃO: Termômetro infravermelho com ampla faixa de temperatura de -50°C a 380°C, ideal para uso industrial e culinário\n\n--- DESCRIÇÃO ---\nTermômetro infravermelho digital KLX GM320, desenvolvido para medições de temperatura sem contato com alta precisão, possui ampla faixa de medição de -50 °C a 380 °C, sendo ideal para uso industrial, culinário e em ambientes de armazenamento, conta com display LCD de fácil leitura que fornece resultados rápidos e claros, design ergonômico tipo pistola para maior conforto durante o uso contínuo, função de alternância entre Celsius e Fahrenheit, retenção de leitura para maior praticidade e construção resistente, ideal para medir fornos, freezers, alimentos e equipamentos industriais.', 41.99, 12, 4, 119, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767895185/loja_ponto_com/produtos/swyqoxvkcva8knjyqvnq.jpg', 'ativo', 6, 12),
-(68, 'RoWood Quebra-cabeças 3D', '--- CARACTERÍSTICAS ---\nObjetivos educativos: ‎Habilidade de resolução de problemas\nNúmero de jogadores: ‎1\nMontagem necessária: Sim\nDimensões do produto: ‎46,99 x 30,68 x 0,1 cm; 2,32 quilogramas\nIdade recomendada: ‎14 anos e acima\n\n--- ESPECIFICAÇÕES ---\nMaterial em madeira: feito com peças de madeira cortadas a laser, exigindo cuidado no manuseio para evitar quebras.\nNão requer cola ou ferramentas elétricas: as peças são projetadas para encaixe preciso, facilitando a montagem.\nMontagem manual: o produto é um quebra-cabeça/modelo 3D que precisa ser montado pelo usuário, não vem pronto.\n\n--- DESCRIÇÃO ---\nQuebra-cabeça 3D em madeira com design detalhado de navio Viking, desenvolvido para proporcionar uma experiência envolvente de montagem manual, ideal para quem aprecia desafios criativos e atividades artesanais. Produzido em madeira cortada a laser, oferece encaixes precisos e acabamento de qualidade, sem necessidade de cola ou ferramentas. Indicado para adolescentes e adultos, estimula concentração, raciocínio lógico e coordenação motora durante a montagem. Após finalizado, transforma-se em uma peça decorativa elegante, perfeita para ambientes residenciais ou escritórios. Uma excelente opção de presente para entusiastas de quebra-cabeças, modelismo e temas históricos.', 569.09, 3, 1, 186, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767896218/loja_ponto_com/produtos/bf8cndd3qgxm07o7idul.jpg', 'ativo', 6, 11),
-(69, 'Escada Extensível 3 Em 1 Metalon Galvanizado 6 Degraus', '--- CARACTERÍSTICAS ---\nMarca: Cardoso\nLinha: Multifuncional\nCor: Prateado\n\n--- ESPECIFICAÇÕES ---\nProduto com 3 posições.\nVersátil e durável.\nÉ extensível.\nÉ dobrável e conveniente para armazenamento.\nProtege o trabalho com suas sapatas anti-derrapantes.\nContém trava de segurança.\n\n--- DESCRIÇÃO ---\nEscada extensível 3 em 1 Metalon galvanizado com 6 degraus, ideal para uso doméstico e profissional, oferece versatilidade para ser usada em três posições (extensível, tipo pintor/cavalete e em duas partes apoiada na parede), com estrutura em metalon reforçado que garante durabilidade e segurança; suporta até cerca de 120 kg e alcança altura máxima estendida de aproximadamente 3,1 m, facilitando trabalhos de manutenção, pintura e alcance de locais altos, possui sapatas antiderrapantes e trava de segurança para maior estabilidade e é resistente à corrosão, sendo uma solução prática e robusta para suas necessidades em casa ou no trabalho.', 314.15, 29, 22, 95, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767896959/loja_ponto_com/produtos/ol2wvggpzmtypar9yrs5.webp', 'ativo', 6, 7),
-(70, 'Chaleira Elétrica EEK10', '--- CARACTERÍSTICAS ---\nMateriais: Aço inoxidável\nCom desligamento automático: Sim\nCom função chimarrão: Não\nCom controle de temperatura: Não\n\n--- ESPECIFICAÇÕES ---\nCom capacidade de 1.8 litros.\nCom desligamento automático.\nPossui luz indicadora de funcionamento.\nPossui base giratória.\nTecnologia e velocidade para suas infusões.\n\n--- DESCRIÇÃO ---\nChaleira elétrica Electrolux EEK10 com 1200 W de potência e capacidade de 1,8 litros, ideal para aquecer água rapidamente para chás, cafés e preparo de alimentos no dia a dia. Possui desligamento automático ao atingir fervura e luz indicadora de funcionamento, garantindo mais segurança durante o uso. Seu corpo em aço inox proporciona durabilidade e um visual moderno para a cozinha. Conta com base giratória 360°, tampa com abertura facilitada e alça ergonômica, oferecendo praticidade no manuseio. O design sem fio com porta-cabo torna o uso e o armazenamento mais simples e eficientes.', 129.90, 0, 19, 41, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767897754/loja_ponto_com/produtos/chguxiwaf5wve7xwubec.webp', 'ativo', 6, 0),
+(55, 'Bicicleta Ergométrica Para Spinning', '--- CARACTERÍSTICAS ---\nPeso máximo suportado: 120 kg\nÉ dobrável: Não\nCor: Preto/Vermelho\nAltura: 1.2 m\n\n--- ESPECIFICAÇÕES ---\nSistema de resistência mecânica que é operado a partir do botão de ajuste.\n\n--- DESCRIÇÃO ---\nA Bicicleta Ergométrica Spinning PACE3000 Odin Fit é ideal para uso residencial, proporcionando exercícios aeróbicos que fortalecem a musculatura e melhoram o condicionamento cardiorrespiratório. Oferece benefícios como queima calórica, aumento da disposição e baixo impacto nas articulações, sendo indicada também para reabilitação. Possui ajustes no selim, guidão e pedais, além de roda de inércia de 8kg com resistência mecânica ajustável. Inclui monitor multifunções com sensor de pulso e suporte para tablet ou smartphone.', 1551.00, 5, 6, 99, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767826978/loja_ponto_com/produtos/taxpkh7a5xaym7kfzqmf.webp', 'ativo', 6, 2),
+(56, 'Cadeira De Escritório Ergonômica Giratória', '--- CARACTERÍSTICAS ---\nÉ gamer: Sim\nCom apoio de braços ajustável: Sim\nÉ giratória: Sim\nMaterial Do Estofamento: Mesh Espuma Látex\n\n--- ESPECIFICAÇÕES ---\n\n--- DESCRIÇÃO ---\nCadeira De Escritório Ergonômica Com Apoio De Braços 3D Plus\r\n\r\nApresentamos a nossa excepcional Cadeira de Escritório Ergonômica 3D Plus, uma fusão perfeita de design elegante e funcionalidade excepcional. O revestimento em tecido Mesh oferece conforto respirável, enquanto o encosto de cabeça ajustável em dois sentidos proporciona suporte personalizado. Com encosto reclinável, altura ajustável e apoio de braço reversível, esta cadeira se adapta perfeitamente às suas preferências.\r\n', 599.32, 6, 23, 25, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767827660/loja_ponto_com/produtos/hzoadq8dwjng4y6urnbw.webp', 'ativo', 6, 3),
+(57, 'Cafeteira Elétrica Electrolux', '--- CARACTERÍSTICAS ---\n Nome da marca: Electrolux\nFabricante: ‎Electrolux\nModelo: ‎ECM25\nCor: ‎Granite Grey\n\n--- ESPECIFICAÇÕES ---\nNúmero da peça: ‎ECM25\nCaracterísticas especiais: filtro permanente\nPeças para montagem: ‎filtro permanente, jarra\n\n--- DESCRIÇÃO ---\nA Cafeteira Elétrica Programável Experience Electrolux possui capacidade de 1,2L, permitindo preparar até 30 cafezinhos. Com timer de 24 horas, painel programável e função manter aquecido, garante praticidade e café quente a qualquer momento. Conta com sistema corta pingos, desligamento automático e placa de aquecimento antiaderente. Seu filtro permanente removível dispensa o uso de filtros de papel, sendo mais econômico e sustentável. Possui acabamento em aço inox escovado e indicador de nível de água para maior modernidade e facilidade no uso.', 259.90, 1, 7, 20, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767828021/loja_ponto_com/produtos/ttqlyl7k1bhyvvvzvaaj.jpg', 'ativo', 6, 5),
+(58, 'Parafusadeira E Furadeira Impacto', '--- CARACTERÍSTICAS ---\nÉ sem fio: Sim\nCom função percutor: Sim\nTamanho do mandril: 10 mm\n\n--- ESPECIFICAÇÕES ---\nCom função reversa.\nVem com maleta de transporte.\nSua frequência é de 60Hz.\nPossui função parafusadeira.\nInclui função martelete.\n\n--- DESCRIÇÃO ---\nA Parafusadeira/Furadeira de Impacto Profissional The Black Tools TB-21PW 21V é ideal para uso profissional e doméstico, oferecendo potência, durabilidade e praticidade. Com velocidade variável, função reversível e impacto, garante excelente desempenho em metal, madeira e plástico. Possui empunhadura Soft Grip e indicador de carga da bateria para maior conforto e controle. Acompanha maleta completa com brocas, soquetes, adaptadores e bits. Compacta e leve, é a escolha certa para quem busca eficiência e qualidade nas tarefas do dia a dia.', 189.00, 9, 22, 24, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767828265/loja_ponto_com/produtos/n4fanmphoqecxzyvx9kq.webp', 'ativo', 6, 0),
+(59, 'Motor Estacionário Gasolina 7hp Kawashima ', '--- CARACTERÍSTICAS ---\nTipo De Motor: Monocilíndrico 4T OHV\nRefrigeração: Ar\nCombustível: Gasolina\nDiâmetro x Curso: 68 x 45 mm\nCilindrada: 208 cc\n\n--- ESPECIFICAÇÕES ---\nTipo de ignição: manual.\nDimensões: 39cm de largura x 39cm de comprimento x 39cm de altura.\nPeso: 16g.\nTipo de combustível: Gasolina.\n\n--- DESCRIÇÃO ---\nOs motores estacionários Kawashima Serie E são equipamentos robustos que proporcionam economia e alto desempenho. Podem ser acoplados em diversos equipamentos como microtratores, motobombas, geradores, rabetas para barcos, moenda de cana e outros.\r\n', 629.00, 2, 17, 23, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767828488/loja_ponto_com/produtos/inrgglai9zdqu5xam2n1.webp', 'ativo', 6, 1),
+(60, 'Placa Solar 550w Peimar Monocristalino', '--- CARACTERÍSTICAS ---\nMarca: Peimar\nModelo: 550w\nCor: Prateado\nVoltagem de circuito aberto: 49.6V\nQuantidade de células: 144\n\n--- ESPECIFICAÇÕES ---\n\n--- DESCRIÇÃO ---\nPainel Solar Monocristalino Peimar OR10H550M de 550W, com tecnologia italiana Half Cell M10 | PERC, garantindo alta eficiência de 21,28% e excelente desempenho em projetos residenciais, comerciais e industriais. O kit inclui 3 unidades, cada uma com estrutura resistente em alumínio anodizado e vidro temperado antirreflexo. Suporta condições extremas, possui classe de proteção IP67 e certificações internacionais (IEC 61215 / 61730). Oferece 30 anos de garantia de performance e 25 anos de fabricação. Produto original com NF-e e seguro de responsabilidade civil incluso.\r\n', 2499.00, 2, 8, 499, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767833502/loja_ponto_com/produtos/ovpsfpduhycxtrk9cj9k.webp', 'ativo', 6, 12),
+(61, 'Tomada Inteligente Wifi', '--- CARACTERÍSTICAS ---\nMarca: ‎Coibeu\nFabricante: C &amp; B Global Importação e Exportação LTDA\nCertificação: ‎INMETRO:0124\nAparelhos compatíveis: ‎smartphones, tablets, computadores\n\n--- ESPECIFICAÇÕES ---\n\n--- DESCRIÇÃO ---\nFiltro de linha multifuncional com 3 tomadas, 2 portas USB e 1 Type-C, permitindo alimentar até 6 dispositivos simultaneamente. Possui carcaça resistente, materiais de alta condutividade e proteção contra sobrecarga e raios. Conta com interruptor centralizado e indicadores luminosos para uso prático e seguro. Permite controle remoto via aplicativo, temporização e integração com Alexa e Google Assistant. Oferece estatísticas de consumo de energia no app (função paga).\r\n', 129.99, 0, 4, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767833718/loja_ponto_com/produtos/btvi5yvbzq8rijs6mtar.jpg', 'ativo', 6, 11),
+(62, 'Samsung S85F 4K OLED Smart TV ', '--- CARACTERÍSTICAS ---\nTipo de tela: OLED\nÉ smart: Sim\nResolução: 4k\n Quantidade de portas HDM: 4\n\n--- ESPECIFICAÇÕES ---\nAlexa Embutido.\nPossui 4 portas HDMI.\nEquipado com conexão USB.\nConta com wi-fi e porto de rede\n\n--- DESCRIÇÃO ---\n65\" OLED S85F 4K Samsung Vision AI Smart TV / Smart TV Samsung Vision AI OLED 4K 2025 é uma Smart TV 4K OLED com painel de pixels autoiluminados que entrega pretos profundos, cores vivas e contraste realista. Seu processador Vision AI aprimora automaticamente brilho, cor e detalhes, além de upscaling inteligente para conteúdos mais antigos. Conta com taxa de atualização de 120 Hz, áudio imersivo e sistema Smart TV Tizen com comandos de voz e conectividade ampla. O design é fino e elegante, com controle SolarCell sustentável incluso', 5019.99, 0, 2, 125, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767834110/loja_ponto_com/produtos/t79m3ex6rtsnkxjicd5l.webp', 'ativo', 6, 4),
+(63, 'Kit De Internet Via Satelite Starlink Mini', '--- CARACTERÍSTICAS ---\nMarca: Starlink\nModelo: Mini\nTipo de antena: Omnidirecional\nCor: Branco\n\n--- ESPECIFICAÇÕES ---\nUnidades por kit: 1.\nFormato de venda: Unidade.\nÉ uma antena de internet via satélite.\n\n--- DESCRIÇÃO ---\nKit de Internet via Satélite Starlink Mini, ideal para quem precisa de conexão rápida e estável em qualquer lugar.\r\nCompacto, portátil e fácil de instalar, funciona mesmo em áreas remotas.\r\n\r\nOferece alta velocidade e baixa latência para trabalho, estudos e lazer.\r\n\r\nPerfeito para viagens, zonas rurais e situações sem infraestrutura tradicional.', 799.99, 6, 11, 200, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767834929/loja_ponto_com/produtos/kov7jsbnjzo6hojfnxji.jpg', 'ativo', 6, 6),
+(64, 'Unitree Go2 ', '--- CARACTERÍSTICAS ---\nMarca: Unitree Go2\nModelo: Unitree Go2 Pro\nCor: Cinza\n\n--- ESPECIFICAÇÕES ---\nPersonagem: CAO.\nTem forma de cão.\nFaz parte do mundo Robô.\n\n--- DESCRIÇÃO ---\nUnitree Go2 — robô-cão quadrúpede inteligente com sensor 4D LIDAR ultra-wide para reconhecimento ambiente e navegação autônoma. \r\n\r\nEquipado com bateria de longa duração, controle via app e conectividade Wi-Fi/Bluetooth/4G para monitoramento em tempo real. \r\n\r\nMovimenta-se com agilidade por terrenos variados e realiza ações programadas como seguir, mapear e evitar obstáculos. \r\n\r\nProjetado para pesquisa, educação e entretenimento com IA integrada para tomadas de decisão. \r\n\r\nCompacto, robusto e versátil, ideal para robótica avançada e aplicações exploratórias.', 30792.00, 13, 5, 499, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767835170/loja_ponto_com/produtos/fhx9zivznaydpsald9ga.webp', 'ativo', 6, 9),
+(65, 'MSI Raider 18 HX AI ', '--- CARACTERÍSTICAS ---\nTipo de resolução: QHD\nCom tela tátil: Não\nTamanho da tela: 18 &quot;\nCom leitor de impressão digital: Sim\n\n--- ESPECIFICAÇÕES ---\nMarca de placa gráfica dedicada: NVIDIA\nLinha de placa gráfica dedicada: GeForce RTX\nModelo de placa gráfica dedicada: 5080\n\n--- DESCRIÇÃO ---\nMSI 18\'\' Raider 18 HX AI Gaming Laptop 5090 64GB RAM 2TB SSD é um laptop gamer top-de-linha com hardware de última geração, combinando processador Intel Core Ultra 9 285HX e GPU NVIDIA GeForce RTX 5090/5080 para desempenho bruto em jogos e tarefas pesadas. Sua tela Mini-LED de 18″ UHD+ com 120 Hz e amplo gamut de cores entrega imagens detalhadas e fluidez visual impressionante. Com Wi-Fi 7, áudio Dynaudio de 6 alto-falantes e sistema térmico avançado, oferece experiência imersiva e conectividade de ponta. Além disso, conta com SSD ultrarrápido, Thunderbolt 5 e recursos de IA integrados para produtividade, streaming e criação de conteúdo. Ideal para quem busca potência, qualidade de visual e versatilidade em um único portátil.', 15699.00, 5, 11, 49, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767835566/loja_ponto_com/produtos/tncqps5nm5dcnupr6en9.jpg', 'ativo', 6, 7),
+(66, 'Lego Ninjago Zane ZX Mini-figurinha', '--- CARACTERÍSTICAS ---\nNúmero do modelo: ‎Ninjago\nNúmero de peças: ‎6\nFunciona a bateria ou pilha?: Não\nTipo(s) de material: ‎Acrilonitrila butadieno estireno\n\n--- ESPECIFICAÇÕES ---\nDimensões do produto: ‎9,14 x 5,84 x 1,52 cm; 9,07 g\nMarca: ‎LEGO\n\n--- DESCRIÇÃO ---\nEGO Ninjago Zane ZX Minifigure é uma mini-figura colecionável LEGO® Ninjago do personagem Zane ZX, representando o ninja branco do gelo em um visual clássico da série. Ela vem com detalhes autênticos e acessórios (dependendo da versão), perfeita para fãs e colecionadores exibirem ou usarem em construções e aventuras LEGO. Zane é conhecido por seu papel como mestre elemental do gelo, sendo um dos protagonistas da história Ninjago, valorizado por sua inteligência, coragem e lealdade. Esta mini-figura remete ao estilo das primeiras temporadas, tornando-a um item nostálgico e divertido tanto para brincar quanto para completar coleções.', 189.99, 0, 1, 110, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767835867/loja_ponto_com/produtos/j19z9mi9apr1bjhyst02.jpg', 'ativo', 6, 8),
+(67, 'Termômetro Infravermelho Digital Industrial', '--- CARACTERÍSTICAS ---\nFabricante: ALTOMEX\nNúmero do modelo: A641\nCor: Amarelo E Preto\nComponentes incluídos: 1 Termômetro Infravermelho, Manual De Instruções\n\n--- ESPECIFICAÇÕES ---\nPilha(s) ou bateria(s): ‏ 2AAA baterias necessárias. (inclusas)\nDimensões do produto: 8 x 3,8 x 1,5 cm; 150 g\nDISPLAY LCD: Tela digital de fácil leitura com iluminação de fundo e indicação em tempo real da temperatura medida\nFAIXA DE MEDIÇÃO: Termômetro infravermelho com ampla faixa de temperatura de -50°C a 380°C, ideal para uso industrial e culinário\n\n--- DESCRIÇÃO ---\nTermômetro infravermelho digital KLX GM320, desenvolvido para medições de temperatura sem contato com alta precisão, possui ampla faixa de medição de -50 °C a 380 °C, sendo ideal para uso industrial, culinário e em ambientes de armazenamento, conta com display LCD de fácil leitura que fornece resultados rápidos e claros, design ergonômico tipo pistola para maior conforto durante o uso contínuo, função de alternância entre Celsius e Fahrenheit, retenção de leitura para maior praticidade e construção resistente, ideal para medir fornos, freezers, alimentos e equipamentos industriais.', 41.99, 12, 4, 119, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767895185/loja_ponto_com/produtos/swyqoxvkcva8knjyqvnq.jpg', 'ativo', 6, 14),
+(68, 'RoWood Quebra-cabeças 3D', '--- CARACTERÍSTICAS ---\nObjetivos educativos: ‎Habilidade de resolução de problemas\nNúmero de jogadores: ‎1\nMontagem necessária: Sim\nDimensões do produto: ‎46,99 x 30,68 x 0,1 cm; 2,32 quilogramas\nIdade recomendada: ‎14 anos e acima\n\n--- ESPECIFICAÇÕES ---\nMaterial em madeira: feito com peças de madeira cortadas a laser, exigindo cuidado no manuseio para evitar quebras.\nNão requer cola ou ferramentas elétricas: as peças são projetadas para encaixe preciso, facilitando a montagem.\nMontagem manual: o produto é um quebra-cabeça/modelo 3D que precisa ser montado pelo usuário, não vem pronto.\n\n--- DESCRIÇÃO ---\nQuebra-cabeça 3D em madeira com design detalhado de navio Viking, desenvolvido para proporcionar uma experiência envolvente de montagem manual, ideal para quem aprecia desafios criativos e atividades artesanais. Produzido em madeira cortada a laser, oferece encaixes precisos e acabamento de qualidade, sem necessidade de cola ou ferramentas. Indicado para adolescentes e adultos, estimula concentração, raciocínio lógico e coordenação motora durante a montagem. Após finalizado, transforma-se em uma peça decorativa elegante, perfeita para ambientes residenciais ou escritórios. Uma excelente opção de presente para entusiastas de quebra-cabeças, modelismo e temas históricos.', 569.09, 3, 1, 186, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767896218/loja_ponto_com/produtos/bf8cndd3qgxm07o7idul.jpg', 'ativo', 6, 13),
+(69, 'Escada Extensível 3 Em 1 Metalon Galvanizado 6 Degraus', '--- CARACTERÍSTICAS ---\nMarca: Cardoso\nLinha: Multifuncional\nCor: Prateado\n\n--- ESPECIFICAÇÕES ---\nProduto com 3 posições.\nVersátil e durável.\nÉ extensível.\nÉ dobrável e conveniente para armazenamento.\nProtege o trabalho com suas sapatas anti-derrapantes.\nContém trava de segurança.\n\n--- DESCRIÇÃO ---\nEscada extensível 3 em 1 Metalon galvanizado com 6 degraus, ideal para uso doméstico e profissional, oferece versatilidade para ser usada em três posições (extensível, tipo pintor/cavalete e em duas partes apoiada na parede), com estrutura em metalon reforçado que garante durabilidade e segurança; suporta até cerca de 120 kg e alcança altura máxima estendida de aproximadamente 3,1 m, facilitando trabalhos de manutenção, pintura e alcance de locais altos, possui sapatas antiderrapantes e trava de segurança para maior estabilidade e é resistente à corrosão, sendo uma solução prática e robusta para suas necessidades em casa ou no trabalho.', 314.15, 29, 22, 95, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767896959/loja_ponto_com/produtos/ol2wvggpzmtypar9yrs5.webp', 'ativo', 6, 10),
+(70, 'Chaleira Elétrica EEK10', '--- CARACTERÍSTICAS ---\nMateriais: Aço inoxidável\nCom desligamento automático: Sim\nCom função chimarrão: Não\nCom controle de temperatura: Não\n\n--- ESPECIFICAÇÕES ---\nCom capacidade de 1.8 litros.\nCom desligamento automático.\nPossui luz indicadora de funcionamento.\nPossui base giratória.\nTecnologia e velocidade para suas infusões.\n\n--- DESCRIÇÃO ---\nChaleira elétrica Electrolux EEK10 com 1200 W de potência e capacidade de 1,8 litros, ideal para aquecer água rapidamente para chás, cafés e preparo de alimentos no dia a dia. Possui desligamento automático ao atingir fervura e luz indicadora de funcionamento, garantindo mais segurança durante o uso. Seu corpo em aço inox proporciona durabilidade e um visual moderno para a cozinha. Conta com base giratória 360°, tampa com abertura facilitada e alça ergonômica, oferecendo praticidade no manuseio. O design sem fio com porta-cabo torna o uso e o armazenamento mais simples e eficientes.', 129.90, 0, 19, 31, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1767897754/loja_ponto_com/produtos/chguxiwaf5wve7xwubec.webp', 'ativo', 6, 15),
 (71, 'Produto Teste Cypress 1768588817468', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768588854/loja_ponto_com/produtos/knrdy9zx1clciq1hyx76.png', 'inativo', 16, 999999),
 (72, 'Produto Teste Cypress 1768589045756', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768589082/loja_ponto_com/produtos/zg9h1vxapaiqvktwoevm.png', 'inativo', 16, 999999),
 (73, 'Produto Teste Cypress 1768589210199', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768589248/loja_ponto_com/produtos/z7suvj21jjlg5y0fiuhj.png', 'inativo', 16, 999999),
@@ -597,9 +696,17 @@ INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `desconto`, `categor
 (75, 'Produto Teste Cypress 1768589571111', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768589608/loja_ponto_com/produtos/ra6qywjrvhxro1s4azdc.png', 'inativo', 16, 999999),
 (76, 'Produto Teste Cypress 1768598828041', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768598866/loja_ponto_com/produtos/d3wxaduqfxphb5nhdvar.png', 'inativo', 16, 999999),
 (77, 'Produto Teste Cypress 1768599951066', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768599990/loja_ponto_com/produtos/urzcvd3qcnc95zn0gonc.png', 'inativo', 16, 999999),
-(78, 'Produto Teste Cypress 1768601299473', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768601336/loja_ponto_com/produtos/gwuh3hfu7eygbixun3jb.png', 'ativo', 16, 999999),
-(79, 'Produto Teste Cypress 1768601650843', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768601688/loja_ponto_com/produtos/gpszxu5ru9u0qidmx8jf.png', 'ativo', 16, 999999),
-(80, 'Produto Teste Cypress 1768602690368', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768602727/loja_ponto_com/produtos/rwsovu2mbnrvjwzdg8w3.png', 'ativo', 16, 999999);
+(78, 'Produto Teste Cypress 1768601299473', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768601336/loja_ponto_com/produtos/gwuh3hfu7eygbixun3jb.png', 'inativo', 16, 999999),
+(79, 'Produto Teste Cypress 1768601650843', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768601688/loja_ponto_com/produtos/gpszxu5ru9u0qidmx8jf.png', 'inativo', 16, 999999),
+(80, 'Produto Teste Cypress 1768602690368', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768602727/loja_ponto_com/produtos/rwsovu2mbnrvjwzdg8w3.png', 'inativo', 16, 999999),
+(81, 'Produto Teste Cypress 1768603480603', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768603519/loja_ponto_com/produtos/d9g0midxikrplrbaqnbx.png', 'inativo', 16, 999999),
+(82, 'Produto Teste Cypress 1768603970780', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768604008/loja_ponto_com/produtos/m848vakmn7bqd6wh696b.png', 'inativo', 16, 999999),
+(83, 'Produto Teste Cypress 1768604459650', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768604497/loja_ponto_com/produtos/pxx1agss99meohb6jhor.png', 'inativo', 16, 999999),
+(84, 'Produto Teste Cypress 1768605311456', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768605351/loja_ponto_com/produtos/v8ocgugwmnfovchuvzg7.png', 'inativo', 16, 999999),
+(85, 'Produto Teste Cypress 1768606298828', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768606336/loja_ponto_com/produtos/npl9pf1gzunk778njoxy.png', 'inativo', 16, 999999),
+(86, 'Produto Teste Cypress 1768607762105', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768607799/loja_ponto_com/produtos/h6swwet6vrbs7iotdtne.png', 'inativo', 16, 999999),
+(87, 'Produto Teste Cypress 1768609443183', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768609482/loja_ponto_com/produtos/h6wezc0fiebl1qn8qkpq.png', 'inativo', 16, 999999),
+(88, 'Produto Teste Cypress 1768778167479', '--- CARACTERÍSTICAS ---\nMarca: Marca Teste\nModelo: Modelo Teste\n\n--- ESPECIFICAÇÕES ---\nEspecificação Teste\n\n--- DESCRIÇÃO ---\nDescrição automática gerada pelo Cypress.', 150.50, 10, 16, 50, 'https://res.cloudinary.com/dp30gyor3/image/upload/v1768778206/loja_ponto_com/produtos/sutbcurdzhy8uxb3voi9.png', 'inativo', 16, 999999);
 
 -- --------------------------------------------------------
 
@@ -803,6 +910,20 @@ ALTER TABLE `notificacoes`
   ADD KEY `fk_NOTIFICACOES_USUARIOS_idx` (`usuario_id`);
 
 --
+-- Indexes for table `order_events`
+--
+ALTER TABLE `order_events`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `order_issues`
+--
+ALTER TABLE `order_issues`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
 -- Indexes for table `pagamentos`
 --
 ALTER TABLE `pagamentos`
@@ -857,7 +978,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT for table `avaliacoes`
 --
 ALTER TABLE `avaliacoes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `carrinho`
@@ -869,7 +990,7 @@ ALTER TABLE `carrinho`
 -- AUTO_INCREMENT for table `carrinho_itens`
 --
 ALTER TABLE `carrinho_itens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT for table `categorias`
@@ -881,7 +1002,7 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT for table `conversas`
 --
 ALTER TABLE `conversas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `cupom_uso`
@@ -917,7 +1038,19 @@ ALTER TABLE `mensagens`
 -- AUTO_INCREMENT for table `notificacoes`
 --
 ALTER TABLE `notificacoes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+
+--
+-- AUTO_INCREMENT for table `order_events`
+--
+ALTER TABLE `order_events`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `order_issues`
+--
+ALTER TABLE `order_issues`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pagamentos`
@@ -929,19 +1062,19 @@ ALTER TABLE `pagamentos`
 -- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `pedido_itens`
 --
 ALTER TABLE `pedido_itens`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `produto_imagens`
@@ -1025,6 +1158,18 @@ ALTER TABLE `mensagens`
 --
 ALTER TABLE `notificacoes`
   ADD CONSTRAINT `fk_NOTIFICACOES_USUARIOS` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `order_events`
+--
+ALTER TABLE `order_events`
+  ADD CONSTRAINT `order_events_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_issues`
+--
+ALTER TABLE `order_issues`
+  ADD CONSTRAINT `order_issues_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `pagamentos`

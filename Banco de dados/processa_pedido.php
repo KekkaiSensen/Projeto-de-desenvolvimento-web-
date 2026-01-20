@@ -137,7 +137,7 @@ try {
         // Insert Pedido
         $stmtInsert = $pdo->prepare("
             INSERT INTO pedidos 
-            (usuario_id, endereco_id, supplier_id, valor_total, status, cupom_id, valor_desconto, created_at) 
+            (usuario_id, endereco_id, supplier_id, valor_total, status, cupom_id, valor_desconto, data_pedido) 
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
         ");
 
