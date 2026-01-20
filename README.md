@@ -23,9 +23,7 @@
 
 ## Sobre o Projeto
 
-**Loja Ponto Com** é uma plataforma de e-commerce moderna desenvolvida como projeto prático da disciplina de Desenvolvimento Web 1 do IFSP. O sistema evoluiu para incluir recursos avançados como cache distribuído com **Redis**, upload de imagens otimizado via **Cloudinary** e um pipeline de **CI/CD** automatizado.
-
-A plataforma opera como um marketplace, permitindo que usuários comprem produtos de diversos fornecedores e também se tornem vendedores.
+**Loja Ponto Com** é uma plataforma de e-commerce desenvolvida como projeto prático da disciplina de Desenvolvimento Web 1 do IFSP. O sistema permite que usuários comprem produtos de diversos fornecedores, além de possibilitar que os próprios usuários se cadastrem como vendedores para oferecer seus produtos na plataforma.
 
 ### Objetivo
 
@@ -45,7 +43,7 @@ Criar uma solução de marketplace robusta e escalável que:
 -  **Busca e Filtros**: Busca inteligente por nome de produtos.
 -  **Comparação de Produtos**: Ferramenta para comparar até 3 produtos lado a lado.
 -  **Sistema de Cupons**: Aplicação de códigos promocionais no carrinho.
--  **Notificações em Tempo Real**: Alertas sobre status de pedidos e novidades.
+-  **Notificações em Tempo Real**: Alertas sobre status de pedidos, novidades e mensagens.
 -  **Carrinho de Compras**: Gestão completa de itens e quantidades.
 -  **Checkout Seguro**: Processo de múltiplas etapas (Endereço, Pagamento, Confirmação).
 -  **Múltiplas Formas de Pagamento**: Simulação de Cartão de Crédito, PIX e Boleto.
@@ -116,17 +114,22 @@ git clone https://github.com/mar-moraes/Loja-Ponto-Com.git
 cd Loja-Ponto-Com
 ```
 
-#### 2. Instale as Dependências
+#### 2. Instale as Dependências e Ferramentas
 
+Para facilitar, execute o arquivo `requirements.bat` (no Windows), ele irá:
+1.  Verificar e instalar o **Redis** automaticamente (caso não esteja instalado).
+2.  Instalar dependências do **PHP** (Backend).
+3.  Instalar dependências do **Node.js** (Testes).
+
+Basta dar dois cliques no arquivo ou rodar no terminal:
 ```bash
-# Backend (PHP)
-composer install
-
-# Frontend/Testes (Node.js) -> Entre na pasta de testes se necessário
-cd Testes
-npm install
-cd ..
+.\requirements.bat
 ```
+
+> **Nota:** Caso prefira instalar manualmente:
+> *   Redis: Baixe e instale via MSI.
+> *   PHP: `composer install`
+> *   Node: `cd Testes && npm install`
 
 #### 3. Configuração de Variáveis de Ambiente
 
@@ -166,6 +169,27 @@ php -S localhost:3000
 ```
 
 Acesse o sistema em: `http://localhost:3000/src/index.php`
+
+---
+
+## Como Rodar os Testes
+
+O projeto possui testes automatizados (E2E com Cypress) para garantir a qualidade.
+
+### Via Script Automático (Windows)
+Execute o script `run_tests.ps1` com PowerShell. Ele irá:
+1.  Iniciar o servidor PHP embutido.
+2.  Rodar os testes do Cypress em modo *headless* (terminal).
+3.  Encerrar o servidor ao final.
+
+```powershell
+.\run_tests.ps1
+```
+
+### Manualmente
+1.  Inicie o servidor PHP: `php -S localhost:8000 -t .`
+2.  Em outro terminal, entre na pasta de testes: `cd Testes`
+3.  Execute o Cypress: `npx cypress run` (headless) ou `npx cypress open` (interface visual).
 
 ---
 
