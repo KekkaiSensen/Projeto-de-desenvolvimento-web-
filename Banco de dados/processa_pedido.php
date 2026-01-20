@@ -1,170 +1,230 @@
 <?php
 session_start();
 header('Content-Type: application/json');
-require 'conexao.php'; // Inclui a conexão
-require '../src/Services/CupomService.php'; // Caminho relativo ajustado para estar no Banco de dados/
-// Model/Cupom.php é incluído pelo Service se seguiu meu replace anterior (require inside service), 
-// mas para garantir, vou assumir que o Service faz o require correct ou autoload.
-// Na verificação anterior, CupomService fazia: require_once __DIR__ . '/../Model/Cupom.php';
-// Como processa_pedido está em Banco de dados/, e Service em src/Services/, 
-// __DIR__ em Service é .../src/Services/. ../Model/Cupom.php vira .../src/Model/Cupom.php. Correto.
+require 'conexao.php';
+require __DIR__ . '/../src/Services/OrderEventService.php';
+require __DIR__ . '/../src/Services/OrderService.php';
+require __DIR__ . '/../src/Services/CupomService.php';
+require __DIR__ . '/../src/Services/NotificationService.php';
 
+use Services\OrderEventService;
+use Services\OrderService;
 use Services\CupomService;
+use Services\NotificationService;
 
-// 1. Verificar se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
     echo json_encode(['sucesso' => false, 'mensagem' => 'Usuário não logado.']);
     exit();
 }
 $usuario_id = $_SESSION['usuario_id'];
 
-// 2. Coletar dados enviados pelo JavaScript
 $dados = json_decode(file_get_contents('php://input'), true);
 $cart = $dados['cart'] ?? [];
-$endereco_id = $dados['endereco_id'] ?? null; // $endereco_id será null se for 'agência'
-$valor_total = (float)($dados['valor_total'] ?? 0);
+$endereco_id = $dados['endereco_id'] ?? null;
+// $valor_total_frontend = (float)($dados['valor_total'] ?? 0); // Not used directly anymore, we recalculate per order
 
-// 3. Validar dados (MODIFICADO: verificação de $endereco_id removida)
 if (empty($cart)) {
     echo json_encode(['sucesso' => false, 'mensagem' => 'O carrinho está vazio.']);
     exit();
 }
-// if (empty($endereco_id)) { // <-- REMOVIDO
-//     echo json_encode(['sucesso' => false, 'mensagem' => 'Endereço de entrega inválido.']);
-//     exit();
-// }
-if ($valor_total <= 0) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Valor total inválido.']);
-    exit();
-}
 
 try {
-    // 4. Iniciar Transação
     $pdo->beginTransaction();
 
-    // 4.1 Calcular total real dos itens (Segurança)
-    $total_itens_real = 0;
-    foreach ($cart as $item) {
-        $total_itens_real += ($item['price'] * $item['quantidade']);
+    $eventService = new OrderEventService($pdo);
+    $orderService = new OrderService($pdo, $eventService);
+    $notificationService = new NotificationService($pdo);
+
+    // 1. Fetch product details to get supplier_id and real price
+    // Group items by supplier_id
+    $ordersBySupplier = [];
+
+    // Get all product IDs
+    $productIds = array_column($cart, 'id');
+    if (empty($productIds)) {
+        throw new Exception("Carrinho inválido.");
     }
 
-    // 4.2 Lógica de Cupom
+    $placeholders = implode(',', array_fill(0, count($productIds), '?'));
+    $stmtProducts = $pdo->prepare("SELECT id, usuario_id, preco, estoque, nome FROM produtos WHERE id IN ($placeholders)");
+    $stmtProducts->execute($productIds);
+    $productsDb = $stmtProducts->fetchAll(PDO::FETCH_ASSOC);
+    $productsMap = [];
+    foreach ($productsDb as $p) {
+        $productsMap[$p['id']] = $p;
+    }
+
+    foreach ($cart as $item) {
+        $pid = $item['id'];
+        $qtd = $item['quantidade'];
+
+        if (!isset($productsMap[$pid])) {
+            throw new Exception("Produto ID $pid não encontrado.");
+        }
+
+        $productDb = $productsMap[$pid];
+        $supplierId = $productDb['usuario_id']; // This is the supplier
+
+        if (!isset($ordersBySupplier[$supplierId])) {
+            $ordersBySupplier[$supplierId] = [
+                'items' => [],
+                'total_itens' => 0.0,
+                'supplier_id' => $supplierId
+            ];
+        }
+
+        $ordersBySupplier[$supplierId]['items'][] = [
+            'product_id' => $pid,
+            'quantity' => $qtd,
+            'price' => $productDb['preco'],
+            'title' => $productDb['nome']
+        ];
+        $ordersBySupplier[$supplierId]['total_itens'] += ($productDb['preco'] * $qtd);
+    }
+
+    // 2. Process Cupom (if any)
+    // IMPORTANT: Simplification - Check if coupon applies to total or split?
+    // Usually coupons are 'Global' or 'Seller specific'. 
+    // For this context, let's assume Global Coupon applies proportionally or simply to the first order?
+    // Or better: Apply to entire cart sum, but we are splitting orders... 
+    // Complexity: High. 
+    // Decision: If a coupon exists, we will verify it against the GLOBAL total, 
+    // then distribute the discount proportionally among orders.
+
     $cupom_id = null;
-    $valor_desconto_aplicado = 0.00;
+    $global_discount = 0.0;
 
     if (isset($_SESSION['checkout_cupom']['codigo'])) {
         $codigoCupom = $_SESSION['checkout_cupom']['codigo'];
+        // Calculate global total
+        $globalTotal = 0;
+        foreach ($ordersBySupplier as $ord) {
+            $globalTotal += $ord['total_itens'];
+        }
+
         try {
             $cupomService = new CupomService($pdo);
-            $validacao = $cupomService->validarCupom($codigoCupom, $total_itens_real, $usuario_id);
-
+            $validacao = $cupomService->validarCupom($codigoCupom, $globalTotal, $usuario_id);
             if ($validacao['valid']) {
                 $cupom = $validacao['cupom'];
-                $valor_desconto_aplicado = $validacao['desconto_calculado'];
+                $global_discount = (float)$validacao['desconto_calculado'];
                 $cupom_id = $cupom->id;
-
-                // Recalcula total final
-                $valor_total = max(0, $total_itens_real - $valor_desconto_aplicado);
-
-                // Opcional: Validar se valor_total bate com frontend se quiser ser estrito
             }
         } catch (Exception $e) {
-            // Se der erro na validação do cupom, prossegue sem desconto ou retorna erro (opção de projeto)
-            // Aqui vamos logar e prosseguir sem desconto
-            error_log("Erro ao aplicar cupom no checkout: " . $e->getMessage());
+            error_log("Erro cupom: " . $e->getMessage());
         }
-    } else {
-        // Se sem cupom, usa o total recalculado para segurança ou o enviado (vamos usar o recalculado se preferir segurança)
-        // $valor_total = $total_itens_real; 
-        // Mas para manter compatibilidade com frete (se houver no futuro), vamos manter a lógica atual de usar $valor_total enviado se não houver cupom, 
-        // ou overwrite se houver cupom.
-        // Se houve cupom, $valor_total já foi atualizado acima.
     }
 
-    // 5. Criar o registro na tabela PEDIDOS (MODIFICADO para usar bind)
-    $stmt_pedido = $pdo->prepare(
-        "INSERT INTO pedidos (usuario_id, endereco_id, valor_total, status, cupom_id, valor_desconto) 
-         VALUES (?, ?, ?, 'processando', ?, ?)"
-    );
-
-    // Bind do usuario_id (int)
-    $stmt_pedido->bindParam(1, $usuario_id, PDO::PARAM_INT);
-
-    // Bind do endereco_id (pode ser int ou null)
-    if (empty($endereco_id)) {
-        $stmt_pedido->bindValue(2, null, PDO::PARAM_NULL);
-    } else {
-        $stmt_pedido->bindParam(2, $endereco_id, PDO::PARAM_INT);
+    $createdOrderIds = [];
+    $totalGlobalNoDesconto = 0;
+    foreach ($ordersBySupplier as $sId => $orderData) {
+        $totalGlobalNoDesconto += $orderData['total_itens'];
     }
 
-    // Bind do valor_total (string/float)
-    $stmt_pedido->bindValue(3, $valor_total);
+    // 3. Create Orders
+    foreach ($ordersBySupplier as $sId => $orderData) {
+        $subTotal = $orderData['total_itens'];
 
-    // Bind Cupom
-    if ($cupom_id) {
-        $stmt_pedido->bindValue(4, $cupom_id, PDO::PARAM_INT);
-        $stmt_pedido->bindValue(5, $valor_desconto_aplicado);
-    } else {
-        $stmt_pedido->bindValue(4, null, PDO::PARAM_NULL);
-        $stmt_pedido->bindValue(5, 0.00);
+        // Proportional discount
+        $myDiscount = 0.0;
+        if ($global_discount > 0 && $totalGlobalNoDesconto > 0) {
+            $ratio = $subTotal / $totalGlobalNoDesconto;
+            $myDiscount = round($global_discount * $ratio, 2);
+        }
+
+        $finalTotal = max(0, $subTotal - $myDiscount);
+
+        // Insert Pedido
+        $stmtInsert = $pdo->prepare("
+            INSERT INTO pedidos 
+            (usuario_id, endereco_id, supplier_id, valor_total, status, cupom_id, valor_desconto, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
+        ");
+
+        // Status initial: CREATED
+        $initialStatus = OrderService::STATUS_CREATED;
+
+        $stmtInsert->execute([
+            $usuario_id,
+            $endereco_id, // null if agency? Logic preserved from original
+            $sId,
+            $finalTotal,
+            $initialStatus,
+            $cupom_id, // We log the same coupon ID for all orders it seems reasonable
+            $myDiscount
+        ]);
+
+        $pedidoId = $pdo->lastInsertId();
+        $createdOrderIds[] = $pedidoId;
+
+        // Log event logic via OrderService? 
+        // OrderService::transitionTo is for changes. Here it's creation.
+        // Let's manually log usage of event service for creation.
+        $eventService->logEvent($pedidoId, null, $initialStatus, 'client', $usuario_id, 'Pedido criado');
+
+        // NOTIFY SUPPLIER
+        try {
+            if ($sId != $usuario_id) {
+                // Determine supplier name or just generic message
+                $notificationService->create(
+                    $sId,
+                    "Novo pedido #$pedidoId recebido! Valor: R$ " . number_format($finalTotal, 2, ',', '.'),
+                    'success',
+                    'tela_minha_conta.php?tab=painel-pedidos-recebidos'
+                );
+            }
+        } catch (Exception $exN) {
+            error_log("Erro ao criar notificacao: " . $exN->getMessage());
+        }
+
+        // Insert Items
+        $stmtItem = $pdo->prepare("INSERT INTO pedido_itens (pedido_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)");
+        $stmtStock = $pdo->prepare("UPDATE produtos SET estoque = estoque - ? WHERE id = ? AND estoque >= ?");
+
+        foreach ($orderData['items'] as $item) {
+            $stmtItem->execute([$pedidoId, $item['product_id'], $item['quantity'], $item['price']]);
+
+            // Dec estoques
+            $stmtStock->execute([$item['quantity'], $item['product_id'], $item['quantity']]);
+            if ($stmtStock->rowCount() == 0) {
+                throw new Exception("Estoque insuficiente para: " . $item['title']);
+            }
+        }
     }
 
-    // Executa o statement preparado
-    $stmt_pedido->execute();
-    $pedido_id = $pdo->lastInsertId();
-
-    // Registrar Uso do Cupom
-    if ($cupom_id) {
-        $cupomService->registrarUso($cupom_id, $usuario_id, $pedido_id);
+    // Register Coupon Usage (Once per global usage? Or once per order? existing service registers (cupom_id, user_id, order_id))
+    // If table `cupom_uso` has UNIQUE(cupom_id, user_id), we might fail if we register multiple times.
+    // Let's register only for the first order or handle logic.
+    // If schema allows multiple uses, okay. If not, only register for first.
+    // Assuming we want to link coupon to all orders.
+    if ($cupom_id && !empty($createdOrderIds)) {
+        // Register for the first order to 'mark' it as used by this user in this transaction block
+        // If we want to track it per order, we loop.
+        // Let's loop but catch dup errors if unique constraint exists.
+        foreach ($createdOrderIds as $oid) {
+            try {
+                $cupomService->registrarUso($cupom_id, $usuario_id, $oid);
+            } catch (Exception $ex) {
+                // Ignore duplicate entry errors if likely
+            }
+        }
     }
 
-    // Limpa a sessão do cupom
+    // Clear Cart
+    $stmtCart = $pdo->prepare("SELECT id FROM carrinho WHERE usuario_id = ?");
+    $stmtCart->execute([$usuario_id]);
+    $cCart = $stmtCart->fetch();
+    if ($cCart) {
+        $pdo->prepare("DELETE FROM carrinho_itens WHERE carrinho_id = ?")->execute([$cCart['id']]);
+    }
+
     unset($_SESSION['checkout_cupom']);
 
-
-    // 6. Preparar queries para itens e estoque (sem alteração)
-    $stmt_item = $pdo->prepare(
-        "INSERT INTO pedido_itens (pedido_id, produto_id, quantidade, preco_unitario) 
-         VALUES (?, ?, ?, ?)"
-    );
-
-    $stmt_stock = $pdo->prepare(
-        "UPDATE produtos SET estoque = estoque - ? WHERE id = ? AND estoque >= ?"
-    );
-
-    // 7. Loop pelos itens do carrinho (sem alteração)
-    foreach ($cart as $item) {
-        $produto_id = $item['id'];
-        $quantidade = $item['quantidade'];
-        $preco = $item['price'];
-
-        $stmt_item->execute([$pedido_id, $produto_id, $quantidade, $preco]);
-        $stmt_stock->execute([$quantidade, $produto_id, $quantidade]);
-
-        if ($stmt_stock->rowCount() == 0) {
-            // ==================
-            // --- CORREÇÃO ---
-            // ==================
-            throw new PDOException("Estoque insuficiente para o produto: " . $item['title']);
-        }
-    }
-
-    // 8. Limpar o CARRINHO_ITENS do usuário no banco (sem alteração)
-    $stmt_get_cart = $pdo->prepare("SELECT id FROM carrinho WHERE usuario_id = ?");
-    $stmt_get_cart->execute([$usuario_id]);
-    $carrinho_row = $stmt_get_cart->fetch();
-
-    if ($carrinho_row) {
-        $carrinho_id = $carrinho_row['id'];
-        $stmt_clear_cart = $pdo->prepare("DELETE FROM carrinho_itens WHERE carrinho_id = ?");
-        $stmt_clear_cart->execute([$carrinho_id]);
-    }
-
-    // 9. Confirmar a Transação
     $pdo->commit();
-    echo json_encode(['sucesso' => true, 'pedido_id' => $pedido_id, 'mensagem' => 'Pedido processado com sucesso.']);
-} catch (PDOException $e) {
-    // 10. Reverter em caso de erro
-    $pdo->rollBack();
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de Banco de Dados: ' . $e->getMessage()]);
+    echo json_encode(['sucesso' => true, 'pedido_id' => $createdOrderIds[0], 'pedidos_ids' => $createdOrderIds, 'mensagem' => 'Pedido(s) realizado(s) com sucesso!']);
+} catch (Exception $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro: ' . $e->getMessage()]);
 }

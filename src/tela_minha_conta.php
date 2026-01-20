@@ -97,6 +97,75 @@ if ($is_fornecedor) {
     } catch (PDOException $e) {
         error_log("Erro ao buscar cupons: " . $e->getMessage());
     }
+    // --- BUSCA PEDIDOS RECEBIDOS (VENDAS) ---
+    $vendas_recebidas = [];
+    try {
+        $sql_vendas = "
+            SELECT 
+                p.id as pedido_id,
+                p.data_pedido,
+                p.status,
+                p.valor_total,
+                u.nome as nome_cliente,
+                e.cidade,
+                e.estado,
+                pi.produto_id,
+                pi.quantidade,
+                prod.nome as produto_nome,
+                prod.imagem_url as produto_imagem
+            FROM pedidos p
+            JOIN usuarios u ON p.usuario_id = u.id
+            LEFT JOIN enderecos e ON p.endereco_id = e.id
+            JOIN pedido_itens pi ON p.pedido_id
+            JOIN pedido_itens pi ON p.id = pi.pedido_id
+            JOIN produtos prod ON pi.produto_id = prod.id
+            WHERE p.supplier_id = ?
+            ORDER BY p.data_pedido DESC
+        ";
+        // Correction: Double join on pedido_itens above. Fixed below.
+        $sql_vendas = "
+            SELECT 
+                p.id as pedido_id,
+                p.data_pedido,
+                p.status,
+                p.valor_total,
+                u.nome as nome_cliente,
+                u.email as email_cliente,
+                pi.produto_id,
+                pi.quantidade,
+                prod.nome as produto_nome,
+                prod.imagem_url as produto_imagem
+            FROM pedidos p
+            JOIN usuarios u ON p.usuario_id = u.id
+            JOIN pedido_itens pi ON p.id = pi.pedido_id
+            JOIN produtos prod ON pi.produto_id = prod.id
+            WHERE p.supplier_id = ?
+            ORDER BY p.data_pedido DESC, p.id DESC
+        ";
+
+        $stmt_vendas = $pdo->prepare($sql_vendas);
+        $stmt_vendas->execute([$usuario_id]);
+        $rows_vendas = $stmt_vendas->fetchAll(PDO::FETCH_ASSOC);
+
+        // Group by Order ID
+        foreach ($rows_vendas as $row) {
+            $pid = $row['pedido_id'];
+            if (!isset($vendas_recebidas[$pid])) {
+                $vendas_recebidas[$pid] = [
+                    'id' => $pid,
+                    'data' => $row['data_pedido'],
+                    'status' => $row['status'],
+                    'total' => $row['valor_total'],
+                    'cliente' => $row['nome_cliente'],
+                    'email' => $row['email_cliente'],
+                    'itens' => []
+                ];
+            }
+            $vendas_recebidas[$pid]['itens'][] = $row;
+        }
+    } catch (PDOException $e) {
+        error_log("Erro ao buscar vendas: " . $e->getMessage());
+    }
 }
 // ==========================================================
 // --- FIM DA LÓGICA ---
@@ -274,6 +343,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 
             <?php if ($is_fornecedor): ?>
                 <button class="tab-button" data-tab="painel-produtos">Meus produtos</button>
+                <button class="tab-button" data-tab="painel-pedidos-recebidos">Pedidos Recebidos</button>
                 <button class="tab-button" data-tab="painel-cupons">Meus Cupons</button>
                 <button class="tab-button" data-tab="painel-relatorio">Relatório de Vendas</button>
             <?php endif; ?>
@@ -341,57 +411,298 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
         </div>
 
         <div id="painel-compras" class="tab-painel">
+            <?php
+            // 4. Busca o histórico de pesdidos (Agrupado por Pedido)
+            try {
+                $sql_pedidos = "
+                    SELECT 
+                        p.id as pedido_id,
+                        p.data_pedido,
+                        p.status,
+                        p.valor_total,
+                        p.supplier_id,
+                        (SELECT nome FROM usuarios WHERE id = p.supplier_id) as nome_loja,
+                        pi.produto_id,
+                        pi.quantidade,
+                        pi.preco_unitario,
+                        prod.nome as produto_nome,
+                        prod.imagem_url as produto_imagem
+                    FROM pedidos p
+                    JOIN pedido_itens pi ON p.id = pi.pedido_id
+                    JOIN produtos prod ON pi.produto_id = prod.id
+                    WHERE p.usuario_id = ?
+                    ORDER BY p.data_pedido DESC, p.id DESC
+                ";
+                $stmt_pedidos = $pdo->prepare($sql_pedidos);
+                $stmt_pedidos->execute([$usuario_id]);
+                $rows = $stmt_pedidos->fetchAll(PDO::FETCH_ASSOC);
 
-            <?php if (empty($itens_de_pedidos)): ?>
+                // Group by Order ID
+                $pedidos_agrupados = [];
+                foreach ($rows as $row) {
+                    $pid = $row['pedido_id'];
+                    if (!isset($pedidos_agrupados[$pid])) {
+                        $pedidos_agrupados[$pid] = [
+                            'id' => $pid,
+                            'data' => $row['data_pedido'],
+                            'status' => $row['status'],
+                            'total' => $row['valor_total'],
+                            'loja' => $row['nome_loja'] ?? 'Loja Ponto Com',
+                            'itens' => []
+                        ];
+                    }
+                    $pedidos_agrupados[$pid]['itens'][] = $row;
+                }
+            } catch (PDOException $e) {
+                $pedidos_agrupados = [];
+                error_log("Erro ao buscar histórico: " . $e->getMessage());
+            }
+            ?>
+
+            <?php if (empty($pedidos_agrupados)): ?>
                 <section class="conta-secao">
                     <h2>Minhas Compras</h2>
                     <p>Você ainda não fez nenhuma compra.</p>
                 </section>
             <?php else: ?>
-                <?php
-                $data_atual_grupo = ""; // Para controlar o cabeçalho de data
+                <section class="conta-secao">
+                    <h2>Meus Pedidos</h2>
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <?php foreach ($pedidos_agrupados as $pedido):
+                            $status = strtoupper($pedido['status']); // Ensure uppercase for logic
+                            // Visual Status Map
+                            $statusLabel = [
+                                'CREATED' => 'Criado',
+                                'PAID' => 'Pago',
+                                'PROCESSING' => 'Em Processamento',
+                                'SHIPPED' => 'Enviado',
+                                'DELIVERED' => 'Entregue',
+                                'CANCELED' => 'Cancelado',
+                                'PROCESSANDO' => 'Em Análise', // Legacy
+                                'ENTREGUE' => 'Entregue' // Legacy fallback
+                            ][$status] ?? 'Em Análise'; // Default fallback
 
-                foreach ($itens_de_pedidos as $item):
-                    $data_pedido = new DateTime($item['data_pedido']);
-                    // Formata a data (ex: "19 de agosto de 2024")
-                    $data_formatada_cabecalho = strftime('%d de %B de %Y', $data_pedido->getTimestamp());
-                    // Formata a data (ex: "20 de agosto")
-                    $data_formatada_item = strftime('%d de %B', $data_pedido->getTimestamp());
+                            // Normalize for checks
+                            if ($status === 'ENTREGUE') $status = 'DELIVERED';
+                            if ($status === 'PROCESSANDO') $status = 'PROCESSING'; // Map legacy processando to processing visual
 
-                    // Se a data mudou, imprime um novo cabeçalho de data
-                    if ($data_formatada_cabecalho != $data_atual_grupo):
-                        $data_atual_grupo = $data_formatada_cabecalho;
-                ?>
-                        <h3 class="data-grupo-compras"><?php echo htmlspecialchars($data_formatada_cabecalho); ?></h3>
-                    <?php
-                    endif;
+                            $statusColor = match ($status) {
+                                'DELIVERED' => '#4caf50', // Green
+                                'CANCELED' => '#f44336', // Red
+                                'SHIPPED' => '#2196f3', // Blue
+                                default => '#ff8c00' // Orange
+                            };
+                        ?>
+                            <div class="pedido-card" style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fff;">
+                                <div class="pedido-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;">
+                                    <div>
+                                        <strong>Pedido #<?php echo $pedido['id']; ?></strong>
+                                        <span style="color: #666; font-size: 0.9em;"> • <?php echo date('d/m/Y', strtotime($pedido['data'])); ?></span>
+                                        <div style="font-size: 0.9em; color: #555;">Vendido por: <strong><?php echo htmlspecialchars($pedido['loja']); ?></strong></div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-weight: bold; color: <?php echo $statusColor; ?>;"><?php echo $statusLabel; ?></div>
+                                        <div style="font-size: 1.1em; font-weight: bold;">R$ <?php echo number_format($pedido['total'], 2, ',', '.'); ?></div>
+                                    </div>
+                                </div>
 
-                    // --- Agora, renderiza o card do item (baseado na imagem) ---
-                    ?>
-                    <div class="compra-card">
-                        <div class="compra-imagem">
-                            <img src="<?php echo htmlspecialchars($item['produto_imagem'] ?? '../assets/imagens/placeholder.png'); ?>" alt="Imagem do Produto">
-                        </div>
-                        <div class="compra-detalhes">
-                            <span class="compra-status" style="color: #ff8c00;"> <?php echo htmlspecialchars(ucfirst($item['pedido_status'])); ?>
-                            </span>
-                            <span class="compra-data-entrega">
-                                Pedido feito em <?php echo htmlspecialchars($data_formatada_item); ?>
-                            </span>
-                            <p class="compra-titulo"><?php echo htmlspecialchars($item['produto_nome']); ?></p>
-                            <span class="compra-unidades"><?php echo htmlspecialchars($item['quantidade']); ?> unidade(s)</span>
-                        </div>
-                        <div class="compra-vendedor">
-                            <span>Vendido por LOJA LTDA</span>
-                        </div>
-                        <div class="compra-acoes">
-                            <a href="#" class="btn-compra-primario">Ver compra</a>
-                            <a href="#" class="btn-compra-secundario" onclick="alert('Funcionalidade ainda não implementada'); return false;">Comprar novamente</a>
-                        </div>
+                                <div class="pedido-itens">
+                                    <?php foreach ($pedido['itens'] as $item): ?>
+                                        <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                                            <img src="<?php echo htmlspecialchars($item['produto_imagem'] ?? '../assets/imagens/placeholder.png'); ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                            <div>
+                                                <div><?php echo htmlspecialchars($item['produto_nome']); ?></div>
+                                                <div style="font-size: 0.85em; color: #777;">
+                                                    <?php echo $item['quantidade']; ?>x R$ <?php echo number_format($item['preco_unitario'], 2, ',', '.'); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+
+                                <!-- Timeline Visual (Simple CSS) -->
+                                <?php if ($status !== 'CANCELED'): ?>
+                                    <div class="timeline-status" style="display: flex; justify-content: space-between; margin: 15px 0; position: relative;">
+                                        <!-- Line background -->
+                                        <div style="position: absolute; top: 12px; left: 0; right: 0; height: 4px; background: #eee; z-index: 0;"></div>
+                                        <!-- Active Line (approximate based on status) -->
+                                        <?php
+                                        // Calculate progress Width
+                                        $progress = 0;
+                                        if ($status == 'PAID') $progress = 25;
+                                        if ($status == 'PROCESSING') $progress = 50;
+                                        if ($status == 'SHIPPED') $progress = 75;
+                                        if ($status == 'DELIVERED') $progress = 100;
+                                        ?>
+                                        <div style="position: absolute; top: 12px; left: 0; width: <?php echo $progress; ?>%; height: 4px; background: #4caf50; z-index: 0; transition: width 0.3s;"></div>
+
+                                        <?php
+                                        $steps = [
+                                            'CREATED' => 'Criado',
+                                            'PAID' => 'Pago',
+                                            'PROCESSING' => 'Prep.',
+                                            'SHIPPED' => 'Enviado',
+                                            'DELIVERED' => 'Entregue'
+                                        ];
+                                        $passed = true;
+                                        foreach ($steps as $key => $label):
+                                            $isActive = ($key == $status);
+                                            // Simple logic: if we found the status, subsequent are passed=false (except if it is the current one, it is passed).
+                                            // Wait, usually timeline lights up steps UP TO current.
+                                            // Let's rely on array order.
+                                            $color = ($passed) ? '#4caf50' : '#ccc';
+                                            if ($key == $status) $passed = false; // Next ones are grey
+                                        ?>
+                                            <div style="z-index: 1; text-align: center; background: #fff; padding: 0 5px;">
+                                                <div style="width: 12px; height: 12px; border-radius: 50%; background: <?php echo $color; ?>; margin: 0 auto 5px;"></div>
+                                                <span style="font-size: 0.75em; color: <?php echo $color; ?>;"><?php echo $label; ?></span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="pedido-actions" style="display: flex; gap: 10px; margin-top: 15px;">
+                                    <!-- Ver Rastreio (Modal) -->
+                                    <button class="btn-action" onclick="openTrackingModal(<?php echo $pedido['id']; ?>)" style="padding: 8px 15px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer;">
+                                        Rastrear / Detalhes
+                                    </button>
+
+                                    <!-- Actions based on status -->
+                                    <?php if ($status == 'CREATED' || $status == 'PAID' || $status == 'PROCESSING'): ?>
+                                        <button class="btn-action" onclick="confirmAction('cancel', <?php echo $pedido['id']; ?>)" style="padding: 8px 15px; background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; border-radius: 4px; cursor: pointer;">
+                                            Cancelar Pedido
+                                        </button>
+                                    <?php endif; ?>
+
+                                    <?php if ($status == 'SHIPPED'): ?>
+                                        <button class="btn-action" onclick="confirmAction('confirm-delivery', <?php echo $pedido['id']; ?>)" style="padding: 8px 15px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; border-radius: 4px; cursor: pointer;">
+                                            Confirmar Recebimento
+                                        </button>
+                                    <?php endif; ?>
+
+                                    <?php if ($status == 'DELIVERED'): ?>
+                                        <button class="btn-action" onclick="openReportModal(<?php echo $pedido['id']; ?>)" style="padding: 8px 15px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer;">
+                                            Reportar Problema
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endforeach; ?>
+                </section>
             <?php endif; ?>
 
+            <!-- Modal de Rastreio -->
+            <div id="trackingModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                <div style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3>Histórico do Pedido</h3>
+                        <button onclick="closeModal('trackingModal')" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">&times;</button>
+                    </div>
+                    <div id="trackingContent">Carregando...</div>
+                </div>
+            </div>
+
+            <!-- Modal Reportar -->
+            <div id="reportModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                <div style="background: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px;">
+                    <h3>Reportar Problema</h3>
+                    <textarea id="reportReason" placeholder="Descreva o problema..." style="width: 100%; height: 100px; margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                    <div style="text-align: right; gap: 10px;">
+                        <button onclick="closeModal('reportModal')" style="padding: 8px 15px; margin-right: 10px;">Cancelar</button>
+                        <button onclick="submitReport()" style="padding: 8px 15px; background: #ff8c00; color: white; border: none; border-radius: 4px;">Enviar</button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Front Functions
+                let currentOrderId = null;
+
+                function confirmAction(action, id) {
+                    let msg = '';
+                    if (action === 'cancel') msg = 'Tem certeza que deseja cancelar este pedido?';
+                    if (action === 'confirm-delivery') msg = 'Confirma que recebeu o produto em bom estado?';
+
+                    if (confirm(msg)) {
+                        callApi(action, id);
+                    }
+                }
+
+                function openTrackingModal(id) {
+                    document.getElementById('trackingModal').style.display = 'flex';
+                    const content = document.getElementById('trackingContent');
+                    content.innerHTML = 'Carregando...';
+
+                    fetch(`api/orders.php?id=${id}&action=events`)
+                        .then(r => r.json())
+                        .then(events => {
+                            if (!events || events.length === 0) {
+                                content.innerHTML = '<p>Nenhum evento registrado.</p>';
+                                return;
+                            }
+                            let html = '<ul style="list-style: none; padding: 0;">';
+                            events.forEach(e => {
+                                const date = new Date(e.created_at).toLocaleString('pt-BR');
+                                html += `
+                                    <li style="border-left: 2px solid #ddd; padding-left: 15px; margin-bottom: 20px; position: relative;">
+                                        <div style="position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: #ff8c00;"></div>
+                                        <div style="font-weight: bold;">${e.new_status}</div>
+                                        <div style="font-size: 0.9em; color: #666;">${date}</div>
+                                        <div style="margin-top: 5px;">${e.description || ''}</div>
+                                    </li>
+                                `;
+                            });
+                            html += '</ul>';
+                            content.innerHTML = html;
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            content.innerHTML = '<p>Erro ao carregar eventos.</p>';
+                        });
+                }
+
+                function openReportModal(id) {
+                    currentOrderId = id;
+                    document.getElementById('reportModal').style.display = 'flex';
+                }
+
+                function submitReport() {
+                    const reason = document.getElementById('reportReason').value;
+                    if (!reason) {
+                        alert('Por favor, descreva o problema.');
+                        return;
+                    }
+                    callApi('report-issue', currentOrderId, {
+                        description: reason
+                    });
+                    closeModal('reportModal');
+                }
+
+                function closeModal(id) {
+                    document.getElementById(id).style.display = 'none';
+                }
+
+                function callApi(action, id, body = {}) {
+                    fetch(`api/orders.php?id=${id}&action=${action}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(body)
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Ação realizada com sucesso!');
+                                location.reload();
+                            } else {
+                                alert('Erro: ' + (data.error || 'Desconhecido'));
+                            }
+                        })
+                        .catch(err => alert('Erro de conexão.'));
+                }
+            </script>
         </div>
 
         <?php if ($is_fornecedor): ?>
@@ -495,6 +806,90 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
         <?php endif; ?>
 
         <?php if ($is_fornecedor): ?>
+            <div id="painel-pedidos-recebidos" class="tab-painel">
+                <section class="conta-secao">
+                    <h2>Gestão de Pedidos</h2>
+
+                    <?php if (empty($vendas_recebidas)): ?>
+                        <p>Você não possui pedidos recebidos.</p>
+                    <?php else: ?>
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <?php foreach ($vendas_recebidas as $pedido):
+                                $status = strtoupper($pedido['status']);
+                                // Status Map
+                                $statusLabel = [
+                                    'CREATED' => 'Aguardando Pagamento/Confirmação',
+                                    'PROCESSANDO' => 'Aguardando Processamento', // Legacy
+                                    'PAID' => 'Pronto para Processar',
+                                    'PROCESSING' => 'Em Separação',
+                                    'SHIPPED' => 'Enviado',
+                                    'DELIVERED' => 'Concluído',
+                                    'CANCELED' => 'Cancelado',
+                                    'ENTREGUE' => 'Concluído' // Legacy
+                                ][$status] ?? $status;
+
+                                // Normalize logic vars
+                                if ($status === 'ENTREGUE') $status = 'DELIVERED';
+                                if ($status === 'PROCESSANDO') $status = 'PROCESSING'; // Legacy processando -> treating as PROCESSING for actions? Or PAID?
+                                // User complains "Process processing" fails from CREATED.
+                                // If legacy is PROCESSANDO, it usually means paid/processing. 
+                                // Let's treat PROCESSANDO as PAID (ready to ship/process) or PROCESSING?
+                                // Legacy 'processando' was the default after purchase. So it equals CREATED/PAID.
+                                // Let's map PROCESSANDO to PAID for logic so they can "Start Processing" (even though name is confusing).
+                                if ($pedido['status'] === 'processando') $status = 'PAID';
+                            ?>
+                                <div class="pedido-card" style="border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #fff;">
+                                    <div class="pedido-header" style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 10px;">
+                                        <div>
+                                            <strong>Pedido #<?php echo $pedido['id']; ?></strong>
+                                            <div style="color: #555;">Cliente: <?php echo htmlspecialchars($pedido['cliente']); ?> (<?php echo htmlspecialchars($pedido['email']); ?>)</div>
+                                            <div style="font-size: 0.9em; color: #888;"><?php echo date('d/m/Y H:i', strtotime($pedido['data'])); ?></div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <span class="badge" style="background: #333; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.85em;"><?php echo $statusLabel; ?></span>
+                                            <div style="margin-top: 5px; font-weight: bold;">Total: R$ <?php echo number_format($pedido['total'], 2, ',', '.'); ?></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pedido-itens" style="margin-bottom: 15px;">
+                                        <?php foreach ($pedido['itens'] as $item): ?>
+                                            <div style="display: flex; justify-content: space-between; font-size: 0.95em; border-bottom: 1px solid #f9f9f9; padding: 5px 0;">
+                                                <span><?php echo $item['quantidade']; ?>x <?php echo htmlspecialchars($item['produto_nome']); ?></span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <div class="pedido-acoes" style="display: flex; gap: 10px; justify-content: flex-end;">
+                                        <?php if ($status == 'PAID' || $status == 'PROCESSANDO' || $status == 'CREATED'): // Allowing created/processando to start processing 
+                                        ?>
+                                            <button class="btn-action" onclick="confirmAction('start-processing', <?php echo $pedido['id']; ?>)" style="background: #2196f3; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                                                Iniciar Processamento
+                                            </button>
+                                            <button class="btn-action" onclick="confirmAction('cancel', <?php echo $pedido['id']; ?>)" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                                                Cancelar
+                                            </button>
+                                        <?php endif; ?>
+
+                                        <?php if ($status == 'PROCESSING'): ?>
+                                            <button class="btn-action" onclick="confirmAction('ship', <?php echo $pedido['id']; ?>)" style="background: #ff9800; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                                                Marcar como Enviado
+                                            </button>
+                                            <button class="btn-action" onclick="confirmAction('cancel', <?php echo $pedido['id']; ?>)" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                                                Cancelar
+                                            </button>
+                                        <?php endif; ?>
+
+                                        <button class="btn-action" onclick="openTrackingModal(<?php echo $pedido['id']; ?>)" style="background: #eee; color: #333; border: 1px solid #ccc; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                                            Ver Histórico
+                                        </button>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </section>
+            </div>
+
             <div id="painel-relatorio" class="tab-painel">
                 <section class="conta-secao">
                     <h2>Desempenho de Vendas</h2>

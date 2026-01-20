@@ -7,7 +7,7 @@ Este documento lista as funcionalidades planejadas e sugestões técnicas para a
 - [x] Sistema de Notificações (Email/Push)
 - [x] Chat entre Comprador e Fornecedor
 - [x] Sistema de Cupons e Descontos
-- [ ] Rastreamento de Pedidos
+- [x] Rastreamento de Pedidos
 - [x] Relatórios e Dashboard para Fornecedores
 - [x] Endpoint REST para listagem de produtos
 - [x] Comparação de Produtos
