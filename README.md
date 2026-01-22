@@ -117,19 +117,19 @@ cd Loja-Ponto-Com
 #### 2. Instale as Dependências e Ferramentas
 
 Para facilitar, execute o arquivo `requirements.bat` (no Windows), ele irá:
-1.  Verificar e instalar o **Redis** automaticamente (caso não esteja instalado).
-2.  Instalar dependências do **PHP** (Backend).
-3.  Instalar dependências do **Node.js** (Testes).
+- Verificar e instalar o **Redis** automaticamente (caso não esteja instalado).
+- Instalar dependências do **PHP** (Backend).
+- Instalar dependências do **Node.js** (Testes).
 
 Basta dar dois cliques no arquivo ou rodar no terminal:
 ```bash
 .\requirements.bat
 ```
 
-> **Nota:** Caso prefira instalar manualmente:
-> *   Redis: Baixe e instale via MSI.
-> *   PHP: `composer install`
-> *   Node: `cd Testes && npm install`
+ **Nota:** Caso prefira instalar manualmente:
+ *   [Redis](https://github.com/tporadowski/redis/releases/download/v5.0.14.1/Redis-x64-5.0.14.1.msi): Baixe e instale via MSI
+ *   PHP: `composer install`
+ *   Node: `cd Testes && npm install`
 
 #### 3. Configuração de Variáveis de Ambiente
 

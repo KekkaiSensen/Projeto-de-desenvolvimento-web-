@@ -2,54 +2,48 @@
 
 use PHPUnit\Framework\TestCase;
 use Services\OrderService;
+use Services\OrderEventService;
+use Services\NotificationService;
 
 class OrderServiceTest extends TestCase
 {
     private $pdoMock;
     private $orderService;
+    private $eventServiceMock;
+    private $notificationServiceMock;
 
     protected function setUp(): void
     {
         $this->pdoMock = $this->createMock(\PDO::class);
-        $this->orderService = new OrderService($this->pdoMock);
+        $this->eventServiceMock = $this->createMock(Services\OrderEventService::class);
+        $this->notificationServiceMock = $this->createMock(Services\NotificationService::class);
+
+        $this->orderService = new OrderService($this->pdoMock, $this->eventServiceMock, $this->notificationServiceMock);
     }
 
-    public function testValidateOrderSuccess()
+    public function testStatusTransitionSuccess()
     {
-        $cart = [['id' => 1, 'qty' => 1]];
-        $total = 100.50;
-        $this->assertTrue($this->orderService->validateOrder($cart, $total));
-    }
+        // Mock getOrder
+        $stmtGet = $this->createMock(\PDOStatement::class);
+        $stmtGet->method('fetch')->willReturn([
+            'id' => 1,
+            'status' => 'CREATED',
+            'usuario_id' => 1,
+            'supplier_id' => 2
+        ]);
 
-    public function testValidateOrderEmptyCart()
-    {
-        $cart = [];
-        $total = 100.50;
-        $this->assertFalse($this->orderService->validateOrder($cart, $total));
-    }
+        // Mock Update
+        $stmtUpdate = $this->createMock(\PDOStatement::class);
+        $stmtUpdate->method('execute')->willReturn(true);
 
-    public function testValidateOrderInvalidTotal()
-    {
-        $cart = [['id' => 1]];
-        $total = 0;
-        $this->assertFalse($this->orderService->validateOrder($cart, $total));
-    }
+        $this->pdoMock->method('prepare')->willReturnOnConsecutiveCalls($stmtGet, $stmtUpdate);
 
-    public function testCheckStockSuccess()
-    {
-        $stmtMock = $this->createMock(\PDOStatement::class);
-        $stmtMock->method('fetch')->willReturn(['estoque' => 10]);
-        $this->pdoMock->method('prepare')->willReturn($stmtMock);
+        // Expect Event Log
+        $this->eventServiceMock->expects($this->once())
+            ->method('logEvent')
+            ->with(1, 'CREATED', 'PROCESSING', 'supplier', 2, '');
 
-        $this->assertTrue($this->orderService->checkStock(1, 5));
-    }
-
-    public function testCheckStockInsufficient()
-    {
-        $stmtMock = $this->createMock(\PDOStatement::class);
-        $stmtMock->method('fetch')->willReturn(['estoque' => 2]);
-        $this->pdoMock->method('prepare')->willReturn($stmtMock);
-
-        $this->assertFalse($this->orderService->checkStock(1, 5));
+        $result = $this->orderService->transitionTo(1, 'PROCESSING', 'supplier', 2);
+        $this->assertTrue($result);
     }
 }

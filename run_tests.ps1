@@ -1,5 +1,13 @@
 # start_run_tests.ps1
 
+
+Write-Host "Executando testes Unitários (PHPUnit)..."
+& .\vendor\bin\phpunit
+if ($LASTEXITCODE -ne 0) { 
+    Write-Error "Testes Unitários falharam! Abortando..."
+    exit 1 
+}
+
 Write-Host "Iniciando servidor PHP em localhost:8000..."
 $phpProcess = Start-Process -FilePath "php" -ArgumentList "-S localhost:8000 -t ." -PassThru -NoNewWindow
 

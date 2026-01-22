@@ -2,8 +2,8 @@
 // Salve este arquivo como: Banco de dados/buscar_categorias.php
 
 header('Content-Type: application/json');
-require '../vendor/autoload.php'; // Autoload do Composer
-require 'conexao.php'; // Assume que conexao.php está no mesmo diretório
+require __DIR__ . '/../vendor/autoload.php'; // Autoload do Composer
+require __DIR__ . '/conexao.php'; // Assume que conexao.php está no mesmo diretório
 
 use Services\CacheService;
 
