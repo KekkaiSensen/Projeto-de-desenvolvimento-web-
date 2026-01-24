@@ -1,5 +1,7 @@
 <?php
 session_start();
+ob_start(); // Previne saída de erros/whitespace antes do JSON
+ini_set('display_errors', 0);
 header('Content-Type: application/json');
 require 'conexao.php';
 require __DIR__ . '/../src/Services/OrderEventService.php';
@@ -221,10 +223,13 @@ try {
     unset($_SESSION['checkout_cupom']);
 
     $pdo->commit();
+    ob_clean(); // Limpa qualquer lixo do buffer
     echo json_encode(['sucesso' => true, 'pedido_id' => $createdOrderIds[0], 'pedidos_ids' => $createdOrderIds, 'mensagem' => 'Pedido(s) realizado(s) com sucesso!']);
 } catch (Exception $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
+    ob_clean(); // Limpa qualquer lixo do buffer
+    file_put_contents('log_erros_pedido.txt', date('Y-m-d H:i:s') . " - Erro: " . $e->getMessage() . "\nStack: " . $e->getTraceAsString() . "\n\n", FILE_APPEND);
     echo json_encode(['sucesso' => false, 'mensagem' => 'Erro: ' . $e->getMessage()]);
 }

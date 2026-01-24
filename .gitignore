@@ -62,3 +62,11 @@ docs
 
 # PHPUnit
 .phpunit.result.cache
+
+# Debug and Dumps
+Banco de dados/log_erros_pedido.txt
+Banco de dados/repro_order.php
+Banco de dados/fix_stock.php
+*.dump
+*.rdb
+debug/
