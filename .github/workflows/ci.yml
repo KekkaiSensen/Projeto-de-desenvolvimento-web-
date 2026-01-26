@@ -1,0 +1,87 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    
+    # Adicionamos o serviço MySQL
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: '1234'
+          MYSQL_DATABASE: bancodadosteste
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo_mysql
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Import Database
+        run: |
+          # Aguarda o MySQL estar pronto (embora o service check já ajude)
+          until mysqladmin ping -h 127.0.0.1 -u root -p1234 --silent; do
+            echo "Aguardando MySQL..."
+            sleep 2
+          done
+          
+          # Importa o dump SQL
+          mysql -h 127.0.0.1 -u root -p1234 bancodadosteste < "Banco de dados/bancodadosteste.sql"
+
+      - name: Seed Missing Test Data (Product 58)
+        run: |
+          # Insere o produto 58 se não existir, para garantir que o teste passe
+          mysql -h 127.0.0.1 -u root -p1234 bancodadosteste -e "
+            INSERT IGNORE INTO produtos (id, nome, descricao, preco, imagem_url, status) 
+            VALUES (58, 'LEGO Star Wars TIE Bomber', 'Descrição teste', 189.00, 'https://http2.mlstatic.com/D_NQ_NP_690111-MLU72685794301_112023-O.webp', 'ativo');
+          "
+
+      - name: Start PHP Server
+        run: |
+          # Inicia server PHP apontando para a raiz e escutando conexões externas (importante no Actions)
+          php -S 0.0.0.0:8000 -t . > /dev/null 2>&1 &
+          sleep 3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node Dependencies
+        working-directory: ./Testes
+        run: npm ci
+
+      - name: Run Cypress Tests
+        working-directory: ./Testes
+        run: npm run test
+        env:
+          CYPRESS_baseUrl: http://127.0.0.1:8000/src
+          # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }} # Opcional se usar Cypress Cloud
+

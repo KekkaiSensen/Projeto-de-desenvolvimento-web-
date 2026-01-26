@@ -1,0 +1,23 @@
+# Melhorias Futuras
+
+Este documento lista as funcionalidades planejadas e sugestões técnicas para a evolução do projeto **Loja Ponto Com**.
+
+## Planejadas
+
+- [x] Sistema de Notificações (Email/Push)
+- [x] Chat entre Comprador e Fornecedor
+- [x] Sistema de Cupons e Descontos
+- [x] Rastreamento de Pedidos
+- [x] Relatórios e Dashboard para Fornecedores
+- [x] Endpoint REST para listagem de produtos
+- [x] Comparação de Produtos
+
+## Sugestões Técnicas
+ 
+- [ ] Migração para Laravel ou Symfony
+- [ ] Frontend em React ou Vue.js
+- [x] Implementação de Cache (Redis)
+- [x] CDN para imagens
+- [x] Containerização com Docker
+- [x] CI/CD com GitHub Actions
+- [x] Testes Unitários e de Integração

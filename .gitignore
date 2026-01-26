@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+Artefatos/node_modules/
+vendor/
+composer.phar
+.env
+.env.backup
+.env.test
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Artefatos/Slides
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+
+# Cypress
+cypress/screenshots/
+cypress/videos/
+Testes/cypress/screenshots/
+Testes/cypress/videos/
+
+# Ignorar documentação técnica, arquivos de conversão e gerados
+Artefatos/Documentacao_Tecnica.md
+Artefatos/Documentacao_Tecnica.odt
+Artefatos/Documentacao_Tecnica.pdf
+Artefatos/converter.js
+Artefatos/gerar*
+**/gerar*
+slides.html
+Artefatos/Slides/
+
+# Magalu API Integration or Secrets
+src/magalu_token.json
+src/magalu_config.php
+ 
+# Documentação de arquitetura (desativada)
+docs
+
+# PHPUnit
+.phpunit.result.cache
+
+# Debug and Dumps
+Banco de dados/log_erros_pedido.txt
+Banco de dados/repro_order.php
+Banco de dados/fix_stock.php
+*.dump
+*.rdb
+debug/
