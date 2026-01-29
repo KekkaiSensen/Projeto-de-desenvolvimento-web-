@@ -97,7 +97,7 @@ Criar uma solução de marketplace robusta e escalável que:
 
 ## Como Instalar e Rodar o Projeto
 
-### Rodando com Docker (Recomendado)
+### Docker (Recomendado)
 
 A maneira mais fácil de rodar o projeto é utilizando o Docker, pois ele sobe todos os serviços (PHP, MySQL, Redis) automaticamente.
 
