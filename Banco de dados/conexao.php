@@ -1,10 +1,5 @@
 <?php
 // Configurações do banco de dados
-<<<<<<< HEAD
-$dsn = 'mysql:host=127.0.0.1;dbname=bancodadosteste'; // Altere "bancodadosteste" para o nome do seu banco de dados
-$dbusername = 'root'; // Usuário padrão do XAMPP/MySQL, mas pode variar conforme sua configuração
-$dbpassword = '1234'; // Galera, essa é senha do meu XAMPP/MySQL. Altere conforme sua configuração.
-=======
 
 // Tenta carregar o autoload se ainda não foi carregado
 $autoloadPath = __DIR__ . '/../vendor/autoload.php';
@@ -26,7 +21,6 @@ $dbpassword = $_ENV['DB_PASS'] ?? '1234';
 $port = $_ENV['DB_PORT'] ?? '3306';
 
 $dsn = "mysql:host=$host;port=$port;dbname=$dbname";
->>>>>>> origin/feature/docker-containerization
 
 try {
     // Cria a conexão PDO
