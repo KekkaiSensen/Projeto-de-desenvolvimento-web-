@@ -97,7 +97,37 @@ Criar uma solução de marketplace robusta e escalável que:
 
 ## Como Instalar e Rodar o Projeto
 
-### Pré-requisitos
+### Rodando com Docker (Recomendado)
+
+A maneira mais fácil de rodar o projeto é utilizando o Docker, pois ele sobe todos os serviços (PHP, MySQL, Redis) automaticamente.
+
+**Pré-requisitos:**
+- [Docker](https://www.docker.com/products/docker-desktop/) instalado e rodando.
+
+**Passo a Passo:**
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/mar-moraes/Loja-Ponto-Com.git
+    cd Loja-Ponto-Com
+    ```
+
+2.  **Configure o ambiente:**
+    - Crie um arquivo `.env` na raiz (copie do `.env.example`).
+    - **Importante:** Se for rodar com Docker, ajuste o host do banco de dados e do Redis no `.env` para apontar para os containers ou use os valores padrões do `docker-compose.yml`.
+
+3.  **Suba os containers:**
+    ```bash
+    docker-compose up -d --build
+    ```
+
+O sistema estará acessível em: `http://localhost:80` (ou apenas `http://localhost`).
+
+---
+
+### Instalação Manual (Sem Docker)
+
+#### Pré-requisitos
 
 - **PHP 8.2+**
 - **MySQL 8.0+**
