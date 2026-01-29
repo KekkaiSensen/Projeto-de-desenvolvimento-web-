@@ -95,14 +95,3 @@ describe('Jornada E2E do Cliente (Happy Path)', () => {
 
 
 
-
-//   1 failing
-
-//   1) Jornada E2E do Cliente (Happy Path)
-//        deve permitir que um usuário adicione um item, faça login e finalize a compra:
-//      AssertionError: Timed out retrying after 4000ms: expected '<div#success-notification.notification.success.hidden>' to be 'visible'
-
-// This element `<div#success-notification.notification.success.hidden>` is not visible because it has CSS property: `display: none`
-//       at Context.eval (webpack://testes-automatizados/./cypress/e2e/jornada_cliente.cy.js:87:7)
-
-

@@ -1,7 +1,9 @@
 <?php
 session_start();
-require '../Banco de dados/conexao.php'; // Inclui a conexão
-require '../vendor/autoload.php';
+require __DIR__ . '/../Banco de dados/conexao.php'; // Inclui a conexão
+
+/** @var \PDO $pdo */
+require_once '../vendor/autoload.php';
 
 use Services\CacheService;
 
@@ -110,8 +112,10 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
       </div>
 
       <form action="buscar.php" method="GET" style="position: relative; width: 600px; max-width: 100%;">
-        <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..." style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
-        <button type="submit" style="position: absolute; right: 0; top: 0; height: 40px; width: 45px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+        <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..."
+          style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
+        <button type="submit"
+          style="position: absolute; right: 0; top: 0; height: 40px; width: 45px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;">
           <img src="../assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
         </button>
       </form>
@@ -134,7 +138,9 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
           <!-- Notification System -->
           <div id="notification-bell" class="notification-container">
             <!-- Icone SVG desenhado -->
-            <svg class="notification-bell-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="notification-bell-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
@@ -157,7 +163,8 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
       <div class="swiper-wrapper">
 
         <?php foreach ($produtos_carousel as $produto_slide): ?>
-          <div class="swiper-slide" style="background-image:url('<?php echo htmlspecialchars($produto_slide['imagem_url']); ?>')">
+          <div class="swiper-slide"
+            style="background-image:url('<?php echo htmlspecialchars($produto_slide['imagem_url']); ?>')">
             <a href="tela_produto.php?id=<?php echo $produto_slide['id']; ?>">
               <?php // echo htmlspecialchars($produto_slide['nome']); /* Descomente se quiser o nome no slide */ 
               ?>
@@ -191,9 +198,9 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
         <?php
         // --- (INÍCIO - LÓGICA DE DESCONTO PARA O CARD) ---
         // Copiada de tela_produto.php
-        $preco_original = (float)$produto['preco'];
+        $preco_original = (float) $produto['preco'];
         // Usamos ?? 0 para garantir que funcione se a coluna 'desconto' for nula
-        $desconto_percent = (int)($produto['desconto'] ?? 0);
+        $desconto_percent = (int) ($produto['desconto'] ?? 0);
         $tem_desconto = $desconto_percent > 0;
 
         $preco_final = $preco_original; // Preço para o data-price
@@ -218,16 +225,19 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
         // --- (NOVO) 2. LÓGICA DE AVALIAÇÃO PARA O CARD ---
         $nota_para_estrelas = 0;
         // Verifica se 'total_avaliacoes' é maior que 0
-        if ((int)$produto['total_avaliacoes'] > 0) {
+        if ((int) $produto['total_avaliacoes'] > 0) {
           // Arredonda a média para o número inteiro mais próximo
-          $nota_para_estrelas = round((float)$produto['media_avaliacoes']);
+          $nota_para_estrelas = round((float) $produto['media_avaliacoes']);
         }
         // --- (FIM - LÓGICA DE AVALIAÇÃO) ---
         ?>
 
-        <a href="tela_produto.php?id=<?php echo $produto['id']; ?>" class="card-link" data-id="<?php echo $produto['id']; ?>">
+        <a href="tela_produto.php?id=<?php echo $produto['id']; ?>" class="card-link"
+          data-id="<?php echo $produto['id']; ?>">
           <article class="card" data-price="<?php echo htmlspecialchars($preco_final); ?>">
-            <div class="thumb" style="background-image:url('<?php echo htmlspecialchars($produto['imagem_url'] ?? '../assets/imagens/placeholder.png'); ?>')"></div>
+            <div class="thumb"
+              style="background-image:url('<?php echo htmlspecialchars($produto['imagem_url'] ?? '../assets/imagens/placeholder.png'); ?>')">
+            </div>
             <div class="title"><?php echo htmlspecialchars($produto['nome']); ?></div>
 
             <div class="card-avaliacao">

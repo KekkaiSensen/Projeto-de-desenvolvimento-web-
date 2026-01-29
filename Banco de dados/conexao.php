@@ -1,8 +1,32 @@
 <?php
 // Configurações do banco de dados
+<<<<<<< HEAD
 $dsn = 'mysql:host=127.0.0.1;dbname=bancodadosteste'; // Altere "bancodadosteste" para o nome do seu banco de dados
 $dbusername = 'root'; // Usuário padrão do XAMPP/MySQL, mas pode variar conforme sua configuração
 $dbpassword = '1234'; // Galera, essa é senha do meu XAMPP/MySQL. Altere conforme sua configuração.
+=======
+
+// Tenta carregar o autoload se ainda não foi carregado
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
+if (file_exists($autoloadPath) && !class_exists('Dotenv\Dotenv')) {
+    require_once $autoloadPath;
+}
+
+// Carrega as variáveis de ambiente se a classe Dotenv existir
+if (class_exists('Dotenv\Dotenv') && file_exists(__DIR__ . '/../.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+    $dotenv->safeLoad();
+}
+
+// Configurações do banco de dados com fallback
+$host = $_ENV['DB_HOST'] ?? '127.0.0.1';
+$dbname = $_ENV['DB_NAME'] ?? 'bancodadosteste';
+$dbusername = $_ENV['DB_USER'] ?? 'root';
+$dbpassword = $_ENV['DB_PASS'] ?? '1234';
+$port = $_ENV['DB_PORT'] ?? '3306';
+
+$dsn = "mysql:host=$host;port=$port;dbname=$dbname";
+>>>>>>> origin/feature/docker-containerization
 
 try {
     // Cria a conexão PDO

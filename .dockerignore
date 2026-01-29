@@ -1,0 +1,6 @@
+vendor/
+.git/
+.env
+docker-compose.yml
+Dockerfile
+*.rdb

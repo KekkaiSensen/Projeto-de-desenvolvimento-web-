@@ -18,6 +18,10 @@ Este documento lista as funcionalidades planejadas e sugestões técnicas para a
 - [ ] Frontend em React ou Vue.js
 - [x] Implementação de Cache (Redis)
 - [x] CDN para imagens
+<<<<<<< HEAD
 - [ ] Containerização com Docker
+=======
+- [x] Containerização com Docker
+>>>>>>> origin/feature/docker-containerization
 - [x] CI/CD com GitHub Actions
 - [x] Testes Unitários e de Integração
