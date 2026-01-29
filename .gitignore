@@ -42,6 +42,7 @@ cypress/screenshots/
 cypress/videos/
 Testes/cypress/screenshots/
 Testes/cypress/videos/
+tests/*.php
 
 # Ignorar documentação técnica, arquivos de conversão e gerados
 Artefatos/Documentacao_Tecnica.md
