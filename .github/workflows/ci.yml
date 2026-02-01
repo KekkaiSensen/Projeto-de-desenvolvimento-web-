@@ -82,6 +82,6 @@ jobs:
         working-directory: ./tests/E2E
         run: npm run test
         env:
-          CYPRESS_baseUrl: http://127.0.0.1:8000/src
+          CYPRESS_baseUrl: http://127.0.0.1:8000/public
           # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }} # Opcional se usar Cypress Cloud
 
