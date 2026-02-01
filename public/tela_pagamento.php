@@ -783,18 +783,21 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                             .then(data => {
                                 if (data.sucesso) {
                                     // SUCESSO!
-                                    // 1. Limpa o carrinho local (só depois de salvar no BD)
-                                    localStorage.setItem("carrinho", "[]");
-                                    localStorage.removeItem("cupomAplicado");
-                                    localStorage.removeItem("valorDesconto");
-                                    localStorage.removeItem("totalCompra");
-                                    localStorage.removeItem("valorFrete");
-                                    localStorage.removeItem("valorFinal");
-
                                     // 2. Mostra notificação e gera PDF
                                     const notificationDuration = 3000;
                                     showNotification("Pagamento bem-sucedido! Gerando nota fiscal...", 'success', notificationDuration);
-                                    setTimeout(gerarNotaFiscalPDF, notificationDuration + 400);
+
+                                    setTimeout(() => {
+                                        gerarNotaFiscalPDF();
+
+                                        // 3. Limpa o carrinho local (só depois de gerar o PDF)
+                                        localStorage.setItem("carrinho", "[]");
+                                        localStorage.removeItem("cupomAplicado");
+                                        localStorage.removeItem("valorDesconto");
+                                        localStorage.removeItem("totalCompra");
+                                        localStorage.removeItem("valorFrete");
+                                        localStorage.removeItem("valorFinal");
+                                    }, notificationDuration + 400);
 
                                     // Habilita o botão novamente
                                     btnContinuarPagina.disabled = false;
