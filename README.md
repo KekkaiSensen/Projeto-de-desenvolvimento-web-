@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/imagens/exemplo-logo-readme.png" width="100px">
+<img src="public/assets/imagens/exemplo-logo-readme.png" width="100px">
 
 
 <h1>Loja Ponto Com</h1>
@@ -159,7 +159,7 @@ Basta dar dois cliques no arquivo ou rodar no terminal:
  **Nota:** Caso prefira instalar manualmente:
  *   [Redis](https://github.com/tporadowski/redis/releases/download/v5.0.14.1/Redis-x64-5.0.14.1.msi): Baixe e instale via MSI
  *   PHP: `composer install`
- *   Node: `cd Testes && npm install`
+ *   Node: `cd tests/E2E && npm install`
 
 #### 3. Configuração de Variáveis de Ambiente
 
@@ -218,7 +218,7 @@ Execute o script `run_tests.ps1` com PowerShell. Ele irá:
 
 ### Manualmente
 1.  Inicie o servidor PHP: `php -S localhost:8000 -t .`
-2.  Em outro terminal, entre na pasta de testes: `cd Testes`
+2.  Em outro terminal, entre na pasta de testes: `cd tests/E2E`
 3.  Execute o Cypress: `npx cypress run` (headless) ou `npx cypress open` (interface visual).
 
 ---

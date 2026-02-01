@@ -38,11 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             // 8. Redireciona para a página principal (ou index.html)
-            header("Location: ../src/index.php");
+            header("Location: ../public/index.php");
             exit();
         } else {
             // 9. Usuário ou senha incorretos
-            header("Location: ../src/tela_login.html?erro=login_invalido");
+            header("Location: ../public/tela_login.html?erro=login_invalido");
             exit();
         }
     } catch (PDOException $e) {

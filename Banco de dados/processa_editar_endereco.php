@@ -4,7 +4,7 @@ require 'conexao.php'; // Conexão
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
-    header('Location: ../src/tela_login.html');
+    header('Location: ../public/tela_login.html');
     exit();
 }
 
@@ -32,12 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$cep, $rua, $numero, $complemento, $bairro, $cidade, $estado, $endereco_id, $usuario_id]);
 
         // Redireciona de volta para a "Minha Conta"
-        header("Location: ../src/tela_minha_conta.php?sucesso=edit");
+        header("Location: ../public/tela_minha_conta.php?sucesso=edit");
         exit();
     } catch (PDOException $e) {
         die("Erro ao atualizar endereço: " . $e->getMessage());
     }
 } else {
-    header("Location: ../src/index.php");
+    header("Location: ../public/index.php");
     exit();
 }
