@@ -1,5 +1,5 @@
 <?php
-require 'Banco de dados/conexao.php'; // Path relative to where I'll run it, or I'll adjust
+require __DIR__ . '/../Banco de dados/conexao.php'; // Path relative to where I'll run it, or I'll adjust
 
 try {
     echo "--- DESCRIBE PEDIDOS ---\n";

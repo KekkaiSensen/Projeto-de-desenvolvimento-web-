@@ -4,7 +4,7 @@ require 'conexao.php'; // Conexão com o banco
 
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
-    header('Location: ../src/tela_login.html');
+    header('Location: ../public/tela_login.html');
     exit();
 }
 
@@ -31,13 +31,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$usuario_id, $cep, $rua, $numero, $complemento, $bairro, $cidade, $estado]);
 
         // Redireciona de volta para a "Minha Conta"
-        header("Location: ../src/tela_minha_conta.php?sucesso=add");
+        header("Location: ../public/tela_minha_conta.php?sucesso=add");
         exit();
     } catch (PDOException $e) {
         die("Erro ao salvar endereço: " . $e->getMessage());
     }
 } else {
     // Se acessou sem ser por POST, volta para a index
-    header("Location: ../src/index.php");
+    header("Location: ../public/index.php");
     exit();
 }

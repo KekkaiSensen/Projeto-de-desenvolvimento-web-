@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tela Executiva</title>
 
-  <link rel="stylesheet" href="../assets/estilos/style.css">
+  <link rel="stylesheet" href="assets/estilos/style.css">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
@@ -39,7 +39,7 @@
     <nav class="actions">
       <div class="logo-container">
         <a href="index.php" style="display: flex; align-items: center;">
-          <img src="../assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
+          <img src="assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
         </a>
       </div>
 
@@ -48,7 +48,7 @@
         <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..." style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
 
         <button type="submit" style="position: absolute; right: 0; top: 0; height: 40px; width: 45px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-          <img src="../assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
+          <img src="assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
         </button>
       </form>
 
@@ -57,7 +57,7 @@
         <a href="#">Entre</a>
         <a href="tela_carrinho.html" style="display: flex; align-items: center; gap: 5px;">
           Carrinho
-          <img src="../assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
+          <img src="assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
         </a>
       </div>
     </nav>

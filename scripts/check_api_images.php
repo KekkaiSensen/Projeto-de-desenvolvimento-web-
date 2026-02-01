@@ -1,6 +1,6 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/Banco de dados/conexao.php';
+require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../Banco de dados/conexao.php';
 
 $stmt = $pdo->query("SELECT nome, imagem_url FROM produtos ORDER BY id DESC LIMIT 5");
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -61,9 +61,9 @@ describe('Gerenciamento de Produtos', () => {
         cy.get('input[name="especificacao_rapida[]"]').first().type('Especificação Teste');
 
         // 4. Upload de Imagem
-        // O ID é estranho: produto-../assets/imagens
+        // O ID é estranho: produto-assets/imagens
         // Vamos usar um seletor de atributo para garantir
-        cy.get('[id="produto-../assets/imagens"]').selectFile('cypress/fixtures/produto_teste.png', { force: true });
+        cy.get('[id="produto-assets/imagens"]').selectFile('cypress/fixtures/produto_teste.png', { force: true });
 
         // 5. Submeter
         cy.intercept('POST', '**/processa_novo_produto.php').as('postProduto');

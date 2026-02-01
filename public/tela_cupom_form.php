@@ -12,7 +12,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'fornecedor
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Novo Cupom - Loja Ponto Com</title>
-    <link rel="stylesheet" href="../assets/estilos/style.css">
+    <link rel="stylesheet" href="assets/estilos/style.css">
     <style>
         .form-container {
             max-width: 600px;
@@ -68,7 +68,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_tipo'] !== 'fornecedor
     <header class="topbar">
         <nav class="actions">
             <div class="logo-container">
-                <a href="index.php"><img src="../assets/imagens/exemplo-logo.png" style="width: 40px;"></a>
+                <a href="index.php"><img src="assets/imagens/exemplo-logo.png" style="width: 40px;"></a>
             </div>
             <a href="tela_minha_conta.php">Voltar para Minha Conta</a>
         </nav>

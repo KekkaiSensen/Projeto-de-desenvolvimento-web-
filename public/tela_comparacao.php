@@ -101,8 +101,8 @@ foreach ($produtos as $p) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparação de Produtos</title>
-    <link rel="stylesheet" href="../assets/estilos/style.css">
-    <link rel="stylesheet" href="../assets/estilos/notifications.css">
+    <link rel="stylesheet" href="assets/estilos/style.css">
+    <link rel="stylesheet" href="assets/estilos/notifications.css">
 </head>
 
 <body>
@@ -111,7 +111,7 @@ foreach ($produtos as $p) {
         <nav class="actions">
             <div class="logo-container">
                 <a href="index.php" style="display: flex; align-items: center;">
-                    <img src="../assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
+                    <img src="assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
                 </a>
             </div>
 
@@ -179,7 +179,7 @@ foreach ($produtos as $p) {
 
     </main>
 
-    <script src="../assets/js/notifications.js"></script>
+    <script src="assets/js/notifications.js"></script>
 
 </body>
 

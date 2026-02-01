@@ -1,5 +1,5 @@
 <?php
-require 'Banco de dados/conexao.php';
+require __DIR__ . '/../Banco de dados/conexao.php';
 
 try {
     echo "--- DESCRIBE PRODUTOS ---\n";

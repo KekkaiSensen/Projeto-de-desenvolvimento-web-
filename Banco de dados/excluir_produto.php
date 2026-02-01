@@ -3,7 +3,7 @@ session_start();
 require 'conexao.php';
 
 if (!isset($_SESSION['usuario_id'])) {
-    header('Location: ../src/tela_login.html');
+    header('Location: ../public/tela_login.html');
     exit();
 }
 
@@ -86,7 +86,7 @@ try {
         }
     }
 
-    header('Location: ../src/tela_minha_conta.php?msg=produto_excluido&tab=painel-produtos');
+    header('Location: ../public/tela_minha_conta.php?msg=produto_excluido&tab=painel-produtos');
 } catch (PDOException $e) {
     die("Erro ao excluir: " . $e->getMessage());
 }

@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 
 // Include dependencies
 require_once __DIR__ . '/../../Banco de dados/conexao.php';
-require_once __DIR__ . '/../Services/CupomService.php';
+require_once __DIR__ . '/../../src/Services/CupomService.php';
 
 use Services\CupomService;
 

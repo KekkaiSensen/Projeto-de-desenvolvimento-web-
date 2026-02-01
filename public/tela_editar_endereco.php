@@ -1,9 +1,34 @@
 <?php
 session_start();
+require '../Banco de dados/conexao.php';
+
 // Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: tela_login.html');
     exit();
+}
+
+$usuario_id = $_SESSION['usuario_id'];
+$endereco_id = $_GET['id'] ?? null; // Pega o ID do endereço da URL
+
+if (!$endereco_id) {
+    header('Location: tela_minha_conta.php'); // Se não tem ID, volta
+    exit();
+}
+
+// Busca o endereço específico PARA ESTE USUÁRIO (Segurança)
+try {
+    $stmt = $pdo->prepare("SELECT * FROM enderecos WHERE id = ? AND usuario_id = ?");
+    $stmt->execute([$endereco_id, $usuario_id]);
+    $endereco = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Se o endereço não for encontrado ou não pertencer ao usuário
+    if (!$endereco) {
+        header('Location: tela_minha_conta.php?erro=nao_encontrado');
+        exit();
+    }
+} catch (PDOException $e) {
+    die("Erro ao buscar endereço: " . $e->getMessage());
 }
 ?>
 <!doctype html>
@@ -12,16 +37,16 @@ if (!isset($_SESSION['usuario_id'])) {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Novo Endereço</title>
-    <link rel="stylesheet" href="../assets/estilos/style.css">
+    <title>Editar Endereço</title>
+    <link rel="stylesheet" href="assets/estilos/style.css">
     <style>
-        /* ../assets/estilos simples para o formulário */
+        /* Estilos atualizados (copiados de tela_novo_endereco.php) */
         .container {
             max-width: 600px;
             margin-top: 40px;
         }
 
-        /* NOVO: Estilo "card" copiado da tela_minha_conta.php */
+        /* Estilo "card" branco */
         .conta-secao {
             background-color: #ffffff;
             border-radius: 8px;
@@ -48,10 +73,9 @@ if (!isset($_SESSION['usuario_id'])) {
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
-            /* Garante que padding não afete a largura */
         }
 
-        /* ATUALIZADO: Botão no padrão azul do site */
+        /* Botão no padrão azul do site */
         .btn-salvar {
             width: 100%;
             /* Botão ocupa 100% da largura do card */
@@ -75,38 +99,40 @@ if (!isset($_SESSION['usuario_id'])) {
 
 <body>
     <main class="container">
-        <h1>Adicionar Novo Endereço</h1>
+        <h1>Editar Endereço</h1>
 
         <div class="conta-secao">
-            <form action="../Banco de dados/processa_novo_endereco.php" method="POST">
+            <form action="../Banco de dados/processa_editar_endereco.php" method="POST">
+                <input type="hidden" name="endereco_id" value="<?php echo $endereco['id']; ?>">
+
                 <div class="form-grupo">
                     <label for="cep">CEP:</label>
-                    <input type="text" id="cep" name="cep" required>
+                    <input type="text" id="cep" name="cep" value="<?php echo htmlspecialchars($endereco['cep']); ?>" required>
                 </div>
                 <div class="form-grupo">
                     <label for="rua">Rua:</label>
-                    <input type="text" id="rua" name="rua" required>
+                    <input type="text" id="rua" name="rua" value="<?php echo htmlspecialchars($endereco['rua']); ?>" required>
                 </div>
                 <div class="form-grupo">
                     <label for="numero">Número:</label>
-                    <input type="text" id="numero" name="numero" required>
+                    <input type="text" id="numero" name="numero" value="<?php echo htmlspecialchars($endereco['numero']); ?>" required>
                 </div>
                 <div class="form-grupo">
                     <label for="complemento">Complemento: (Opcional)</label>
-                    <input type="text" id="complemento" name="complemento">
+                    <input type="text" id="complemento" name="complemento" value="<?php echo htmlspecialchars($endereco['complemento']); ?>">
                 </div>
                 <div class="form-grupo">
                     <label for="bairro">Bairro:</label>
-                    <input type="text" id="bairro" name="bairro" required>
+                    <input type="text" id="bairro" name="bairro" value="<?php echo htmlspecialchars($endereco['bairro']); ?>" required>
                 </div>
                 <div class="form-grupo">
                     <label for="cidade">Cidade:</label>
-                    <input type="text" id="cidade" name="cidade" required>
+                    <input type="text" id="cidade" name="cidade" value="<?php echo htmlspecialchars($endereco['cidade']); ?>" required>
                 </div>
 
                 <div class="form-grupo">
                     <label for="estado">Estado: (Sigla, ex: SP)</label>
-                    <input type="text" id="estado" name="estado" list="estados-lista" maxlength="2" required autocomplete="off">
+                    <input type="text" id="estado" name="estado" list="estados-lista" maxlength="2" value="<?php echo htmlspecialchars($endereco['estado']); ?>" required autocomplete="off">
 
                     <datalist id="estados-lista">
                         <option value="AC">Acre</option>
@@ -139,7 +165,7 @@ if (!isset($_SESSION['usuario_id'])) {
                     </datalist>
                 </div>
 
-                <button type="submit" class="btn-salvar">Salvar Endereço</button>
+                <button type="submit" class="btn-salvar">Salvar Alterações</button>
             </form>
         </div>
     </main>
@@ -155,7 +181,7 @@ if (!isset($_SESSION['usuario_id'])) {
             const inputCidade = document.getElementById('cidade');
             const inputEstado = document.getElementById('estado');
 
-            // --- Função para buscar o CEP (copiada de tela_entrega.php e adaptada) ---
+            // --- Função para buscar o CEP ---
             function buscarCep() {
                 if (!inputCep) return;
 
@@ -201,25 +227,20 @@ if (!isset($_SESSION['usuario_id'])) {
                             inputEstado.value = "";
                         });
                 } else if (cep.length > 0 && cep.length < 8) {
-                    // CEP incompleto, limpa os campos se estavam "Buscando..."
                     if (inputRua && inputRua.value === "Buscando...") {
                         inputRua.value = "";
                         inputBairro.value = "";
                         inputCidade.value = "";
                     }
-                } else if (cep.length === 0) {
-                    // Campo CEP vazio, limpa os campos
-                    inputRua.value = "";
-                    inputBairro.value = "";
-                    inputCidade.value = "";
                 }
+                // Não limpa se o CEP estiver vazio, para manter os dados originais
             }
 
             // --- Adiciona os 'escutadores' de evento no campo CEP ---
             if (inputCep) {
                 inputCep.addEventListener('blur', buscarCep); // Busca quando perde o foco
 
-                inputCep.addEventListener('input', () => { // Limpa "Buscando..." se o usuário digitar mais
+                inputCep.addEventListener('input', () => {
                     if (inputRua && inputRua.value === "Buscando...") {
                         inputRua.value = "";
                         inputBairro.value = "";

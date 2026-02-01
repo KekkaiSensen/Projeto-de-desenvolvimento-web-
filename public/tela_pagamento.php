@@ -18,9 +18,9 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escolha como pagar</title>
-    <link rel="stylesheet" href="../assets/estilos/style.css">
-    <link rel="stylesheet" href="../assets/estilos/estilo_entrega.css">
-    <link rel="stylesheet" href="../assets/estilos/estilo_pagamento.css">
+    <link rel="stylesheet" href="assets/estilos/style.css">
+    <link rel="stylesheet" href="assets/estilos/estilo_entrega.css">
+    <link rel="stylesheet" href="assets/estilos/estilo_pagamento.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -34,7 +34,7 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
         <nav class="actions">
             <div class="logo-container">
                 <a href="index.php">
-                    <img src="../assets/imagens/exemplo-logo.png"" alt=" Logo" style="width: 40px; height: 40px;">
+                    <img src="assets/imagens/exemplo-logo.png"" alt=" Logo" style="width: 40px; height: 40px;">
                 </a>
             </div>
             <div class="user-menu">
@@ -141,7 +141,7 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                             </div>
                             <!-- Retirado -->
                             <!-- <div class="form-coluna-direita">
-                                <img src="../assets/imagens/cartao-generico.png" alt="Cartão de crédito">
+                                <img src="assets/imagens/cartao-generico.png" alt="Cartão de crédito">
                             </div> -->
 
                         </div>

@@ -23,9 +23,9 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
   <meta charset="UTF-8">
   <title>Novo Produto</title>
 
-  <link rel="stylesheet" href="../assets/estilos/style.css" />
-  <link rel="stylesheet" href="../assets/estilos/estilo_carrinho.css">
-  <link rel="stylesheet" href="../assets/estilos/estilo_produto.css">
+  <link rel="stylesheet" href="assets/estilos/style.css" />
+  <link rel="stylesheet" href="assets/estilos/estilo_carrinho.css">
+  <link rel="stylesheet" href="assets/estilos/estilo_produto.css">
 
   <style>
     /* Estiliza os inputs de NOME da característica */
@@ -154,7 +154,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
     <nav class="actions">
       <div class="logo-container">
         <a href="index.php" style="display: flex; align-items: center;">
-          <img src="../assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
+          <img src="assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
         </a>
       </div>
 
@@ -163,7 +163,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
         <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..." style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
 
         <button type="submit" style="position: absolute; right: 0; top: 0; height: 40px; width: 45px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-          <img src="../assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
+          <img src="assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
         </button>
       </form>
 
@@ -172,7 +172,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
         <a href="tela_minha_conta.php">Olá, <?php echo htmlspecialchars($nome_usuario); ?></a>
         <a href="../Banco de dados/logout.php">Sair</a>
         <a href="tela_carrinho.php" style="display: flex; align-items: center; gap: 5px;"> Carrinho
-          <img src="../assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
+          <img src="assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
         </a>
       </div>
     </nav>
@@ -190,7 +190,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
 
       <div class="coluna-galeria" style="flex: 1.2;">
 
-        <input type="file" id="produto-../assets/imagens" multiple accept="image/*" style="display: none;">
+        <input type="file" id="produto-assets/imagens" multiple accept="image/*" style="display: none;">
 
         <div style="display: flex; gap: 15px; width: 100%; height: 100%;">
 
@@ -199,7 +199,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
 
           <div class="imagem-principal-container" style="display: flex; flex-direction: column; flex: 1;">
 
-            <label for="produto-../assets/imagens"
+            <label for="produto-assets/imagens"
               id="imagem-placeholder"
               style="background-color: #f0f0f0; border: 1px dashed #ccc; height: 100%; display: flex; align-items: center; justify-content: center; width: 100%; cursor: pointer; color: #555; text-align: center; box-sizing: border-box;">
               Clique aqui para selecionar as imagens
@@ -485,7 +485,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
 
 
       // --- Upload de Imagem ---
-      const fileInput = document.getElementById('produto-../assets/imagens');
+      const fileInput = document.getElementById('produto-assets/imagens');
       const mainImage = document.getElementById('imagem-principal');
       const imagePlaceholder = document.getElementById('imagem-placeholder');
       const thumbnailsContainer = document.getElementById('thumbnails-container');

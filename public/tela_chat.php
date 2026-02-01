@@ -18,9 +18,9 @@ $usuario_logado = true;
     <meta charset="UTF-8">
     <title>Suas Conversas - Loja Ponto Com</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/estilos/style.css">
-    <link rel="stylesheet" href="../assets/estilos/notifications.css">
-    <link rel="stylesheet" href="../assets/estilos/chat.css">
+    <link rel="stylesheet" href="assets/estilos/style.css">
+    <link rel="stylesheet" href="assets/estilos/notifications.css">
+    <link rel="stylesheet" href="assets/estilos/chat.css">
     <script>
         const USER_ID = <?php echo $usuario_id; ?>;
     </script>
@@ -32,7 +32,7 @@ $usuario_logado = true;
         <nav class="actions">
             <div class="logo-container">
                 <a href="index.php" style="display: flex; align-items: center;">
-                    <img src="../assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
+                    <img src="assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
                 </a>
             </div>
 
@@ -43,7 +43,7 @@ $usuario_logado = true;
                 <a href="../Banco de dados/logout.php">Sair</a>
                 <a href="tela_carrinho.php" style="display: flex; align-items: center; gap: 5px;">
                     Carrinho
-                    <img src="../assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
+                    <img src="assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
                 </a>
                 <?php if ($usuario_logado): ?>
                     <!-- Notification System -->
@@ -87,7 +87,7 @@ $usuario_logado = true;
 
             <div id="chat-messages" class="chat-messages">
                 <div class="empty-state">
-                    <img src="../assets/imagens/chat-placeholder.png" alt="Chat" style="width: 100px; opacity: 0.5;">
+                    <img src="assets/imagens/chat-placeholder.png" alt="Chat" style="width: 100px; opacity: 0.5;">
                     <p>Selecione uma conversa para começar</p>
                 </div>
             </div>
@@ -107,8 +107,8 @@ $usuario_logado = true;
         </main>
     </div>
 
-    <script src="../assets/js/notifications.js"></script>
-    <script src="../assets/js/chat.js"></script>
+    <script src="assets/js/notifications.js"></script>
+    <script src="assets/js/chat.js"></script>
 </body>
 
 </html>

@@ -187,8 +187,8 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Minha Conta - Loja Ponto Com</title>
 
-    <link rel="stylesheet" href="../assets/estilos/style.css">
-    <link rel="stylesheet" href="../assets/estilos/notifications.css">
+    <link rel="stylesheet" href="assets/estilos/style.css">
+    <link rel="stylesheet" href="assets/estilos/notifications.css">
 
     <style>
         /* Estilos copiados de tela_gerenciar_produtos.html */
@@ -253,14 +253,14 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
         <nav class="actions">
             <div class="logo-container">
                 <a href="index.php" style="display: flex; align-items: center;">
-                    <img src="../assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
+                    <img src="assets/imagens/exemplo-logo.png" alt="" style="width: 40px; height: 40px;">
                 </a>
             </div>
 
             <form action="buscar.php" method="GET" style="position: relative; width: 600px; max-width: 100%;">
                 <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..." style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
                 <button type="submit" style="position: absolute; right: 0; top: 0; height: 40px; width: 45px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                    <img src="../assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
+                    <img src="assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
                 </button>
             </form>
 
@@ -269,7 +269,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
                 <a href="../Banco de dados/logout.php">Sair</a>
                 <a href="tela_carrinho.php" style="display: flex; align-items: center; gap: 5px;">
                     Carrinho
-                    <img src="../assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
+                    <img src="assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
                 </a>
 
                 <?php if (isset($usuario_id)): // Já verificado no início do arquivo 
@@ -509,7 +509,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
                                 <div class="pedido-itens">
                                     <?php foreach ($pedido['itens'] as $item): ?>
                                         <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
-                                            <img src="<?php echo htmlspecialchars($item['produto_imagem'] ?? '../assets/imagens/placeholder.png'); ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                            <img src="<?php echo htmlspecialchars($item['produto_imagem'] ?? 'assets/imagens/placeholder.png'); ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                                             <div>
                                                 <div><?php echo htmlspecialchars($item['produto_nome']); ?></div>
                                                 <div style="font-size: 0.85em; color: #777;">
@@ -728,7 +728,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
                                 $preco = $p['preco'] ?? 0;
                                 $desconto = $p['desconto'] ?? 0;
                                 $precoFinal = $preco * (1 - $desconto / 100);
-                                $img = !empty($p['imagem_url']) ? $p['imagem_url'] : '../assets/imagens/placeholder.png';
+                                $img = !empty($p['imagem_url']) ? $p['imagem_url'] : 'assets/imagens/placeholder.png';
                             ?>
                                 <article class="card" data-price="<?php echo $precoFinal; ?>">
                                     <div class="thumb" style="background-image:url('<?php echo htmlspecialchars($img); ?>')"></div>
@@ -1053,7 +1053,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
         });
     </script>
 
-    <script src="../assets/js/notifications.js"></script>
+    <script src="assets/js/notifications.js"></script>
 </body>
 
 </html>

@@ -2,11 +2,13 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     ports:
       - "8080:80"
     volumes:
-      - .:/var/www/html
+      - ..:/var/www/html
     environment:
       - DB_HOST=db
       - DB_NAME=bancodadosteste
@@ -28,7 +30,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: bancodadosteste
     volumes:
-      - ./Banco de dados:/docker-entrypoint-initdb.d
+      - ../Banco de dados:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
     networks:
       - lojapontocom-network

@@ -30,7 +30,9 @@ where composer >nul 2>nul
 if %errorlevel% neq 0 (
     echo Erro: Composer nao encontrado no PATH. Por favor instale o Composer.
 ) else (
+    call cd ..
     call composer install
+    call cd scripts
 )
 
 echo.
@@ -39,10 +41,10 @@ where npm >nul 2>nul
 if %errorlevel% neq 0 (
     echo Erro: NPM nao encontrado no PATH. Por favor instale o Node.js.
 ) else (
-    if exist "Testes" (
-        cd Testes
+    if exist "..\Testes" (
+        cd ..\Testes
         call npm install
-        cd ..
+        cd ..\scripts
     ) else (
         echo Pasta 'Testes' nao encontrada. Pulei o npm install.
     )
