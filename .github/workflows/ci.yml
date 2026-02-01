@@ -75,11 +75,11 @@ jobs:
           node-version: '20'
 
       - name: Install Node Dependencies
-        working-directory: ./Testes
+        working-directory: ./tests/E2E
         run: npm ci
 
       - name: Run Cypress Tests
-        working-directory: ./Testes
+        working-directory: ./tests/E2E
         run: npm run test
         env:
           CYPRESS_baseUrl: http://127.0.0.1:8000/src
