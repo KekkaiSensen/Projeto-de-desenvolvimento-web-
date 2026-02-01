@@ -40,9 +40,8 @@ temp/
 # Cypress
 cypress/screenshots/
 cypress/videos/
-Testes/cypress/screenshots/
-Testes/cypress/videos/
-tests/*.php
+tests/E2E/cypress/screenshots/
+tests/E2E/cypress/videos/
 
 # Ignorar documentação técnica, arquivos de conversão e gerados
 Artefatos/Documentacao_Tecnica.md
@@ -50,6 +49,8 @@ Artefatos/Documentacao_Tecnica.odt
 Artefatos/Documentacao_Tecnica.pdf
 Artefatos/converter.js
 Artefatos/gerar*
+Artefatos/package.json
+Artefatos/package.json.lock
 **/gerar*
 slides.html
 Artefatos/Slides/
@@ -76,3 +77,5 @@ debug/
 test_*.php
 verify_db.php
 dump.rdb
+
+CHANGELOG.md

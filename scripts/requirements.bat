@@ -41,12 +41,12 @@ where npm >nul 2>nul
 if %errorlevel% neq 0 (
     echo Erro: NPM nao encontrado no PATH. Por favor instale o Node.js.
 ) else (
-    if exist "..\Testes" (
-        cd ..\Testes
+    if exist "..\tests\E2E" (
+        cd ..\tests\E2E
         call npm install
         cd ..\scripts
     ) else (
-        echo Pasta 'Testes' nao encontrada. Pulei o npm install.
+        echo Pasta 'tests\E2E' nao encontrada. Pulei o npm install.
     )
 )
 

@@ -22,7 +22,7 @@ Write-Host "Aguardando servidor iniciar..."
 Start-Sleep -Seconds 3
 
 Write-Host "Executando testes Cypress..."
-Push-Location "$Root\Testes"
+Push-Location "$Root\tests\E2E"
 try {
     npm run test
 }
