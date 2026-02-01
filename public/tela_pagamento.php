@@ -783,16 +783,18 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                             .then(data => {
                                 if (data.sucesso) {
                                     // SUCESSO!
-                                    // 2. Mostra notificação e gera PDF
+                                    // 2. Limpa o carrinho local IMEDIATAMENTE para evitar inconsistências se o usuário sair da página
+                                    localStorage.setItem("carrinho", "[]");
+                                    localStorage.removeItem("cupomAplicado");
+
+                                    // 3. Mostra notificação e gera PDF
                                     const notificationDuration = 3000;
                                     showNotification("Pagamento bem-sucedido! Gerando nota fiscal...", 'success', notificationDuration);
 
                                     setTimeout(() => {
                                         gerarNotaFiscalPDF();
 
-                                        // 3. Limpa o carrinho local (só depois de gerar o PDF)
-                                        localStorage.setItem("carrinho", "[]");
-                                        localStorage.removeItem("cupomAplicado");
+                                        // 4. Limpa o restante dados temporários (usados na nota fiscal)
                                         localStorage.removeItem("valorDesconto");
                                         localStorage.removeItem("totalCompra");
                                         localStorage.removeItem("valorFrete");
