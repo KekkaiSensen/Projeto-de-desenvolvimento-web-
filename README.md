@@ -11,12 +11,18 @@
 <div align="center">
 
 ![Status](https://img.shields.io/badge/Status-Finalizado-4AC41C)
+![Cypress](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/ci.yml?label=Testes%20E2E)
+
+</div>
+
+<div align="center">
+
 ![PHP](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
-![Cypress](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/ci.yml?label=Testes%20E2E)
+![Cypress](https://img.shields.io/badge/Cypress-%23E5E5E5?logo=cypress&logoColor=058a5e)
 </div>
 
 ---
