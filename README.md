@@ -15,8 +15,8 @@
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white)
-![Cypress](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/ci.yml?label=E2E%20Tests&logo=cypress)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+![Cypress](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/ci.yml?label=E2E%20Tests&logo=cypress)
 </div>
 
 ---
