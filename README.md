@@ -24,15 +24,9 @@
 ## Índice
 
 - [Sobre o Projeto](#sobre-o-projeto)
-  - [Objetivo](#objetivo)
 - [Funcionalidades](#funcionalidades)
-  - [Para Clientes](#para-clientes)
-  - [Para Fornecedores](#para-fornecedores)
-  - [Funcionalidades Técnicas](#funcionalidades-técnicas)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Como Instalar e Rodar o Projeto](#como-instalar-e-rodar-o-projeto)
-  - [Docker (Recomendado)](#docker-recomendado)
-  - [Instalação Manual](#instalação-manual-sem-docker)
 - [Como Rodar os Testes](#como-rodar-os-testes)
 - [Estrutura de CI/CD](#estrutura-de-cicd)
 - [Como Contribuir](#como-contribuir)
