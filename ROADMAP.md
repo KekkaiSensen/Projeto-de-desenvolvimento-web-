@@ -14,8 +14,8 @@ Este documento lista as funcionalidades planejadas e sugestões técnicas para a
 
 ## Sugestões Técnicas
  
-- [ ] Migração para Laravel ou Symfony
-- [ ] Frontend em React ou Vue.js
+- [ ] ~~Migração para Laravel ou Symfony~~
+- [ ] ~~Frontend em React ou Vue.js~~
 - [x] Implementação de Cache (Redis)
 - [x] CDN para imagens
 - [x] Containerização com Docker

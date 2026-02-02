@@ -21,6 +21,28 @@
 
 ---
 
+## Índice
+
+- [Sobre o Projeto](#sobre-o-projeto)
+  - [Objetivo](#objetivo)
+- [Funcionalidades](#funcionalidades)
+  - [Para Clientes](#para-clientes)
+  - [Para Fornecedores](#para-fornecedores)
+  - [Funcionalidades Técnicas](#funcionalidades-técnicas)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Como Instalar e Rodar o Projeto](#como-instalar-e-rodar-o-projeto)
+  - [Docker (Recomendado)](#docker-recomendado)
+  - [Instalação Manual](#instalação-manual-sem-docker)
+- [Como Rodar os Testes](#como-rodar-os-testes)
+- [Estrutura de CI/CD](#estrutura-de-cicd)
+- [Como Contribuir](#como-contribuir)
+- [Capturas de Tela](#capturas-de-tela)
+- [Autores](#autores)
+- [Suporte](#suporte)
+
+---
+
+
 ## Sobre o Projeto
 
 **Loja Ponto Com** é uma plataforma de e-commerce desenvolvida como projeto prático da disciplina de Desenvolvimento Web 1 do IFSP. O sistema permite que usuários comprem produtos de diversos fornecedores, além de possibilitar que os próprios usuários se cadastrem como vendedores para oferecer seus produtos na plataforma.
