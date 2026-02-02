@@ -16,7 +16,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
-![Cypress](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/ci.yml?label=E2E%20Tests&logo=cypress)
+![Cypress](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/ci.yml?label=Testes%20E2E)
 </div>
 
 ---
