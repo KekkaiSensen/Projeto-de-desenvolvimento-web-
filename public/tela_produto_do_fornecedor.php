@@ -300,12 +300,12 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
         </script>
 
         <div style="margin-top: auto; display: flex; gap: 10px; padding-top: 20px; border-top: 1px solid #eee;">
-          <button type="submit" style="flex: 1; background:#2968C8;color:white;padding:10px 15px;border:none;border-radius:6px;cursor:pointer; font-size: 16px; font-weight: 600;">
-            📤 Enviar Produto
+          <button type="submit" style="flex: 1; background:#2968C8;color:white;padding:10px 15px;border:none;border-radius:6px;cursor:pointer; font-size: 16px; font-weight: 600; min-height: 48px; display: flex; align-items: center; justify-content: center;">
+            Enviar Produto
           </button>
 
-          <button type="button" id="btn-salvar-rascunho" style="flex: 1; background: rgba(41, 104, 200, 0.1); color: #2968C8; padding: 10px 15px;border:none;border-radius:6px;cursor:pointer; font-size: 16px; font-weight: 600;">
-            💾 Salvar como Rascunho
+          <button type="button" id="btn-salvar-rascunho" style="flex: 1; background: rgba(41, 104, 200, 0.1); color: #2968C8; padding: 10px 15px;border:none;border-radius:6px;cursor:pointer; font-size: 16px; font-weight: 600; min-height: 48px; display: flex; align-items: center; justify-content: center;">
+            Salvar como Rascunho
           </button>
         </div>
       </div>
