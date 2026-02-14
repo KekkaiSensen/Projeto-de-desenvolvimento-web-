@@ -12,6 +12,7 @@
 
 ![Status](https://img.shields.io/badge/Status-Finalizado-4AC41C)
 ![Cypress](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/ci.yml?label=Testes%20E2E)
+![Deploy](https://img.shields.io/github/actions/workflow/status/mar-moraes/Loja-Ponto-Com/deploy.yml?label=Deploy&color=4AC41C)
 
 </div>
 
