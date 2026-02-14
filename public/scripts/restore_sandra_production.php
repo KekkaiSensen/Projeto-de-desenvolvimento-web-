@@ -73,7 +73,7 @@ header('Content-Type: text/html; charset=utf-8');
     <pre>
 <?php
 
-require __DIR__ . '/../Banco de dados/conexao.php';
+require __DIR__ . '/../../Banco de dados/conexao.php';
 
 try {
     echo "🔄 <span class='info'>Iniciando restauração da conta de Sandra Gomes...</span>\n\n";
