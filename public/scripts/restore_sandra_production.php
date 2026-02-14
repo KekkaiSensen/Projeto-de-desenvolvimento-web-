@@ -83,7 +83,9 @@ try {
     $nome = 'Sandra Gomes Fictícia';
     $email = 'sandra.gomes@LojaLTDA.com';
     $cpf = '707.808.909-00';
-    $senha_hash = '$2y$10$87ZxH.N.bJtnM.2Od6txi.Vky0Rs7rzFyU/dV0xa3f.irbaDbymwe';
+    // Gera um novo hash para garantir que funcione
+    $senha_limpa = 'senha123';
+    $senha_hash = password_hash($senha_limpa, PASSWORD_DEFAULT);
     $telefone = '31 96666-5555';
     $tipo = 'fornecedor';
     $data_cadastro = '2025-10-28 23:11:37';
