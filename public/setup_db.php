@@ -70,8 +70,11 @@ $sqlContent = preg_replace('/DEFAULT CHARSET=.*?;/', ';', $sqlContent);
 // Criar as tabelas com SERIAL se a coluna for `id` e apagar os ALTER TABLE posteriores.
 
 // TENTATIVA: Executar comando por comando e ignorar erros específicos ou adaptar.
-// Vamos dividir por ";"
-$queries = explode(';', $sqlContent);
+// A divisão por ";" simples falha se houver ";" dentro de strings.
+// Vamos usar um regex mais robusto para separar as queries.
+// Regex explicado: Separa por ; seguido de fim de linha ou fim de string, tentando ignorar ; dentro de aspas simples.
+// Nota: O dump do PHPMyAdmin usa aspas simples para valores.
+$queries = preg_split("/;+(?=([^']*'[^']*')*[^']*$)/", $sqlContent);
 
 echo "<ul>";
 foreach ($queries as $query) {
