@@ -1,7 +1,7 @@
 <?php
 session_start();
 header('Content-Type: application/json');
-require 'conexao.php'; // Inclui a conexão
+require __DIR__ . '/conexao.php'; // Inclui a conexão
 
 // 1. Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
@@ -26,7 +26,7 @@ try {
     $sql = "DELETE FROM avaliacoes WHERE id = ? AND usuario_id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$avaliacao_id, $usuario_id]);
-    
+
     $linhas_afetadas = $stmt->rowCount();
 
     if ($linhas_afetadas > 0) {
@@ -34,9 +34,7 @@ try {
     } else {
         echo json_encode(['sucesso' => false, 'mensagem' => 'Avaliação não encontrada ou não pertence a você.']);
     }
-
 } catch (PDOException $e) {
     error_log("Erro ao excluir avaliação: " . $e->getMessage());
     echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de banco de dados.']);
 }
-?>

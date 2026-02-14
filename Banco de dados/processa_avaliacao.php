@@ -1,7 +1,7 @@
 <?php
 session_start();
 header('Content-Type: application/json');
-require 'conexao.php'; // Inclui a conexão
+require __DIR__ . '/conexao.php'; // Inclui a conexão
 
 // 1. Verifica se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
@@ -45,7 +45,7 @@ try {
                 nota = VALUES(nota),
                 comentario = VALUES(comentario),
                 data_avaliacao = NOW()";
-                
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         $usuario_id,
@@ -55,9 +55,7 @@ try {
     ]);
 
     echo json_encode(['sucesso' => true, 'mensagem' => 'Avaliação salva.']);
-
 } catch (PDOException $e) {
     error_log("Erro ao salvar avaliação: " . $e->getMessage());
     echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de banco de dados: ' . $e->getMessage()]);
 }
-?>

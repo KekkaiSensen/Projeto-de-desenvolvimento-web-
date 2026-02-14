@@ -768,7 +768,7 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                         btnContinuarPagina.disabled = true;
                         btnContinuarPagina.innerText = "Processando...";
 
-                        fetch('../Banco de dados/processa_pedido.php', {
+                        fetch('api/processa_pedido.php', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'

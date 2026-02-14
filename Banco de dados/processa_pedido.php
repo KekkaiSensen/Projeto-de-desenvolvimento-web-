@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 
 try {
     // Requires inside try/catch to handle file not found errors
-    require 'conexao.php';
+    require __DIR__ . '/conexao.php';
     require __DIR__ . '/../src/Services/OrderEventService.php';
     require __DIR__ . '/../src/Services/OrderService.php';
     require __DIR__ . '/../src/Services/CupomService.php';
