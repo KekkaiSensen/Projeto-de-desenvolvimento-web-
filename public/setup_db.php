@@ -5,7 +5,7 @@ require __DIR__ . '/../Banco de dados/conexao.php';
 // Aumenta tempo de execução para importação
 set_time_limit(300);
 
-echo "<h1>Setup Inicial do Banco de Dados</h1>";
+echo "<h1>Setup Inicial do Banco de Dados (v3 - Stream Parser)</h1>";
 
 $sqlFile = __DIR__ . '/../Banco de dados/bancodadosteste.sql';
 
@@ -14,121 +14,110 @@ if (!file_exists($sqlFile)) {
 }
 
 echo "Lendo arquivo SQL...<br>";
-$sqlContent = file_get_contents($sqlFile);
 
-// === CONVERSÃO MYSQL PARA POSTGRESQL ===
-echo "Convertendo sintaxe MySQL para PostgreSQL...<br>";
+// TENTATIVA: Leitura linha a linha para montar as queries
+// Isso evita problemas de memória com regex em arquivos grandes e é mais seguro.
+$handle = fopen($sqlFile, "r");
+if ($handle) {
+    echo "<ul>";
+    $queryBuffer = '';
 
-// 1. Remove SET SQL_MODE, START TRANSACTION, etc do início
-$sqlContent = preg_replace('/SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";/', '', $sqlContent);
-$sqlContent = preg_replace('/START TRANSACTION;/', '', $sqlContent);
-$sqlContent = preg_replace('/SET time_zone = "\+00:00";/', '', $sqlContent);
-$sqlContent = preg_replace('/SET NAMES utf8mb4;/', '', $sqlContent);
+    // Processamento simplificado:
+    // O dump do phpMyAdmin geralmente coloca cada comando INSERT em uma linha (ou poucas).
+    // Mas CREATE TABLE pode usar várias.
+    // Vamos acumular até encontrar ";\n" ou ";" no final da linha.
 
-// 2. Remove comentários de versão condicional
-$sqlContent = preg_replace('/\/\*!.*?\*\//s', '', $sqlContent);
+    while (($line = fgets($handle)) !== false) {
+        $trimmedLine = trim($line);
 
-// 3. Substitui crases (`) por aspas duplas (") para nomes de tabelas/colunas
-$sqlContent = str_replace('`', '"', $sqlContent);
+        // Ignora comentários de linha inteira e linhas vazias (se buffer vazio)
+        if (empty($trimmedLine) || strpos($trimmedLine, '--') === 0 || strpos($trimmedLine, '/*') === 0) {
+            if (empty($queryBuffer)) continue;
+        }
 
-// 4. Converte AUTO_INCREMENT para SERIAL ou identidade
-// Postgres usa SERIAL para inteiros auto-incrementáveis na criação da tabela.
-// Mas o dump tem "int NOT NULL AUTO_INCREMENT".
-// Vamos substituir "int NOT NULL AUTO_INCREMENT" por "SERIAL PRIMARY KEY" (se for PK)
-// Mas o dump separa a definição da chave primária no final (PRIMARY KEY (`id`)).
-// Estratégia simples:
-// Trocar `int(11)` por `INTEGER`
-$sqlContent = preg_replace('/int\(\d+\)/', 'INTEGER', $sqlContent);
-// Trocar `tinyint(1)` por `BOOLEAN` ou `SMALLINT`
-$sqlContent = preg_replace('/tinyint\(\d+\)/', 'SMALLINT', $sqlContent);
-// Remover `ENGINE=InnoDB ...`
-$sqlContent = preg_replace('/ENGINE=InnoDB.*?\;/', ';', $sqlContent);
-// Remover `DEFAULT CHARSET=...` se sobrou
-$sqlContent = preg_replace('/DEFAULT CHARSET=.*?;/', ';', $sqlContent);
+        $queryBuffer .= $line;
 
-// 5. Ajustes específicos de CREATE TABLE
-// O dump tem "CREATE TABLE ... ( ... ) ENGINE=..."
-// Precisa virar "CREATE TABLE ... ( ... );"
-// Já removemos o ENGINE acima.
+        // Verifica se a linha termina com ; (ignorando espaços)
+        // Isso assume que o dump formata bem os comandos (phpMyAdmin geralmente faz isso)
+        if (substr(rtrim($trimmedLine), -1) === ';') {
 
-// 6. Ajustar aspas em strings (MySQL aceita aspas duplas para strings, Postgres não, só simples)
-// O dump parece usar aspas simples para valores ('Valor'), o que é OK.
-// Mas se tiver aspas escapadas (\'), Postgres prefere (''').
-// O dump usa backslash escape? O padrão SQL é aspas duplicadas.
-// Vamos assumir que o dump padrão do PHPMyAdmin usa aspas simples.
+            // Query completa encontrada
+            $query = trim($queryBuffer);
+            $queryBuffer = ''; // Limpa buffer
 
-// 7. Lidando com chaves primárias e AUTO_INCREMENT separados
-// MySQL dump:
-//   `id` int NOT NULL,
-//   ...
-//   ALTER TABLE `tabela` ADD PRIMARY KEY (`id`);
-//   ALTER TABLE `tabela` MODIFY `id` int NOT NULL AUTO_INCREMENT;
-//
-// Postgres não suporta MODIFY ... AUTO_INCREMENT.
-// Precisamos criar SEQUENCEs e associar.
-// OU, mais fácil para este script "quick fix":
-// Criar as tabelas com SERIAL se a coluna for `id` e apagar os ALTER TABLE posteriores.
+            // === FILTROS E ADAPTAÇÕES ===
+            if (empty($query)) continue;
 
-// TENTATIVA: Executar comando por comando e ignorar erros específicos ou adaptar.
-// A divisão por ";" simples falha se houver ";" dentro de strings.
-// Vamos usar um regex mais robusto para separar as queries.
-// Regex explicado: Separa por ; seguido de fim de linha ou fim de string, tentando ignorar ; dentro de aspas simples.
-// Nota: O dump do PHPMyAdmin usa aspas simples para valores.
-$queries = preg_split("/;+(?=([^']*'[^']*')*[^']*$)/", $sqlContent);
+            // Ignora LOCK/UNLOCK/COMMIT/SET/START
+            if (
+                stripos($query, 'LOCK TABLES') === 0 || stripos($query, 'UNLOCK TABLES') === 0 ||
+                stripos($query, 'SET SQL_MODE') === 0 || stripos($query, 'START TRANSACTION') === 0 ||
+                stripos($query, 'SET time_zone') === 0 || stripos($query, 'SET NAMES') === 0 ||
+                stripos($query, 'COMMIT') === 0
+            ) {
+                continue;
+            }
 
-echo "<ul>";
-foreach ($queries as $query) {
-    $query = trim($query);
-    if (empty($query)) continue;
+            // Remove ENGINE=InnoDB...
+            $query = preg_replace('/ENGINE=InnoDB.*?;/i', ';', $query);
+            $query = preg_replace('/DEFAULT CHARSET=.*?;/i', ';', $query);
 
-    // Ignora comentários
-    if (strpos($query, '--') === 0 || strpos($query, '/*') === 0) continue;
+            // Adaptação de aspas para Identificadores
+            // CUIDADO: Substituir todas as crases pode quebrar se houver crases dentro de strings.
+            // Mas em Dumps SQL, crases são usadas para delimitadores.
+            $query = str_replace('`', '"', $query);
 
-    // Ignora LOCK TABLES / UNLOCK TABLES
-    if (stripos($query, 'LOCK TABLES') === 0 || stripos($query, 'UNLOCK TABLES') === 0) continue;
+            // Adaptação AUTO_INCREMENT
+            if (stripos($query, 'CREATE TABLE') === 0) {
+                $query = preg_replace('/int\(\d+\) NOT NULL AUTO_INCREMENT/i', 'SERIAL PRIMARY KEY', $query);
+                $query = preg_replace('/int NOT NULL AUTO_INCREMENT/i', 'SERIAL PRIMARY KEY', $query);
+                // Substitui int(11) por INTEGER
+                $query = preg_replace('/int\(\d+\)/i', 'INTEGER', $query);
+                $query = preg_replace('/tinyint\(\d+\)/i', 'SMALLINT', $query);
+            }
 
-    // --- ADAPTAÇÕES EM TEMPO DE EXECUÇÃO ---
+            // Remove ALTER TABLE ... AUTO_INCREMENT
+            if (stripos($query, 'ALTER TABLE') === 0 && stripos($query, 'AUTO_INCREMENT') !== false) {
+                continue;
+            }
 
-    // Converte definições de coluna AUTO_INCREMENT (se houver na linha)
-    $query = str_ireplace('AUTO_INCREMENT', '', $query); // Remove, pois Postgres usa Sequence
-
-    // IMPORTANTE: Postgres não aceita "int NOT NULL" para autoincremento sem sequence.
-    // Hack: Se a query for CREATE TABLE e tiver "id" int, transformar em SERIAL.
-    if (stripos($query, 'CREATE TABLE') === 0) {
-        $query = preg_replace('/"id" int NOT NULL/', '"id" SERIAL PRIMARY KEY', $query);
-        // Precisamos remover a definição de PRIMARY KEY lá do final da query se já definimos aqui?
-        // O dump do PHPMyAdmin geralmente coloca PK no create ou no alter?
-        // No arquivo que vi: `id` int NOT NULL, ... PRIMARY KEY (`id`) não estava no create?
-        // O arquivo diz:
-        // CREATE TABLE `avaliacoes` ( `id` int NOT NULL, ... ) ENGINE=...
-        // E depois:
-        // ALTER TABLE `avaliacoes` ADD PRIMARY KEY (`id`);
-        // ALTER TABLE `avaliacoes` MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
-        // Se mudarmos para SERIAL PRIMARY KEY no Create, o ALTER TABLE ADD PRIMARY KEY vai falhar (duplicado), o que é aceitável (podemos ignorar o erro).
-    }
-
-    // Ignore ALTER TABLE ... MODIFY ... AUTO_INCREMENT
-    if (stripos($query, 'ALTER TABLE') === 0 && stripos($query, 'AUTO_INCREMENT') !== false) {
-        echo "<li>Ignorando ajuste de Auto Increment (feito via SERIAL): <span style='color:gray'>" . substr($query, 0, 50) . "...</span></li>";
-        continue;
-    }
-
-    // Ignore ALTER TABLE ... ADD PRIMARY KEY se já definimos no create
-    // Mas vamos deixar rodar, se der erro capturamos.
-
-    try {
-        $pdo->exec($query);
-        echo "<li style='color:green'>Sucesso: " . substr($query, 0, 100) . "...</li>";
-    } catch (PDOException $e) {
-        // Ignora erros de "tabela já existe" ou "primary key já existe"
-        if (strpos($e->getMessage(), 'already exists') !== false) {
-            echo "<li style='color:orange'>Aviso (já existe): " . substr($query, 0, 100) . "...</li>";
-        } else {
-            echo "<li style='color:red'>Erro: " . $e->getMessage() . "<br><small>" . htmlspecialchars(substr($query, 0, 200)) . "</small></li>";
+            try {
+                $pdo->exec($query);
+                // Feedback resumido
+                if (stripos($query, 'CREATE TABLE') === 0) {
+                    echo "<li style='color:blue'>Tabela criada: " . substr($query, 0, 50) . "...</li>";
+                } elseif (stripos($query, 'INSERT INTO') === 0) {
+                    // echo "."; // Feedback visual mínimo para inserts
+                } else {
+                    echo "<li style='color:green'>Executado: " . substr($query, 0, 50) . "...</li>";
+                }
+            } catch (PDOException $e) {
+                if (strpos($e->getMessage(), 'already exists') !== false) {
+                    // echo "x";
+                } else {
+                    echo "<li style='color:red'>Erro no comando: <br>" . htmlspecialchars(substr($query, 0, 300)) . "<br>Msg: " . $e->getMessage() . "</li>";
+                }
+            }
         }
     }
+    fclose($handle);
+} else {
+    echo "Erro ao abrir arquivo.";
 }
+
 echo "</ul>";
+
+// Verifica contagem final
+echo "<h2>Verificação Rápida</h2>";
+try {
+    $tables = $pdo->query("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")->fetchAll(PDO::FETCH_COLUMN);
+    echo "Tabelas encontradas: " . implode(", ", $tables) . "<br>";
+    if (in_array('produtos', $tables)) {
+        $count = $pdo->query("SELECT COUNT(*) FROM produtos")->fetchColumn();
+        echo "Produtos cadastrados: <strong>$count</strong>";
+    }
+} catch (Exception $e) {
+    echo "Erro na verificação: " . $e->getMessage();
+}
 
 echo "<h2>Concluído!</h2>";
