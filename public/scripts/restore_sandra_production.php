@@ -15,12 +15,12 @@
 define('SECURITY_TOKEN', 'sandra_restore_2025');
 
 // Verifica se estamos em produção (não localhost)
-$isLocalhost = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'])
-    || strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false;
+// $isLocalhost = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'])
+//     || strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') !== false;
 
-if ($isLocalhost) {
-    die("❌ Este script só pode ser executado em PRODUÇÃO. Use o script local em 'Banco de dados/restaurar_sandra_gomes.php'");
-}
+// if ($isLocalhost) {
+//     die("❌ Este script só pode ser executado em PRODUÇÃO. Use o script local em 'Banco de dados/restaurar_sandra_gomes.php'");
+// }
 
 // Verifica o token de segurança
 if (!isset($_GET['token']) || $_GET['token'] !== SECURITY_TOKEN) {
