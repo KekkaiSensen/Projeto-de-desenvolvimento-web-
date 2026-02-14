@@ -779,7 +779,15 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                                     valor_total: total
                                 })
                             })
-                            .then(response => response.json())
+                            .then(async response => {
+                                const text = await response.text();
+                                console.log("Raw Response from server:", text); // DEBUG: Veja o que o servidor retornou
+                                try {
+                                    return JSON.parse(text);
+                                } catch (e) {
+                                    throw new Error("Server response is not valid JSON: " + text.substring(0, 100) + "...");
+                                }
+                            })
                             .then(data => {
                                 if (data.sucesso) {
                                     // SUCESSO!
@@ -813,8 +821,8 @@ $telefone_cliente = $_SESSION['usuario_telefone'] ?? 'N/A';
                                 }
                             })
                             .catch(error => {
-                                console.error("Erro de conexão ao processar pedido:", error);
-                                alert("Erro de conexão. Seu pedido não foi salvo. Tente novamente.");
+                                console.error("Erro de conexão ou parsing ao processar pedido:", error);
+                                alert("Erro. Detalhes no console (F12): " + error.message);
                                 btnContinuarPagina.disabled = false;
                                 btnContinuarPagina.innerText = "Continuar";
                             });
