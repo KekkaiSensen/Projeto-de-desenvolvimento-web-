@@ -73,6 +73,7 @@ function cleanQuery($query)
     // 3. Aspas
     $query = str_replace('`', '"', $query);
     $query = str_replace("\\'", "''", $query); // Escape de single quote
+    $query = str_replace("\\n", "\n", $query); // [FIX] Unescape newlines
 
     // 4. PK e Auto Increment (CREATE TABLE)
     if (stripos($query, 'CREATE TABLE') === 0) {
