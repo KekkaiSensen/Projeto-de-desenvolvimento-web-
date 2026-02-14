@@ -15,7 +15,7 @@ describe('Gerenciamento de Produtos', () => {
         cy.visit('/tela_login.html');
         cy.get('input[name="email"]').type(usuarioFornecedor);
         cy.get('input[name="senha"]').type(senhaFornecedor);
-        cy.get('form[action*="processa_login.php"] button[type="submit"]').click();
+        cy.get('form[action="api/processa_login.php"] button[type="submit"]').click();
 
         // Verifica se logou (redirecionamento ou cookie)
         // Assumindo que redireciona para home ou minha conta

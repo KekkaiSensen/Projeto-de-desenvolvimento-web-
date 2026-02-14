@@ -38,7 +38,7 @@ describe('Jornada E2E do Cliente (Happy Path)', () => {
     // A senha para 'joao.teste+qa@example.com' é 'senha123' (hash $2y$10$BzliJoZptHJnsCFGKk4ADO8MOXxT89I3LfYgG/QSqC7CXCjLgEfzO)
     cy.get('input[name="email"]').type('joao.teste+qa@example.com');
     cy.get('input[name="senha"]').type('Teste@1234'); // Senha correta do fornecedor
-    cy.get('form[action*="processa_login.php"] button[type="submit"]').click();
+    cy.get('form[action="api/processa_login.php"] button[type="submit"]').click();
 
     cy.wait('@postLogin');
 

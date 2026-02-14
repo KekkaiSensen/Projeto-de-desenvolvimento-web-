@@ -9,7 +9,7 @@ describe('Sistema de Rastreamento', () => {
         cy.visit('tela_login.html');
         cy.get('input[name="email"]').type('joao.teste+qa@example.com');
         cy.get('input[name="senha"]').type('Teste@1234');
-        cy.get('form[action="../Banco de dados/processa_login.php"] button[type="submit"]').click();
+        cy.get('form[action="api/processa_login.php"] button[type="submit"]').click();
 
         cy.visit('tela_minha_conta.php');
         cy.contains('Compras feitas').click();
@@ -37,7 +37,7 @@ describe('Sistema de Rastreamento', () => {
                 cy.visit('tela_login.html');
                 cy.get('input[name="email"]').type('sandra.gomes@LojaLTDA.com');
                 cy.get('input[name="senha"]').type('FakeUser@P@ss');
-                cy.get('form[action="../Banco de dados/processa_login.php"] button[type="submit"]').click();
+                cy.get('form[action="api/processa_login.php"] button[type="submit"]').click();
 
                 // Wait for session/page transition
                 cy.wait(500);
@@ -93,7 +93,7 @@ describe('Sistema de Rastreamento', () => {
                 cy.visit('tela_login.html');
                 cy.get('input[name="email"]').type('joao.teste+qa@example.com');
                 cy.get('input[name="senha"]').type('Teste@1234');
-                cy.get('form[action="../Banco de dados/processa_login.php"] button[type="submit"]').click();
+                cy.get('form[action="api/processa_login.php"] button[type="submit"]').click();
 
                 cy.visit('tela_minha_conta.php');
                 cy.contains('Compras feitas').click();

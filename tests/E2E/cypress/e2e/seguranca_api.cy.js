@@ -9,7 +9,7 @@ describe('Segurança - Testes de API (SQLi e XSS)', () => {
 
     cy.request({
       method: 'POST',
-      url: '../Banco de dados/processa_login.php',
+      url: 'api/processa_login.php',
       form: true,
       body: {
         usuario: sqlPayload,
