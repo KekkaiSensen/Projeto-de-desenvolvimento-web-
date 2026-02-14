@@ -78,4 +78,13 @@ test_*.php
 verify_db.php
 dump.rdb
 
+# Debug files and logs
+debug*.log
+output*.txt
+*_fix.txt
+
+# Python utility scripts
+check_*.py
+
 CHANGELOG.md
+
