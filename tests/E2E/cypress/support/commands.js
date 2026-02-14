@@ -1,20 +1,26 @@
 // cypress/support/commands.js
 
+/**
+ * Cria um comando de login reutilizável.
+ * Isso usa o cy.session() para manter o cookie de login
+ * entre os testes, tornando-os muito mais rápidos.
+ */
 Cypress.Commands.add('login', (email, password) => {
   cy.session([email, password], () => {
+    // Visita a página de login
     cy.visit('/tela_login.html');
 
+    // Intercepta a chamada para saber quando ela terminar
+    // O wildcard ** funciona tanto para api/ quanto para outros caminhos
     cy.intercept('POST', '**/processa_login.php').as('loginRequest');
 
-    // --- CORREÇÃO AQUI ---
-    // O seletor foi trocado de #usuario para input[name="email"]
+    // Preenche os dados (Seletores corrigidos para name=email/senha)
     cy.get('input[name="email"]').type(email);
-    // --- FIM DA CORREÇÃO ---
-
     cy.get('input[name="senha"]').type(password);
-    cy.get('main button[type="submit"]').click();
+    cy.get('button[type="submit"]').click();
 
+    // Espera o redirecionamento para o index.php
     cy.wait('@loginRequest');
-    cy.url().should('include', 'index.php');
+    cy.url().should('include', 'index.php'); // Confirma que o login deu certo
   });
 });
