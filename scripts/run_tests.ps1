@@ -30,7 +30,7 @@ Push-Location "$Root\tests\E2E"
 try {
     # start-server-and-test ou execução direta
     # Como já iniciamos o servidor manualmente acima, rodamos direto o cypress com os testes e2e
-    npx cypress run --spec "cypress/e2e/sistema_notificacao.cy.js,cypress/e2e/sistema_cupom.cy.js"
+    npx cypress run
 }
 finally {
     Pop-Location

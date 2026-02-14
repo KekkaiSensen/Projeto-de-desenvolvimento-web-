@@ -6,7 +6,7 @@ describe('Sistema de Cupom', () => {
         // Login User
         cy.get('input[name="email"]').type('joao.teste+qa@example.com');
         cy.get('input[name="senha"]').type('Teste@1234');
-        cy.get('form[action="../Banco de dados/processa_login.php"] button[type="submit"]').click();
+        cy.get('form[action="api/processa_login.php"] button[type="submit"]').click();
 
         // Verify login
         cy.url().should('include', 'index.php');

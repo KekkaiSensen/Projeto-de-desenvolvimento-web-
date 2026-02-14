@@ -4,7 +4,7 @@ session_start();
 
 // 1. Inclui a conexão
 // 1. Inclui a conexão
-require 'conexao.php';
+require __DIR__ . '/conexao.php';
 
 // Carregamento manual ou via Composer
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
@@ -38,11 +38,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             // 8. Redireciona para a página principal (ou index.html)
-            header("Location: ../public/index.php");
+            if (defined('IS_PROXY')) {
+                header("Location: ../index.php");
+            } else {
+                header("Location: ../public/index.php");
+            }
             exit();
         } else {
             // 9. Usuário ou senha incorretos
-            header("Location: ../public/tela_login.html?erro=login_invalido");
+            if (defined('IS_PROXY')) {
+                header("Location: ../tela_login.html?erro=login_invalido");
+            } else {
+                header("Location: ../public/tela_login.html?erro=login_invalido");
+            }
             exit();
         }
     } catch (PDOException $e) {
