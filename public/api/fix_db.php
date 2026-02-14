@@ -2,86 +2,67 @@
 define('API_MODE', true);
 require __DIR__ . '/../../Banco de dados/conexao.php';
 
-echo "<h1>Diagnóstico de Sequências (Debug Mode)</h1>";
+echo "<h1>Reparo de Schema do Banco de Dados</h1>";
 
 try {
     $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
-    echo "<p>Conectado ao banco: <strong>$driver</strong></p>";
+    echo "<p>Driver: <strong>$driver</strong></p>";
 
     if ($driver === 'pgsql') {
 
-        // 1. Listar TODAS as sequências para eu ver o nome correto
-        $stmtSeq = $pdo->query("SELECT c.relname FROM pg_class c WHERE c.relkind = 'S' ORDER BY c.relname");
-        $allSequences = $stmtSeq->fetchAll(PDO::FETCH_COLUMN);
-
-        echo "<h3>Listagem de TODAS as sequências no banco:</h3>";
-        echo "<ul>";
-        foreach ($allSequences as $seq) {
-            echo "<li>$seq</li>";
-        }
-        echo "</ul>";
-        echo "<hr>";
-
-        // 2. Tentar corrigir (Lógica Melhorada)
-        $tablesMap = [
-            'pedidos' => ['pedidos_id_seq', 'pedidos_seq'],
-            'order_events' => ['order_events_id_seq', 'order_events_seq'],
-            'pedido_itens' => ['pedido_itens_id_seq', 'pedido_itens_seq', 'pedidos_itens_id_seq', 'pedidos_itens_seq'], // Tentando plural
-            'carrinho' => ['carrinho_id_seq'],
-            'carrinho_itens' => ['carrinho_itens_id_seq', 'carrinho_itens_seq'],
-            'enderecos' => ['enderecos_id_seq', 'enderecos_seq'],
-            'avaliacoes' => ['avaliacoes_id_seq'],
-            'usuarios' => ['usuarios_id_seq'],
-            'produtos' => ['produtos_id_seq'],
-            'cupons' => ['cupons_id_seq']
+        $tablesWithoutSequence = [
+            'pedido_itens',
+            'carrinho_itens',
+            'enderecos',
+            'produtos',
+            'cupons'
         ];
 
-        echo "<h3>Tentativa de Correção:</h3>";
+        echo "<h2>Tentando criar sequências faltantes...</h2>";
 
-        foreach ($tablesMap as $table => $possibleNames) {
-            echo "<p><strong>Tabela: $table</strong>";
+        foreach ($tablesWithoutSequence as $table) {
+            echo "<div style='border:1px solid #ccc; padding:10px; margin-bottom:10px;'>";
+            echo "<strong>Tabela: $table</strong><br>";
 
-            $seqName = null;
-            // Tenta achar nas possibilidades explicitas
-            foreach ($possibleNames as $name) {
-                if (in_array($name, $allSequences)) {
-                    $seqName = $name;
-                    break;
+            $seqName = "{$table}_id_seq";
+
+            try {
+                // 1. Verificar se a sequência já existe
+                $check = $pdo->query("SELECT 1 FROM pg_class WHERE relname = '$seqName'");
+                if ($check->fetch()) {
+                    echo "Sequência '$seqName' já existe.<br>";
+                } else {
+                    // 2. Criar a sequência
+                    echo "Criando sequência '$seqName'... ";
+                    $pdo->exec("CREATE SEQUENCE $seqName");
+                    echo "<span style='color:green'>Sucesso!</span><br>";
                 }
+
+                // 3. Associar a sequência à coluna ID (DEFAULT nextval(...))
+                echo "Associando sequência à coluna ID... ";
+                // Nota: Usamos COALESCE para evitar erro se a tabela estiver vazia, mas MAX() retorna NULL se vazia.
+                // Se max for null, começamos do 1.
+                $pdo->exec("ALTER TABLE $table ALTER COLUMN id SET DEFAULT nextval('$seqName')");
+                echo "<span style='color:green'>Associado!</span><br>";
+
+                // 4. Sincronizar valor
+                $maxId = $pdo->query("SELECT MAX(id) FROM $table")->fetchColumn();
+                $nextVal = ($maxId) ? $maxId + 1 : 1;
+
+                echo "Sincronizando valor para $nextVal... ";
+                $pdo->query("SELECT setval('$seqName', $nextVal, false)"); // false = next value will be $nextVal
+                echo "<span style='color:green'>Sincronizado!</span><br>";
+            } catch (Exception $e) {
+                echo "<br><span style='color:red'>Erro ao processar $table: " . $e->getMessage() . "</span>";
             }
-
-            // Se não achou, tenta 'match fuzzy' (contém o nome da tabela)
-            if (!$seqName) {
-                foreach ($allSequences as $s) {
-                    if (strpos($s, $table) !== false) {
-                        $seqName = $s; // Pega o primeiro que parece ser dessa tabela
-                        echo " (fuzzy match: $s) ";
-                        break;
-                    }
-                }
-            }
-
-            if ($seqName) {
-                echo " -> Sequência: <span style='color:blue'>$seqName</span>";
-
-                // Get Max ID
-                $stmtMax = $pdo->query("SELECT MAX(id) FROM $table");
-                $maxId = $stmtMax->fetchColumn();
-                $actualMax = $maxId ? $maxId : 0;
-
-                echo " -> Max ID: <strong>$actualMax</strong>";
-
-                // Fix Sequence
-                $pdo->query("SELECT setval('$seqName', " . ($actualMax > 0 ? $actualMax : 1) . ", " . ($actualMax > 0 ? 'true' : 'false') . ")");
-                echo " -> <span style='color:green'>OK</span>";
-            } else {
-                echo " -> <span style='color:red'>Sequência NÃO encontrada (Verifique lista acima)</span>";
-            }
-            echo "</p>";
+            echo "</div>";
         }
+
+        echo "<h2>Concluído. Tente comprar novamente.</h2>";
     } else {
-        echo "<p>Não é PostgreSQL ($driver).</p>";
+        echo "<p>Este script é apenas para PostgreSQL.</p>";
     }
 } catch (Exception $e) {
-    echo "ERROR: " . $e->getMessage();
+    echo "<h1>Erro Fatal: " . $e->getMessage() . "</h1>";
+    echo "<pre>" . $e->getTraceAsString() . "</pre>";
 }
