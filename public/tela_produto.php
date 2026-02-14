@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 ob_start();
 session_start();
 require __DIR__ . '/../Banco de dados/conexao.php';
