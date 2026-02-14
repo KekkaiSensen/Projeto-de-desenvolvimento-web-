@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: Production
 
     steps:
       - name: Trigger Render Deploy
@@ -19,9 +20,9 @@ jobs:
           
           # Aceita qualquer código 2xx como sucesso
           if [ "$response" -ge 200 ] && [ "$response" -lt 300 ]; then
-            echo "✅ Deploy triggered successfully!"
+            echo "Deploy triggered successfully!"
             exit 0
           else
-            echo "❌ Deploy failed with HTTP code: $response"
+            echo "Deploy failed with HTTP code: $response"
             exit 1
           fi
