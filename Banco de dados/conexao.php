@@ -43,5 +43,8 @@ try {
 } catch (PDOException $e) {
     // Em caso de falha, exibe o erro. 
     // Em um site em produção, você deve logar este erro, não exibi-lo.
+    if (defined('API_MODE') && API_MODE) {
+        throw new Exception('Conexão falhou: ' . $e->getMessage());
+    }
     die('Conexão falhou: ' . $e->getMessage());
 }
