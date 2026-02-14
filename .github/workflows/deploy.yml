@@ -12,11 +12,16 @@ jobs:
     steps:
       - name: Trigger Render Deploy
         run: |
+          echo "Triggering Render deployment..."
           response=$(curl -s -o /dev/null -w "%{http_code}" -X POST ${{ secrets.RENDER_DEPLOY_HOOK }})
           
-          if [ "$response" -ne 200 ]; then
-            echo "Deploy failed"
+          echo "HTTP Response Code: $response"
+          
+          # Aceita qualquer código 2xx como sucesso
+          if [ "$response" -ge 200 ] && [ "$response" -lt 300 ]; then
+            echo "✅ Deploy triggered successfully!"
+            exit 0
+          else
+            echo "❌ Deploy failed with HTTP code: $response"
             exit 1
           fi
-
-          echo "Deploy triggered successfully"
