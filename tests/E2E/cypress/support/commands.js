@@ -17,7 +17,7 @@ Cypress.Commands.add('login', (email, password) => {
     // Preenche os dados (Seletores corrigidos para name=email/senha)
     cy.get('input[name="email"]').type(email);
     cy.get('input[name="senha"]').type(password);
-    cy.get('button[type="submit"]').click();
+    cy.get('form[action="api/processa_login.php"] button[type="submit"]').click();
 
     // Espera o redirecionamento para o index.php
     cy.wait('@loginRequest');
