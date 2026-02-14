@@ -1,15 +1,18 @@
 # start_run_tests.ps1
 
 $Root = Split-Path $PSScriptRoot -Parent
-$Root = Split-Path $PSScriptRoot -Parent
-Write-Host "Executando testes Unitários (PHPUnit)..."
+Write-Host "Raiz do projeto: $Root"
 
+Write-Host "Executando testes Unitários (PHPUnit)..."
 $phpunitPath = "$Root\vendor\bin\phpunit.bat"
 if (-not (Test-Path $phpunitPath)) {
     $phpunitPath = "$Root\vendor\bin\phpunit"
 }
 
-& $phpunitPath
+Write-Host "Usando PHPUnit em: $phpunitPath"
+
+# Executa PHPUnit apontando para a configuração correta
+& $phpunitPath -c "$Root\phpunit.xml" --testdox
 if ($LASTEXITCODE -ne 0) { 
     Write-Error "Testes Unitários falharam! Abortando..."
     exit 1 
@@ -22,9 +25,12 @@ Write-Host "Aguardando servidor iniciar..."
 Start-Sleep -Seconds 3
 
 Write-Host "Executando testes Cypress..."
+# Garante que estamos na raiz para o npx funcionar bem com o config
 Push-Location "$Root\tests\E2E"
 try {
-    npm run test
+    # start-server-and-test ou execução direta
+    # Como já iniciamos o servidor manualmente acima, rodamos direto o cypress com os testes e2e
+    npx cypress run --spec "cypress/e2e/sistema_notificacao.cy.js,cypress/e2e/sistema_cupom.cy.js"
 }
 finally {
     Pop-Location
