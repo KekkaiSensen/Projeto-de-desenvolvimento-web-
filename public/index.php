@@ -50,7 +50,7 @@ try {
   $produtos_carousel = $cache->remember('home_produtos_carousel', 300, function () use ($pdo) {
     // ORDER BY RAND() pega produtos aleatórios.
     // Garante que tenham imagem e estejam ativos.
-    $stmt_carousel = $pdo->prepare("SELECT id, nome, imagem_url FROM produtos WHERE status = 'ativo' AND imagem_url IS NOT NULL ORDER BY RAND() LIMIT 3");
+    $stmt_carousel = $pdo->prepare("SELECT id, nome, imagem_url FROM produtos WHERE status = 'ativo' AND imagem_url IS NOT NULL ORDER BY RANDOM() LIMIT 3");
     $stmt_carousel->execute();
     return $stmt_carousel->fetchAll(PDO::FETCH_ASSOC);
   });

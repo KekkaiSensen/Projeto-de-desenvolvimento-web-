@@ -6,7 +6,7 @@ echo "<h1>Debug Content</h1>";
 
 // 1. Check for duplicate products
 echo "<h2>1. Duplicate Check</h2>";
-$sql = "SELECT nome, COUNT(*) as c FROM produtos GROUP BY nome HAVING c > 1";
+$sql = "SELECT nome, COUNT(*) as c FROM produtos GROUP BY nome HAVING COUNT(*) > 1";
 $stmt = $pdo->query($sql);
 $duplicates = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
