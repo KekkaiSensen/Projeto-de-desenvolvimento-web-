@@ -14,13 +14,18 @@ if (class_exists('Dotenv\Dotenv') && file_exists(__DIR__ . '/../.env')) {
 }
 
 // Configurações do banco de dados com fallback
+// Configurações do banco de dados com fallback
+$driver = $_ENV['DB_CONNECTION'] ?? 'mysql'; // 'mysql' ou 'pgsql'
 $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
 $dbname = $_ENV['DB_NAME'] ?? 'bancodadosteste';
 $dbusername = $_ENV['DB_USER'] ?? 'root';
 $dbpassword = $_ENV['DB_PASS'] ?? '1234';
-$port = $_ENV['DB_PORT'] ?? '3306';
+$port = $_ENV['DB_PORT'] ?? ($driver === 'pgsql' ? '5432' : '3306');
 
-$dsn = "mysql:host=$host;port=$port;dbname=$dbname";
+$dsn = "$driver:host=$host;port=$port;dbname=$dbname";
+if ($driver === 'mysql') {
+    $dsn .= ";charset=utf8mb4";
+}
 
 try {
     // Cria a conexão PDO
