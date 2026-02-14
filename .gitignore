@@ -75,6 +75,7 @@ debug/
 
 # Test and verification scripts
 test_*.php
+test_*.json
 verify_db.php
 dump.rdb
 

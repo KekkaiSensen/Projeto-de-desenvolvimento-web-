@@ -220,9 +220,9 @@ $password = 'sua_senha';
 
 Certifique-se de que o **MySQL** e o **Redis** estejam rodando.
 
-Inicie o servidor PHP embutido:
+Inicie o servidor PHP embutido na raiz do projeto:
 ```bash
-php -S localhost:3000
+php -S localhost:8000 -t .
 ```
 
 Acesse o sistema em: `http://localhost:3000/src/index.php`
@@ -231,20 +231,29 @@ Acesse o sistema em: `http://localhost:3000/src/index.php`
 
 ## Como Rodar os Testes
 
-O projeto possui testes automatizados (E2E com Cypress) para garantir a qualidade.
+O projeto possui testes automatizados (PHPUnit e E2E com Cypress) para garantir a qualidade do código.
 
 ### Via Script Automático (Windows)
-Execute o script `run_tests.ps1` com PowerShell. Ele irá:
-1.  Iniciar o servidor PHP embutido.
-2.  Rodar os testes do Cypress em modo *headless* (terminal).
-3.  Encerrar o servidor ao final.
+Execute o script `run_tests.ps1` (localizado em `scripts/`) com PowerShell. Ele irá:
+1.  Executar os testes unitários (PHPUnit) com configuração do `phpunit.xml`.
+2.  Iniciar o servidor PHP embutido na raiz do projeto.
+3.  Rodar os testes E2E do Cypress em modo *headless* (terminal).
+4.  Encerrar o servidor ao final.
 
 ```powershell
-.\run_tests.ps1
+.\scripts\run_tests.ps1
 ```
 
 ### Manualmente
-1.  Inicie o servidor PHP: `php -S localhost:8000 -t .`
+
+**Testes Unitários (PHPUnit):**
+```bash
+# A partir da raiz do projeto
+.\vendor\bin\phpunit -c phpunit.xml --testdox
+```
+
+**Testes E2E (Cypress):**
+1.  Inicie o servidor PHP na raiz: `php -S localhost:8000 -t .`
 2.  Em outro terminal, entre na pasta de testes: `cd tests/E2E`
 3.  Execute o Cypress: `npx cypress run` (headless) ou `npx cypress open` (interface visual).
 
