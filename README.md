@@ -15,8 +15,6 @@
 
 </div>
 
-<div align="center">
-
 ![PHP](https://img.shields.io/badge/PHP-777BB4?logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
@@ -27,8 +25,10 @@
 </div>
 
 ---
-
 ## Índice
+
+<details>
+  <summary>Conteúdo</summary>
 
 - [Sobre o Projeto](#sobre-o-projeto)
 - [Funcionalidades](#funcionalidades)
@@ -40,6 +40,8 @@
 - [Capturas de Tela](#capturas-de-tela)
 - [Autores](#autores)
 - [Suporte](#suporte)
+
+</details>
 
 ---
 
