@@ -34,8 +34,12 @@ try {
     // Define o modo de erro para exceções, para podermos ver os erros
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Define o charset para utf8mb4, conforme seu script SQL
-    $pdo->exec("SET NAMES 'utf8mb4'");
+    // Define o charset
+    if ($driver === 'pgsql') {
+        $pdo->exec("SET NAMES 'UTF8'");
+    } else {
+        $pdo->exec("SET NAMES 'utf8mb4'");
+    }
 } catch (PDOException $e) {
     // Em caso de falha, exibe o erro. 
     // Em um site em produção, você deve logar este erro, não exibi-lo.
