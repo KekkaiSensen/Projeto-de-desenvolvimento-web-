@@ -394,3 +394,70 @@
         align-self: center;
     }
 }
+/* =================================== */
+/* MELHORIAS PARA MOBILE PEQUENO (<480px) */
+/* =================================== */
+
+@media (max-width: 480px) {
+    /* Galeria Ocupando 100% da largura */
+    .coluna-galeria {
+        flex-direction: column-reverse; /* Thumbnails abaixo da imagem */
+    }
+
+    .thumbnails {
+        flex-direction: row;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 5px; /* Espaço para scrollbar */
+    }
+
+    .thumbnails .thumb-img {
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0; /* Não encolher */
+    }
+
+    .imagem-principal-container {
+        width: 100%;
+    }
+
+    #imagem-principal {
+        max-height: 300px; /* Menor altura em mobile */
+    }
+
+    /* Botões de Ação Fixos ou Destacados */
+    .botoes-acao {
+        /* Opcional: Fixar no fundo da tela (Sticky Footer) */
+        /* position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        z-index: 100;
+        flex-direction: row; */
+    }
+    
+    .btn-acao {
+        padding: 16px; /* Touch target maior */
+    }
+    
+    /* Tabela de características vira blocos */
+    .caracteristica-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .caracteristica-item input,
+    .caracteristica-item span {
+        padding: 8px 16px;
+    }
+    
+    .caracteristica-item input {
+        font-weight: bold;
+        background: #fafafa;
+    }
+}
+

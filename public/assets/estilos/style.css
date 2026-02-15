@@ -1015,3 +1015,110 @@ body.comparison-mode-active {
     font-size: 0.9rem;
 }
 
+
+/* =================================== */
+/* MENU MOBILE (Hambúrguer) */
+/* =================================== */
+
+.mobile-menu-toggle {
+    display: none; /* Escondido em desktop */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.mobile-menu-toggle .bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 5px 0;
+    transition: 0.3s;
+}
+
+/* Animação do botão quando ativo */
+.mobile-menu-toggle.active .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+.mobile-menu-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+}
+.mobile-menu-toggle.active .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block; /* Mostra no mobile */
+        order: 2; /* Fica à direita do logo */
+    }
+
+    /* Esconde o menu por padrão no mobile */
+    .menu-links {
+        display: none !important; /* !important para sobrescrever o style inline do PHP */
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--card-bg); /* Use a cor do card ou header */
+        position: absolute;
+        top: 100%; /* Logo abaixo do header */
+        left: 0;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-top: 1px solid #eee;
+        z-index: 1000;
+    }
+
+    /* Mostra quando a classe 'open' for adicionada pelo JS */
+    .menu-links.open {
+        display: flex !important;
+    }
+    
+    .menu-links a {
+        padding: 10px 0;
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .menu-links a:last-child {
+        border-bottom: none;
+    }
+    
+    /* Ajustes espec�ficos para o container actions */
+    .topbar .actions {
+        position: relative; /* Para posicionar o menu absoluto */
+    }
+}
+
+
+/* =================================== */
+/* MELHORIA DO GRID MOBILE */
+/* =================================== */
+@media (max-width: 480px) {
+    .grid {
+        /* Permite 2 colunas em telas muito pequenas */
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+        gap: 10px !important;
+    }
+
+    /* Ajuste dos cards para caberem melhor */
+    .card {
+        padding: 10px;
+    }
+
+    .card .title {
+        font-size: 0.9rem;
+        height: 2.4em; /* Limita altura */
+        overflow: hidden;
+    }
+    
+    .card .price {
+        font-size: 1.1rem;
+    }
+    
+    .card .thumb {
+        height: 140px; /* Reduz altura da imagem */
+    }
+}
+

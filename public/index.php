@@ -120,7 +120,15 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
         </button>
       </form>
 
-      <div style="display: flex; gap: 30px; align-items: center;">
+
+      <!-- Botão Menu Mobile -->
+      <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Abrir menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <div class="menu-links" style="display: flex; gap: 30px; align-items: center;">
         <?php if ($usuario_logado): ?>
           <a href="tela_minha_conta.php">Olá, <?php echo htmlspecialchars($nome_usuario); ?></a>
           <a href="logout.php">Sair</a>
@@ -407,6 +415,7 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
       }
     </style>
   <?php endif; ?>
+  <script src="assets/js/mobile-menu.js"></script>
 </body>
 
 </html>
