@@ -1184,3 +1184,150 @@ body.comparison-mode-active {
     /* A solução 'overflow-x: auto' já está no HTML para cupons, então ok. */
 }
 
+
+/* =================================== */
+/* HEADER REFACTOR (FIX SEARCH/MENU)   */
+/* =================================== */
+
+/* Barra de pesquisa flexível */
+.search-form-header {
+    position: relative;
+    flex: 1;
+    max-width: 600px;
+    min-width: 0; /* Permite encolher abaixo do conteúdo */
+    margin: 0 15px; /* Espaço lateral */
+}
+
+/* Menu Links Container */
+.menu-links {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    /* Esconde menu desktop por padrão */
+    .menu-links {
+        display: none !important; /* Força override de qualquer inline style residual */
+        position: absolute;
+        top: 60px; /* Altura do header mais ou menos */
+        right: 0;
+        width: 250px;
+        background: #fff;
+        flex-direction: column;
+        border: 1px solid #ddd;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 1000;
+        gap: 15px !important;
+        align-items: flex-start !important;
+    }
+
+    /* Mostra menu quando ativo */
+    .menu-links.active {
+        display: flex !important;
+    }
+    
+    /* Links do menu mobile */
+    .menu-links a {
+        color: #333;
+        font-size: 16px;
+        width: 100%;
+        padding: 5px 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    /* Ajuste da barra em mobile */
+    .search-form-header {
+        margin: 0 10px;
+        max-width: 100%;
+    }
+}
+
+
+/* =================================== */
+/* HEADER LAYOUT FIX (FINAL)           */
+/* =================================== */
+
+.topbar {
+    display: flex;
+    justify-content: center;
+    background-color: #FFD700; /* var(--yellow) se preferir */
+    padding: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.topbar .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 15px;
+    gap: 15px;
+    flex-wrap: nowrap; /* IMPORTANTE: Não quebra linha */
+}
+
+/* Logo não encolhe */
+.logo-container {
+    flex-shrink: 0;
+}
+
+/* Barra de pesquisa flexível */
+.search-form-header {
+    flex: 1; /* Cresce e encolhe */
+    min-width: 0; /* Permite encolher muito se necessário */
+    max-width: 600px;
+    position: relative;
+    margin: 0;
+}
+
+/* Botão hambúrguer não encolhe */
+.mobile-menu-toggle {
+    flex-shrink: 0; 
+}
+
+/* Menu links desktop */
+.menu-links {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .menu-links {
+        display: none !important; /* SOME NO MOBILE */
+    }
+    
+    .search-form-header {
+        max-width: 100%; /* Usa todo espaço entre logo e menu */
+    }
+}
+
+
+/* =================================== */
+/* HEADER VISUAL ORDER FIX             */
+/* =================================== */
+
+.logo-container {
+    order: 1; /* SEMPRE PRIMEIRO */
+}
+
+.search-form-header {
+    order: 2; /* SEMPRE SEGUNDO (MEIO) */
+}
+
+.mobile-menu-toggle {
+    order: 3; /* DEPOIS DA BARRA DE PESQUISA */
+}
+
+.menu-links {
+    order: 4; /* ÚLTIMO */
+}
+
+/* Garante alinhamento vertical e espaçamento */
+.topbar .actions {
+    align-items: center;
+    justify-content: space-between; 
+}
+

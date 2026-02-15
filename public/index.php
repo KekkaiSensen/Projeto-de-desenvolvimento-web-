@@ -111,7 +111,7 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
         </a>
       </div>
 
-      <form action="buscar.php" method="GET" style="position: relative; width: 600px; max-width: 100%;">
+      <form action="buscar.php" method="GET" class="search-form-header">
         <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..."
           style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
         <button type="submit"
@@ -128,7 +128,7 @@ $nome_usuario = $usuario_logado ? explode(' ', $_SESSION['usuario_nome'])[0] : '
         <span class="bar"></span>
       </button>
 
-      <div class="menu-links" style="display: flex; gap: 30px; align-items: center;">
+      <div class="menu-links">
         <?php if ($usuario_logado): ?>
           <a href="tela_minha_conta.php">Olá, <?php echo htmlspecialchars($nome_usuario); ?></a>
           <a href="logout.php">Sair</a>

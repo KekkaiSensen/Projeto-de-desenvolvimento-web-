@@ -21,9 +21,10 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Novo Produto</title>
 
-  <link rel="stylesheet" href="assets/estilos/style.css" />
+  <link rel="stylesheet" href="assets/estilos/style.css?v=<?php echo time(); ?>_fix_order" />
   <link rel="stylesheet" href="assets/estilos/estilo_carrinho.css">
   <link rel="stylesheet" href="assets/estilos/estilo_produto.css">
 
@@ -158,7 +159,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
         </a>
       </div>
 
-      <form action="buscar.php" method="GET" style="position: relative; width: 600px; max-width: 100%;">
+      <form action="buscar.php" method="GET" class="search-form-header">
 
         <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..." style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
 
@@ -167,7 +168,14 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
         </button>
       </form>
 
-      <div style="display: flex; gap: 30px; align-items: center;">
+      <!-- Botão Menu Mobile -->
+      <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Abrir menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <div class="menu-links">
 
         <a href="tela_minha_conta.php">Olá, <?php echo htmlspecialchars($nome_usuario); ?></a>
         <a href="../Banco de dados/logout.php">Sair</a>
@@ -586,6 +594,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
 
     });
   </script>
+  <script src="assets/js/mobile-menu.js"></script>
 </body>
 
 </html>

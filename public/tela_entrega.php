@@ -94,7 +94,7 @@ $dados_para_js = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forma de Entrega</title>
 
-    <link rel="stylesheet" href="assets/estilos/style.css">
+    <link rel="stylesheet" href="assets/estilos/style.css?v=<?php echo time(); ?>_fix_order">
     <link rel="stylesheet" href="assets/estilos/notifications.css">
     <link rel="stylesheet" href="assets/estilos/estilo_entrega.css">
 
@@ -114,14 +114,21 @@ $dados_para_js = [
                 </a>
             </div>
 
-            <form action="buscar.php" method="GET" style="position: relative; width: 600px; max-width: 100%;">
+            <form action="buscar.php" method="GET" class="search-form-header">
                 <input type="search" id="pesquisa" name="q" placeholder="Digite sua pesquisa..." style="font-size: 16px; width: 100%; height: 40px; padding-left: 15px; padding-right: 45px; border-radius: 6px; border: none; box-sizing: border-box;">
                 <button type="submit" style="position: absolute; right: 0; top: 0; height: 40px; width: 45px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                     <img src="assets/imagens/lupa.png" alt="lupa" style="width: 28px; height: 28px; opacity: 0.6;">
                 </button>
             </form>
 
-            <div style="display: flex; gap: 30px; align-items: center;">
+            <!-- Botão Menu Mobile -->
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Abrir menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <div class="menu-links">
                 <a href="tela_minha_conta.php">Olá, <?php echo htmlspecialchars($nome_usuario); ?></a>
                 <a href="../Banco de dados/logout.php">Sair</a>
                 <a href="tela_carrinho.php" style="display: flex; align-items: center; gap: 5px;">
@@ -984,6 +991,7 @@ $dados_para_js = [
         }); // <-- FIM do DOMContentLoaded
     </script>
     <script src="assets/js/notifications.js"></script>
+    <script src="assets/js/mobile-menu.js"></script>
 </body>
 
 </html>
