@@ -1122,3 +1122,65 @@ body.comparison-mode-active {
     }
 }
 
+
+/* =================================== */
+/* PAINEL DE USUÁRIO / FORNECEDOR (Mobile) */
+/* =================================== */
+
+@media (max-width: 768px) {
+    /* Abas roláveis horizontalmente */
+    .tabs-container {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px; /* Espaço para scrollbar */
+        gap: 10px;
+    }
+    
+    .tab-button {
+        flex: 0 0 auto; /* Não encolher */
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+
+    /* Cards de Pedido (Usuário e Fornecedor) */
+    .pedido-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .pedido-header > div {
+        text-align: left !important;
+        width: 100%;
+    }
+    
+    /* Itens do pedido */
+    .pedido-itens > div {
+        /* Se houver inline style flex */
+        flex-direction: column; 
+        align-items: flex-start !important;
+    }
+    
+    /* Ações (Botões) */
+    .pedido-acoes {
+        justify-content: flex-start !important;
+        flex-wrap: wrap;
+    }
+    
+    .pedido-acoes .btn-action {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    /* Tabelas de Dados (Perfil e Cupons) */
+    .dados-pessoais {
+        width: 100%;
+        display: block; /* Permite scroll se necessário */
+    }
+    
+    /* Transformar tabela de cupons em Cards (se possível) ou manter scroll */
+    /* A solução 'overflow-x: auto' já está no HTML para cupons, então ok. */
+}
+
