@@ -1,7 +1,14 @@
 <?php
 session_start();
 header('Content-Type: application/json');
-require 'conexao.php'; //
+define('API_MODE', true);
+
+try {
+    require 'conexao.php';
+} catch (Exception $e) {
+    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de conexão com o banco de dados: ' . $e->getMessage()]);
+    exit();
+}
 
 // 1. Verificar se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
