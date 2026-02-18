@@ -2,10 +2,11 @@
 session_start();
 header('Content-Type: application/json');
 define('API_MODE', true);
+ini_set('display_errors', 0);
 
 try {
     require 'conexao.php';
-} catch (Exception $e) {
+} catch (Throwable $e) {
     echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de conexão com o banco de dados: ' . $e->getMessage()]);
     exit();
 }
