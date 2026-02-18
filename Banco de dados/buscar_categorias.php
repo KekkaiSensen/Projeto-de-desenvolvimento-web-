@@ -1,15 +1,16 @@
 <?php
 // Salve este arquivo como: Banco de dados/buscar_categorias.php
 
+define('API_MODE', true); // Define que estamos em modo API para o conexao.php não dar die()
+
 header('Content-Type: application/json');
-require __DIR__ . '/../vendor/autoload.php'; // Autoload do Composer
-require __DIR__ . '/conexao.php'; // Assume que conexao.php está no mesmo diretório
-
-use Services\CacheService;
-
-$cache = new CacheService();
 
 try {
+    require __DIR__ . '/../vendor/autoload.php'; // Autoload do Composer
+    require __DIR__ . '/conexao.php'; // Assume que conexao.php está no mesmo diretório
+
+    $cache = new Services\CacheService();
+
     // Tenta buscar do cache
     $categorias = $cache->remember('categorias_lista', 600, function () use ($pdo) {
         // Busca o ID e o Nome da tabela categorias, ordenando por nome
@@ -20,8 +21,8 @@ try {
 
     // Retorna um JSON com sucesso e a lista de categorias
     echo json_encode(['sucesso' => true, 'categorias' => $categorias]);
-} catch (PDOException $e) {
+} catch (Throwable $e) {
     // Em caso de erro, envia uma resposta JSON de falha
     http_response_code(500); // Internal Server Error
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de Banco de Dados: ' . $e->getMessage()]);
+    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro: ' . $e->getMessage()]);
 }

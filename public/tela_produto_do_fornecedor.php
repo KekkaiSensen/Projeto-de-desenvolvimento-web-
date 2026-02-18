@@ -375,6 +375,7 @@ $nome_usuario = explode(' ', $_SESSION['usuario_nome'] ?? 'Usuário')[0];
           }
         } catch (error) {
           console.error('Erro ao buscar categorias:', error);
+          selectCategoria.innerHTML = '<option value="">Erro ao carregar categorias</option>';
         }
       }
       await carregarCategorias(); // Aguarda para poder selecionar a categoria correta depois
