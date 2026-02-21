@@ -273,11 +273,11 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
 
             <div class="menu-links">
                 <a href="tela_minha_conta.php">Olá, <?php echo htmlspecialchars($nome_usuario); ?></a>
-                <a href="../Banco de dados/logout.php">Sair</a>
                 <a href="tela_carrinho.php" style="display: flex; align-items: center; gap: 5px;">
                     Carrinho
                     <img src="assets/imagens/carrinho invertido.png" alt="" style="width: 20px; height: 20px;">
                 </a>
+                <a href="../Banco de dados/logout.php">Sair</a>
 
                 <?php if (isset($usuario_id)): // Já verificado no início do arquivo 
                 ?>
@@ -750,7 +750,7 @@ setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'portuguese');
                                         <?php endif; ?>
                                     </div>
                                     <a href="tela_produto_do_fornecedor.php?id=<?php echo $p['id']; ?>" class="editar-btn" style="text-decoration: none; text-align: center; display: inline-block; padding: 5px;">✏️ Editar</a>
-                                    <a href="../Banco de dados/excluir_produto.php?id=<?php echo $p['id']; ?>" class="excluir-btn" style="text-decoration: none; text-align: center; display: inline-block; padding: 5px;" onclick="return confirm('Excluir este rascunho?');">🗑 Excluir</a>
+                                    <a href="api/excluir_produto.php?id=<?php echo $p['id']; ?>" class="excluir-btn" style="text-decoration: none; text-align: center; display: inline-block; padding: 5px;" onclick="return confirm('Excluir este rascunho?');">🗑 Excluir</a>
                                 </article>
                             <?php endforeach; ?>
                         </section>
